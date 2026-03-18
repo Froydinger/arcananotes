@@ -185,8 +185,8 @@ export function MarketingSplashScreen() {
             <p>✨ Always free • 🔒 Private & secure • 📱 Works everywhere</p>
             <p>
               Questions? Contact us at{' '}
-              <a href="mailto:help@noteily.app" className="text-accent hover:underline">
-                help@noteily.app
+              <a href="mailto:contact@winthenight.org" className="text-accent hover:underline">
+                contact@winthenight.org
               </a>
             </p>
           </div>
