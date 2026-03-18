@@ -318,7 +318,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     localStorage.setItem('aiEnabled', aiEnabled.toString());
   };
 
-  const updateBrowserThemeColor = (theme: ThemeType) => {
+  const updateBrowserThemeColor = (theme: 'light' | 'dark' | 'navy') => {
     const themeColors = {
       light: '#ffffff',
       dark: '#0a0a0a',

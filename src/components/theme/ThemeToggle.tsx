@@ -32,8 +32,10 @@ export default function ThemeToggle({ variant = 'sidebar' }: ThemeToggleProps) {
         return <Sparkles className="h-4 w-4" />;
       case 'navy':
         return <Moon className="h-4 w-4" />;
+      case 'system':
+        return <Monitor className="h-4 w-4" />;
       default:
-        return <Moon className="h-4 w-4" />;
+        return <Sparkles className="h-4 w-4" />;
     }
   };
 
@@ -45,8 +47,10 @@ export default function ThemeToggle({ variant = 'sidebar' }: ThemeToggleProps) {
         return 'Dark Mode';
       case 'navy':
         return 'Night Mode';
+      case 'system':
+        return 'System';
       default:
-        return 'Night Mode';
+        return 'Dark Mode';
     }
   };
 

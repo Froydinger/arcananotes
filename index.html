@@ -62,8 +62,12 @@
         const fallbackColor = '#0a0a0a';
         
         try {
-          const theme = localStorage.getItem('theme') || 'dark';
-          const colors = { light: '#ffffff', dark: '#0a0a0a', navy: '#192028', sepia: '#f5f1eb' };
+          var theme = localStorage.getItem('theme') || 'dark';
+          // Resolve system theme to light or dark
+          if (theme === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          const colors = { light: '#ffffff', dark: '#0a0a0a', navy: '#192028' };
           const color = colors[theme] || fallbackColor;
           
           console.log('IMMEDIATE THEME SETUP:', theme, 'COLOR:', color, 'FROM LOCALSTORAGE:', localStorage.getItem('theme'));
