@@ -56,7 +56,7 @@ const SettingsPage = () => {
   const { state } = useSidebar();
   const { user, signOut } = useAuth();
   const { notes } = useNotes();
-  const { preferences, updateTitleFont, updateBodyFont, updateAiEnabled } = usePreferences();
+  const { preferences, updateTheme, updateTitleFont, updateBodyFont, updateAiEnabled } = usePreferences();
   const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
