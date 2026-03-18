@@ -339,7 +339,6 @@ const SettingsPage = () => {
                       </Button>
                     </div>
                   </div>
-                  </div>
 
                   {/* Sign Out */}
                   <Button onClick={handleSignOut} variant="outline" size="sm" className="w-full rounded-xl">
