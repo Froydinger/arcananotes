@@ -24,6 +24,14 @@ import { useAuth } from "./contexts/AuthContext";
 import { LoadingSpinner } from "./components/ui/loading-spinner";
 const queryClient = new QueryClient();
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, initializing } = useAuth();
 
