@@ -79,7 +79,7 @@ export default function LanderPage() {
       {/* Top Navigation */}
       <nav className="relative z-50 flex items-center justify-between px-4 py-4 md:px-8 max-w-7xl mx-auto pwa-safe-top">
         <div className="flex items-center gap-2.5">
-          <Heart className="h-8 w-8 text-accent" fill="currentColor" />
+          <img src={arcanaLogo} alt="Arcana" className="h-8 w-8" />
           <span className="font-display text-xl text-foreground tracking-tight">
             Arcana Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1 align-super">™</span>
           </span>
