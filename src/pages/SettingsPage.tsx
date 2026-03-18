@@ -40,6 +40,7 @@ import {
   Shield,
   MessageCircle,
   HelpCircle,
+  Monitor,
 } from "lucide-react";
 import { useTitleFont } from "@/hooks/useTitleFont";
 import { supabase } from "@/integrations/supabase/client";
