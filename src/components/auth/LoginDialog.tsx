@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Eye, EyeOff, Heart, Lock, Mail, X } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Lock, Mail, X } from 'lucide-react';
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -113,7 +114,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
             <div className="mb-8 pr-10 text-center">
               <div className="mb-4 flex justify-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-[1.35rem] border border-accent/20 bg-accent/10 shadow-glow-sm">
-                  <Heart className="h-8 w-8 text-accent" fill="currentColor" />
+                  <img src={arcanaLogo} alt="Arcana" className="h-10 w-10" />
                 </div>
               </div>
               <DialogTitle className="font-display text-3xl text-foreground">

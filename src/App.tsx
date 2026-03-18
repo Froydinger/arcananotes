@@ -1,3 +1,4 @@
+import React from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -46,6 +47,23 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   );
 }
 
+function ForceDarkTheme({ children }: { children: React.ReactNode }) {
+  React.useEffect(() => {
+    const html = document.documentElement;
+    const prevClasses = Array.from(html.classList);
+    html.classList.remove('light', 'navy');
+    if (!html.classList.contains('dark')) {
+      html.classList.add('dark');
+    }
+    return () => {
+      // Restore previous theme classes when leaving
+      html.classList.remove('dark', 'light', 'navy');
+      prevClasses.filter(c => ['dark', 'light', 'navy'].includes(c)).forEach(c => html.classList.add(c));
+    };
+  }, []);
+  return <>{children}</>;
+}
+
 function RootRoute() {
   const { user, initializing } = useAuth();
 
@@ -61,7 +79,7 @@ function RootRoute() {
     return <Navigate to="/home" replace />;
   }
 
-  return <LanderPage />;
+  return <ForceDarkTheme><LanderPage /></ForceDarkTheme>;
 }
 
 const App = () => {
@@ -74,9 +92,10 @@ const App = () => {
             <Routes>
               <Route path="/" element={<RootRoute />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/forgot-password" element={<ForceDarkTheme><ForgotPasswordPage /></ForceDarkTheme>} />
+              <Route path="/reset-password" element={<ForceDarkTheme><ResetPasswordPage /></ForceDarkTheme>} />
+              <Route path="/privacy" element={<ForceDarkTheme><PrivacyPage /></ForceDarkTheme>} />
+              <Route path="/terms" element={<ForceDarkTheme><TermsPage /></ForceDarkTheme>} />
               <Route path="/terms" element={<TermsPage />} />
 
               <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
