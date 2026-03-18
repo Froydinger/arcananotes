@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
   BookOpen,
   Plus,
-  Heart,
+  
   Settings,
   Pencil,
   RefreshCw,
