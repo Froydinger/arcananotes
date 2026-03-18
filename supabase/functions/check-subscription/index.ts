@@ -63,11 +63,18 @@ serve(async (req) => {
     const subscriptions = await stripe.subscriptions.list({
       customer: customer.id,
       status: "active",
-      limit: 1,
+      limit: 10,
     });
 
-    const isActive = subscriptions.data.length > 0;
-    const sub = isActive ? subscriptions.data[0] : null;
+    // Only count subscriptions for the Arcana price
+    const ARCANA_PRICE_ID = "price_1TBoC0AB32948AKDSNYNhxHG";
+    const arcanaSubscription = subscriptions.data.find(sub =>
+      sub.items.data.some(item => item.price.id === ARCANA_PRICE_ID)
+    );
+    logStep("Arcana filter", { totalSubs: subscriptions.data.length, arcanaFound: !!arcanaSubscription });
+
+    const isActive = !!arcanaSubscription;
+    const sub = arcanaSubscription ?? null;
 
     const periodEnd = sub?.current_period_end
       ? new Date(sub.current_period_end * 1000).toISOString()
