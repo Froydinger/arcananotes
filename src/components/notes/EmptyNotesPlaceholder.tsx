@@ -32,7 +32,7 @@ export default function EmptyNotesPlaceholder() {
           </div>
         )}
         <EmptyState
-          icon={Heart}
+          icon={() => <img src={arcanaLogo} alt="Arcana" className="h-12 w-12" />}
           title={
             <div className="flex items-center justify-center">
               Welcome to Arcana Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1">™</span>

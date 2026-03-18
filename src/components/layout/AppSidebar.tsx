@@ -115,9 +115,7 @@ export function AppSidebar() {
     >
       <SidebarHeader className="flex flex-row items-center justify-between px-5 py-5 gap-0 apple-pwa-sidebar-header">
         <div className={`flex items-center space-x-3 flex-1 ${state === "collapsed" ? "justify-center" : ""}`}>
-          <div className="p-1.5 rounded-xl bg-gradient-to-br from-accent/20 to-accent/5">
-            <Heart className="h-5 w-5 text-accent" fill="currentColor" />
-          </div>
+          <img src={arcanaLogo} alt="Arcana" className="h-8 w-8 rounded-xl" />
           {state !== "collapsed" && (
             <div className="flex items-center">
               <h1 className="text-xl font-display font-medium tracking-tight dynamic-title-font">Arcana Notes</h1>

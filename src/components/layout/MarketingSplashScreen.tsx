@@ -141,7 +141,7 @@ export function MarketingSplashScreen() {
 
         <div className="space-y-4">
           <div className="flex justify-center">
-            <Heart className="h-20 w-20 text-accent animate-heartbeat" />
+            <img src={arcanaLogo} alt="Arcana" className="h-20 w-20 animate-heartbeat" />
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif text-foreground flex items-center justify-center">
             Arcana Notes<span className="text-xs sm:text-sm md:text-base text-muted-foreground ml-1 -mt-2">™</span>
