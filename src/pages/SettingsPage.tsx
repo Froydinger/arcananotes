@@ -168,10 +168,10 @@ const SettingsPage = () => {
   return (
     <div className="h-full md:pl-20">
       {/* Header */}
-      <header className="sticky top-0 z-50 px-4 pt-4 pb-2 md:px-8 md:pt-8 pwa-safe-top">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-50 px-4 pt-4 pb-2 md:px-8 md:pt-8 pwa-safe-top pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-2xl bg-background/60 backdrop-blur-md border border-border/30 flex items-center justify-center shadow-sm glass-shimmer">
               <Settings className="h-5 w-5 text-accent" />
             </div>
             <div>
@@ -183,7 +183,7 @@ const SettingsPage = () => {
       </header>
 
       <div className="px-4 md:px-8 pb-32 pt-4 animate-fade-in">
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
           {/* ─── Preferences ─── */}
           <section className="rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50 overflow-hidden">
