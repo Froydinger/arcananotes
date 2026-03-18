@@ -19,7 +19,7 @@ export function useSubscription() {
     currentPeriodEnd: null,
     loading: true,
     aiUsageToday: 0,
-    aiLimit: 20,
+    aiLimit: 10,
   });
 
   const checkSubscription = useCallback(async () => {
