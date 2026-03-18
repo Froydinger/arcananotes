@@ -77,11 +77,11 @@ serve(async (req) => {
       );
     }
 
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      console.error('OPENAI_API_KEY is not set');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      console.error('LOVABLE_API_KEY is not set');
       return new Response(
-        JSON.stringify({ error: 'OpenAI API key not configured' }), 
+        JSON.stringify({ error: 'AI API key not configured' }), 
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -91,14 +91,14 @@ serve(async (req) => {
 
     console.log(`${action} checking text:`, content.substring(0, 100) + '...');
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-nano', // Fast and efficient model
+        model: 'google/gemini-2.5-flash-lite',
         messages: [
           {
             role: 'system',
@@ -109,8 +109,7 @@ serve(async (req) => {
             content: getUserPrompt(action, content, instructions, title, originalHTML, isSelectedText)
           }
         ],
-        max_tokens: 1500, // Fast responses
-        temperature: 0.3, // More focused output
+        temperature: 0.3,
       }),
     });
 
