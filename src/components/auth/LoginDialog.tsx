@@ -127,121 +127,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
               </DialogDescription>
             </div>
 
-            <div className="mb-6 grid grid-cols-2 gap-2 rounded-full border border-border/60 bg-background/50 p-1">
-              <button
-                type="button"
-                onClick={() => handleModeChange('signin')}
-                disabled={isSubmitting}
-                className={cn(
-                  'rounded-full px-4 py-2.5 text-sm font-medium transition-all',
-                  mode === 'signin'
-                    ? 'bg-accent text-accent-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                Sign in
-              </button>
-              <button
-                type="button"
-                onClick={() => handleModeChange('signup')}
-                disabled={isSubmitting}
-                className={cn(
-                  'rounded-full px-4 py-2.5 text-sm font-medium transition-all',
-                  mode === 'signup'
-                    ? 'bg-accent text-accent-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                Create account
-              </button>
-            </div>
-
-            <div className="mb-5 text-center">
-              <h2 className="text-xl font-semibold text-foreground">{copy.title}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {mode === 'signup' ? 'Create your account with email and password.' : 'Use your email and password to get back in.'}
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="auth-email">Email</Label>
-                <div className="relative">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    id="auth-email"
-                    type="email"
-                    inputMode="email"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                    spellCheck={false}
-                    autoComplete={mode === 'signin' ? 'username' : 'email'}
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    className="h-12 rounded-2xl border-border/60 bg-background/60 pl-10 text-base"
-                    disabled={isSubmitting}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="auth-password">Password</Label>
-                  {mode === 'signin' && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleOpenChange(false);
-                        navigate('/forgot-password');
-                      }}
-                      className="text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
-                    >
-                      Forgot password?
-                    </button>
-                  )}
-                </div>
-                <div className="relative">
-                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    id="auth-password"
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                    placeholder={mode === 'signup' ? 'At least 6 characters' : 'Enter your password'}
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    className="h-12 rounded-2xl border-border/60 bg-background/60 pl-10 pr-12 text-base"
-                    disabled={isSubmitting}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((current) => !current)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-
-              {inlineError && (
-                <div className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">
-                  {inlineError}
-                </div>
-              )}
-
-              <Button type="submit" className="h-12 w-full rounded-2xl text-base font-semibold" disabled={isSubmitting}>
-                {copy.submit}
-                {!isSubmitting && <ArrowRight className="h-4 w-4" />}
-              </Button>
-            </form>
-
-            <div className="relative my-6 flex items-center gap-3">
-              <div className="h-px flex-1 bg-border/60" />
-              <span className="text-xs text-muted-foreground">or</span>
-              <div className="h-px flex-1 bg-border/60" />
-            </div>
-
+            {/* OAuth buttons first */}
             <div className="space-y-3">
               <Button
                 type="button"
@@ -293,17 +179,127 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
               </Button>
             </div>
 
-            <div className="mt-6 text-center text-sm text-muted-foreground">
-              <span>{copy.switchLabel} </span>
-              <button
-                type="button"
-                onClick={() => handleModeChange(mode === 'signin' ? 'signup' : 'signin')}
-                className="font-medium text-foreground underline underline-offset-4 transition-colors hover:text-accent"
-                disabled={isSubmitting}
-              >
-                {copy.switchAction}
-              </button>
-            </div>
+            {!showEmail ? (
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={() => setShowEmail(true)}
+                  className="text-sm text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+                >
+                  Use email instead
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="relative my-6 flex items-center gap-3">
+                  <div className="h-px flex-1 bg-border/60" />
+                  <span className="text-xs text-muted-foreground">or</span>
+                  <div className="h-px flex-1 bg-border/60" />
+                </div>
+
+                <div className="mb-5 grid grid-cols-2 gap-2 rounded-full border border-border/60 bg-background/50 p-1">
+                  <button
+                    type="button"
+                    onClick={() => handleModeChange('signin')}
+                    disabled={isSubmitting}
+                    className={cn(
+                      'rounded-full px-4 py-2.5 text-sm font-medium transition-all',
+                      mode === 'signin'
+                        ? 'bg-accent text-accent-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    )}
+                  >
+                    Sign in
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleModeChange('signup')}
+                    disabled={isSubmitting}
+                    className={cn(
+                      'rounded-full px-4 py-2.5 text-sm font-medium transition-all',
+                      mode === 'signup'
+                        ? 'bg-accent text-accent-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    )}
+                  >
+                    Create account
+                  </button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="auth-email">Email</Label>
+                    <div className="relative">
+                      <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="auth-email"
+                        type="email"
+                        inputMode="email"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        autoComplete={mode === 'signin' ? 'username' : 'email'}
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        className="h-12 rounded-2xl border-border/60 bg-background/60 pl-10 text-base"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="auth-password">Password</Label>
+                      {mode === 'signin' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleOpenChange(false);
+                            navigate('/forgot-password');
+                          }}
+                          className="text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+                        >
+                          Forgot password?
+                        </button>
+                      )}
+                    </div>
+                    <div className="relative">
+                      <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="auth-password"
+                        type={showPassword ? 'text' : 'password'}
+                        autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                        placeholder={mode === 'signup' ? 'At least 6 characters' : 'Enter your password'}
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        className="h-12 rounded-2xl border-border/60 bg-background/60 pl-10 pr-12 text-base"
+                        disabled={isSubmitting}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((current) => !current)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {inlineError && (
+                    <div className="rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">
+                      {inlineError}
+                    </div>
+                  )}
+
+                  <Button type="submit" className="h-12 w-full rounded-2xl text-base font-semibold" disabled={isSubmitting}>
+                    {copy.submit}
+                    {!isSubmitting && <ArrowRight className="h-4 w-4" />}
+                  </Button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </DialogContent>
