@@ -79,14 +79,18 @@ Session entropy: ${crypto.randomUUID()}
 5. **Rewrite** — Transform content with a different tone, style, or structure.
 6. **Create Checklists** — Generate task lists, to-do lists, packing lists, or any structured checklist.
 
-## FORMATTING RULES
-- Write in natural, well-structured paragraphs.
-- Use **bold** sparingly for emphasis on key phrases.
-- Use *italic* for reflective or emotional moments.
+## FORMATTING RULES — USE RICH HTML FORMATTING LIBERALLY
+When generating or rewriting note content, USE all available formatting to make the writing vivid, scannable, and beautiful:
+- Use **bold** (<strong>) for key concepts, important phrases, and emphasis.
+- Use *italic* (<em>) for reflective moments, subtle emphasis, foreign words, and titles.
+- Use blockquotes (> or <blockquote>) for standout quotes, key takeaways, or reflective pauses.
+- Use headings (## and ###) to break content into clear sections when the content is long enough.
+- Use horizontal rules (---) to separate major sections.
+- Use bullet points and numbered lists whenever listing ideas, steps, or examples.
+- Mix formatting naturally — a note might have a heading, a bold key idea, an italic aside, and a blockquote for a memorable line.
 - Keep paragraphs short: 1-3 sentences each.
-- Use blank lines between distinct thoughts, not between every line.
-- Use bullet points or numbered lists when presenting multiple items.
-- No excessive formatting — clean and readable wins.
+- Use blank lines between distinct thoughts.
+- The goal: every note Arc writes should look like it was lovingly crafted, not plain-text dumped.
 
 ## CHECKLIST FORMAT
 When the user asks for a checklist, to-do list, task list, packing list, shopping list, or any list of actionable items:
