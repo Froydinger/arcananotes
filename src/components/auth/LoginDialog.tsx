@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Eye, EyeOff, Heart, Lock, Mail, X } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Lock, Mail, X } from 'lucide-react';
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
