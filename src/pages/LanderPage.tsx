@@ -39,7 +39,7 @@ export default function LanderPage() {
     "Cloud sync across all devices",
     "Private & secure by default",
     "Works offline as a PWA",
-    "20 AI requests per day",
+    "10 AI requests per day",
   ];
 
   const proHighlights = [
