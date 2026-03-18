@@ -196,6 +196,14 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
     let assistantContent = '';
 
     try {
+      // Get the user's session token for authenticated requests
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        toast.error('Please sign in to use Arc AI.');
+        setIsLoading(false);
+        return;
+      }
+
       const apiMessages = newMessages.map((m, i) =>
         i === newMessages.length - 1 && m.role === 'user'
           ? { role: 'user' as const, content: contextMessage }
@@ -206,7 +214,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ messages: apiMessages, stream: true }),
       });
