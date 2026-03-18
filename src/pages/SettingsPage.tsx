@@ -305,12 +305,12 @@ const SettingsPage = () => {
                 ) : (
                   <div className="space-y-3">
                     <p className="text-sm text-muted-foreground">
-                      You're on the free plan — <strong>{aiUsageToday}/20</strong> AI requests used today.
+                      You're on the free plan — <strong>{aiUsageToday}/10</strong> AI requests used today.
                     </p>
                     <div className="w-full bg-muted rounded-full h-2">
                       <div
                         className="bg-accent h-2 rounded-full transition-all"
-                        style={{ width: `${Math.min((aiUsageToday / 20) * 100, 100)}%` }}
+                        style={{ width: `${Math.min((aiUsageToday / 10) * 100, 100)}%` }}
                       />
                     </div>
                     <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
