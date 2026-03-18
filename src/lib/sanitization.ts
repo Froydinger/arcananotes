@@ -2,7 +2,7 @@ import DOMPurify from 'dompurify';
 
 // Strict DOMPurify configuration for enhanced security
 const SANITIZE_CONFIG = {
-  ALLOWED_TAGS: ['p', 'br', 'strong', 'b', 'em', 'i', 'u', 'img', 'div', 'span', 'h1', 'blockquote'],
+  ALLOWED_TAGS: ['p', 'br', 'strong', 'b', 'em', 'i', 'u', 'img', 'div', 'span', 'h1', 'h2', 'h3', 'blockquote', 'ul', 'ol', 'li', 'hr'],
   ALLOWED_ATTR: ['src', 'alt', 'class'],
   ALLOW_DATA_ATTR: false, // We'll manually allow specific data attributes
   FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'button', 'textarea'],
