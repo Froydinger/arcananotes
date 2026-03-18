@@ -49,6 +49,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
 
   const resetState = () => {
     setMode('signin');
+    setShowEmail(false);
     setEmail('');
     setPassword('');
     setShowPassword(false);
