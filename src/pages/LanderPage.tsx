@@ -150,7 +150,7 @@ export default function LanderPage() {
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-14 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-lg gap-3 transition-all hover:scale-105 shadow-glow-sm"
             >
-              <Heart className="h-5 w-5" fill="currentColor" />
+              <img src={arcanaLogo} alt="" className="h-5 w-5" />
               Start Writing — It's Free
             </Button>
             <span className="text-xs text-muted-foreground/60">Free to use · Unlimited AI for $5/mo</span>
