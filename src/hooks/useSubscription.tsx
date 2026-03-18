@@ -39,7 +39,7 @@ export function useSubscription() {
           isSubscribed: data.subscribed || false,
           status: data.status || 'free',
           currentPeriodEnd: data.current_period_end || null,
-          aiLimit: data.subscribed ? -1 : 20,
+          aiLimit: data.subscribed ? -1 : 10,
           loading: false,
         }));
       } else {
