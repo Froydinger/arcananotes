@@ -73,8 +73,8 @@ const SettingsPage = () => {
       case "light": return "Light";
       case "dark": return "Dark";
       case "navy": return "Night";
-      case "sepia": return "Fresh Page";
-      default: return "Night";
+      case "system": return "System default";
+      default: return "Dark";
     }
   };
 
