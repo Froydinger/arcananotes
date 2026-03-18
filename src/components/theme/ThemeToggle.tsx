@@ -1,4 +1,4 @@
-import { Sun, Moon, Waves, FileText, Sparkles } from 'lucide-react';
+import { Sun, Moon, Sparkles, Monitor } from 'lucide-react';
 import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { usePreferences, ThemeType } from '@/contexts/PreferencesContext';
@@ -13,7 +13,7 @@ export default function ThemeToggle({ variant = 'sidebar' }: ThemeToggleProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   
   const toggleTheme = async () => {
-    const themeOrder: ThemeType[] = ['navy', 'dark', 'light'];
+    const themeOrder: ThemeType[] = ['dark', 'navy', 'light', 'system'];
     const currentIndex = themeOrder.indexOf(preferences.theme);
     const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
     
@@ -32,8 +32,10 @@ export default function ThemeToggle({ variant = 'sidebar' }: ThemeToggleProps) {
         return <Sparkles className="h-4 w-4" />;
       case 'navy':
         return <Moon className="h-4 w-4" />;
+      case 'system':
+        return <Monitor className="h-4 w-4" />;
       default:
-        return <Moon className="h-4 w-4" />;
+        return <Sparkles className="h-4 w-4" />;
     }
   };
 
@@ -45,8 +47,10 @@ export default function ThemeToggle({ variant = 'sidebar' }: ThemeToggleProps) {
         return 'Dark Mode';
       case 'navy':
         return 'Night Mode';
+      case 'system':
+        return 'System';
       default:
-        return 'Night Mode';
+        return 'Dark Mode';
     }
   };
 

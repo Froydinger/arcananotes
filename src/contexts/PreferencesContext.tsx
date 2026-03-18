@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
-export type ThemeType = 'light' | 'dark' | 'navy';
+export type ThemeType = 'light' | 'dark' | 'navy' | 'system';
 export type TitleFontType = 'serif' | 'sans' | 'mono';
 export type BodyFontType = 'serif' | 'sans' | 'mono';
 
@@ -52,7 +52,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (!html.classList.contains(localTheme)) {
       applyTheme(localTheme);
     } else {
-      updateBrowserThemeColor(localTheme);
+      updateBrowserThemeColor(getResolvedTheme(localTheme));
     }
 
     if (!user) {
@@ -169,7 +169,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     applyTheme(newTheme);
     
     // Update browser color when user explicitly changes theme
-    updateBrowserThemeColor(newTheme);
+    updateBrowserThemeColor(getResolvedTheme(newTheme));
 
     if (!user) {
       // For non-authenticated users, only update local state
@@ -261,21 +261,41 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     await loadPreferences();
   };
 
+  const getResolvedTheme = (theme: ThemeType): 'light' | 'dark' | 'navy' => {
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return theme;
+  };
+
   const applyTheme = (theme: ThemeType) => {
     const html = document.documentElement;
+    const resolved = getResolvedTheme(theme);
     
     // Remove all theme classes
     html.classList.remove('light', 'dark', 'navy');
     
-    // Add the new theme class
-    html.classList.add(theme);
+    // Add the resolved theme class
+    html.classList.add(resolved);
     
     // Save to localStorage immediately
     localStorage.setItem('theme', theme);
     
     // Update browser theme color to match the applied theme
-    updateBrowserThemeColor(theme);
+    updateBrowserThemeColor(resolved);
   };
+
+  // Listen for OS theme changes when in system mode
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = () => {
+      if (preferences.theme === 'system') {
+        applyTheme('system');
+      }
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, [preferences.theme]);
 
   const applyTitleFont = (titleFont: TitleFontType) => {
     // Save to localStorage immediately
@@ -298,7 +318,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     localStorage.setItem('aiEnabled', aiEnabled.toString());
   };
 
-  const updateBrowserThemeColor = (theme: ThemeType) => {
+  const updateBrowserThemeColor = (theme: 'light' | 'dark' | 'navy') => {
     const themeColors = {
       light: '#ffffff',
       dark: '#0a0a0a',
