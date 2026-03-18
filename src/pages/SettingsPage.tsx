@@ -22,6 +22,7 @@ import { usePreferences } from "@/contexts/PreferencesContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import arcanaLogo from '@/assets/arcana-logo.png';
 import {
   LogOut,
   User,
