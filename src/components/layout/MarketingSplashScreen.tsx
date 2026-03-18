@@ -96,7 +96,7 @@ export function MarketingSplashScreen() {
                   <li>Share & Collaborate: Share notes with friends and collaborate in real-time</li>
                   <li>Works Everywhere: Progressive Web App that works on any device, online or offline</li>
                 </ul>
-                <p>Contact: help@noteily.app</p>
+                <p>Contact: contact@winthenight.org</p>
                 <p>Free note-taking app for writers, secure and beautiful design</p>
               </div>
             </CardContent>
