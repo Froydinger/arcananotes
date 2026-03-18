@@ -329,7 +329,7 @@ export default function LanderPage() {
           </p>
         </div>
         <p className="text-xs text-muted-foreground/40 font-sans">
-          <a href="mailto:help@noteily.app" className="hover:text-muted-foreground transition-colors">help@noteily.app</a>
+          <a href="mailto:contact@winthenight.org" className="hover:text-muted-foreground transition-colors">contact@winthenight.org</a>
           {" · "}
           <a href="/terms" className="hover:text-muted-foreground transition-colors">Terms</a>
           {" · "}

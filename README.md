@@ -45,7 +45,7 @@ Questions
 
 Support
 
-Found a bug or need help? Email help@noteily.app We read every message.
+Found a bug or need help? Email contact@winthenight.org — we read every message.
 
 Credits
 

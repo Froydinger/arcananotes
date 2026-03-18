@@ -96,7 +96,7 @@ export function MarketingSplashScreen() {
                   <li>Share & Collaborate: Share notes with friends and collaborate in real-time</li>
                   <li>Works Everywhere: Progressive Web App that works on any device, online or offline</li>
                 </ul>
-                <p>Contact: help@noteily.app</p>
+                <p>Contact: contact@winthenight.org</p>
                 <p>Free note-taking app for writers, secure and beautiful design</p>
               </div>
             </CardContent>
@@ -133,7 +133,7 @@ export function MarketingSplashScreen() {
             ],
             "contactPoint": {
               "@type": "ContactPoint",
-              "email": "help@noteily.app",
+              "email": "contact@winthenight.org",
               "contactType": "customer support"
             }
           })}
@@ -185,8 +185,8 @@ export function MarketingSplashScreen() {
             <p>✨ Always free • 🔒 Private & secure • 📱 Works everywhere</p>
             <p>
               Questions? Contact us at{' '}
-              <a href="mailto:help@noteily.app" className="text-accent hover:underline">
-                help@noteily.app
+              <a href="mailto:contact@winthenight.org" className="text-accent hover:underline">
+                contact@winthenight.org
               </a>
             </p>
           </div>

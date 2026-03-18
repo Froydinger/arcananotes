@@ -143,10 +143,10 @@ const PrivacyPage = () => {
               <p className="text-muted-foreground">
                 If you have any questions or concerns, reach out:{' '}
                 <a
-                  href="mailto:help@noteily.app"
+                  href="mailto:contact@winthenight.org"
                   className="text-accent hover:underline"
                 >
-                  help@noteily.app
+                  contact@winthenight.org
                 </a>
               </p>
             </CardContent>
