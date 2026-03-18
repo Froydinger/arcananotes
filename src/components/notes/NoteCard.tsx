@@ -89,6 +89,7 @@ export default function NoteCard({ note, onShareClick, isSelected = false, onPre
         cursor-pointer group relative overflow-hidden
         glass-card note-card-outline
         transition-all duration-350 ease-bounce-out
+        h-[200px]
         ${!isTouchDevice ? 'hover:shadow-elevated-lg hover:-translate-y-1 hover:ring-1 hover:ring-accent/20' : ''}
         ${isSelected ? 'ring-2 ring-accent/40 shadow-glow' : ''}
       `}
