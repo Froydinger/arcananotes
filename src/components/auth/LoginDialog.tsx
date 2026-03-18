@@ -40,7 +40,7 @@ export function LoginDialog({ open, onOpenChange }: LoginDialogProps) {
 
     return {
       title: 'Welcome back',
-      description: 'Sign in to sync your notes and pick up where you left off.',
+      description: 'Sign in or sign up to write.',
       submit: isSubmitting ? 'Signing in...' : 'Sign in',
       switchLabel: "Don't have an account?",
       switchAction: 'Create one',
