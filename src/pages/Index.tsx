@@ -209,7 +209,7 @@ const Index = () => {
 
   // Header component - stays outside PullToRefresh for sticky to work on mobile
   const header = (
-    <header className="sticky top-0 z-[100] px-4 pt-4 md:px-8 md:pt-8 pb-4 pwa-safe-top">
+    <header className="sticky top-0 z-[100] px-4 pt-4 md:px-8 md:pt-8 pb-4 pwa-safe-top pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto">
       {/* Mobile layout - matches desktop */}
       <div className="md:hidden">
         <div className="flex items-center justify-between">
