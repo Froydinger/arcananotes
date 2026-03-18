@@ -13,7 +13,7 @@ export default function ThemeToggle({ variant = 'sidebar' }: ThemeToggleProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   
   const toggleTheme = async () => {
-    const themeOrder: ThemeType[] = ['navy', 'dark', 'light'];
+    const themeOrder: ThemeType[] = ['dark', 'navy', 'light', 'system'];
     const currentIndex = themeOrder.indexOf(preferences.theme);
     const nextTheme = themeOrder[(currentIndex + 1) % themeOrder.length];
     
