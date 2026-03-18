@@ -92,9 +92,10 @@ const App = () => {
             <Routes>
               <Route path="/" element={<RootRoute />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/forgot-password" element={<ForceDarkTheme><ForgotPasswordPage /></ForceDarkTheme>} />
+              <Route path="/reset-password" element={<ForceDarkTheme><ResetPasswordPage /></ForceDarkTheme>} />
+              <Route path="/privacy" element={<ForceDarkTheme><PrivacyPage /></ForceDarkTheme>} />
+              <Route path="/terms" element={<ForceDarkTheme><TermsPage /></ForceDarkTheme>} />
               <Route path="/terms" element={<TermsPage />} />
 
               <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
