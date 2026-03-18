@@ -199,6 +199,26 @@ const SettingsPage = () => {
                 </div>
                 <ThemeToggle variant="settings" />
               </div>
+              {/* System Theme */}
+              <div className="px-5 py-3 flex items-center justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                    <Monitor className="h-3.5 w-3.5 text-muted-foreground" />
+                    System default
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Follow your device's light/dark setting</p>
+                </div>
+                <Switch
+                  checked={preferences.theme === 'system'}
+                  onCheckedChange={async (checked) => {
+                    if (checked) {
+                      await updateTheme('system');
+                    } else {
+                      await updateTheme('dark');
+                    }
+                  }}
+                />
+              </div>
               {/* AI Features */}
               <div className="px-5 py-4 flex items-center justify-between gap-3">
                 <div className="flex-1 min-w-0">
