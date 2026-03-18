@@ -133,7 +133,7 @@ export function MarketingSplashScreen() {
             ],
             "contactPoint": {
               "@type": "ContactPoint",
-              "email": "help@noteily.app",
+              "email": "contact@winthenight.org",
               "contactType": "customer support"
             }
           })}
