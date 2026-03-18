@@ -307,23 +307,33 @@ export default function LanderPage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 py-12 px-6 border-t border-border/40 text-center space-y-3">
-        <div className="flex items-center justify-center gap-2 mb-4">
+      <footer className="relative z-10 py-12 px-6 border-t border-border/40 text-center space-y-4">
+        <div className="flex items-center justify-center gap-2 mb-2">
           <img src={arcanaLogo} alt="Arcana" className="h-5 w-5 opacity-60" />
           <span className="font-display text-foreground/60">
             Arcana Notes<span className="text-xs text-muted-foreground/40 ml-0.5 align-super">™</span>
           </span>
         </div>
-        <p className="text-xs text-muted-foreground/50 font-sans">
-          Questions?{" "}
-          <a href="mailto:help@noteily.app" className="hover:text-muted-foreground transition-colors underline underline-offset-2">
-            help@noteily.app
-          </a>
-        </p>
-        <p className="text-xs text-muted-foreground/30 font-sans mt-2">
-          <a href="/terms" className="hover:text-muted-foreground transition-colors underline underline-offset-2">Terms</a>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground/50 font-sans">
+            By{" "}
+            <a href="https://winthenight.org" target="_blank" rel="noopener noreferrer" className="text-muted-foreground/70 hover:text-muted-foreground transition-colors">
+              Win The Night™ Productions
+            </a>
+          </p>
+          <p className="text-xs text-muted-foreground/50 font-sans">
+            Powered by{" "}
+            <a href="https://askarc.chat" target="_blank" rel="noopener noreferrer" className="text-accent/60 hover:text-accent transition-colors">
+              ArcAi™
+            </a>
+          </p>
+        </div>
+        <p className="text-xs text-muted-foreground/40 font-sans">
+          <a href="mailto:help@noteily.app" className="hover:text-muted-foreground transition-colors">help@noteily.app</a>
           {" · "}
-          <a href="/privacy" className="hover:text-muted-foreground transition-colors underline underline-offset-2">Privacy</a>
+          <a href="/terms" className="hover:text-muted-foreground transition-colors">Terms</a>
+          {" · "}
+          <a href="/privacy" className="hover:text-muted-foreground transition-colors">Privacy</a>
         </p>
       </footer>
 
