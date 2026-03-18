@@ -282,7 +282,7 @@ export default function LanderPage() {
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-12 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-base gap-2 transition-all hover:scale-105 shadow-glow-sm"
             >
-              <Heart className="h-4 w-4" fill="currentColor" />
+              <img src={arcanaLogo} alt="" className="h-4 w-4" />
               Start Writing with Pro
             </Button>
           </div>
