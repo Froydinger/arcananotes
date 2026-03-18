@@ -169,7 +169,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     applyTheme(newTheme);
     
     // Update browser color when user explicitly changes theme
-    updateBrowserThemeColor(newTheme);
+    updateBrowserThemeColor(getResolvedTheme(newTheme));
 
     if (!user) {
       // For non-authenticated users, only update local state
