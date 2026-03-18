@@ -46,6 +46,23 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   );
 }
 
+function ForceDarkTheme({ children }: { children: React.ReactNode }) {
+  React.useEffect(() => {
+    const html = document.documentElement;
+    const prevClasses = Array.from(html.classList);
+    html.classList.remove('light', 'navy');
+    if (!html.classList.contains('dark')) {
+      html.classList.add('dark');
+    }
+    return () => {
+      // Restore previous theme classes when leaving
+      html.classList.remove('dark', 'light', 'navy');
+      prevClasses.filter(c => ['dark', 'light', 'navy'].includes(c)).forEach(c => html.classList.add(c));
+    };
+  }, []);
+  return <>{children}</>;
+}
+
 function RootRoute() {
   const { user, initializing } = useAuth();
 
@@ -61,7 +78,7 @@ function RootRoute() {
     return <Navigate to="/home" replace />;
   }
 
-  return <LanderPage />;
+  return <ForceDarkTheme><LanderPage /></ForceDarkTheme>;
 }
 
 const App = () => {
