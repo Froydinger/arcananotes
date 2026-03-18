@@ -15,6 +15,7 @@ import {
   ChevronDown,
   Clock,
 } from "lucide-react";
+import arcanaLogo from '@/assets/arcana-logo.png';
 import {
   Sidebar,
   SidebarContent,
