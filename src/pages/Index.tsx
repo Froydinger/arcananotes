@@ -10,7 +10,7 @@ import EmptyNotesPlaceholder from "@/components/notes/EmptyNotesPlaceholder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, ArrowUpDown, Filter, X, Heart, FileText, CheckSquare, RefreshCw } from "lucide-react";
+import { Plus, Search, ArrowUpDown, Filter, X, FileText, CheckSquare, RefreshCw, Crown, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -18,6 +18,8 @@ import { useNotifications } from "@/hooks/useNotifications";
 import PullToRefresh from "react-simple-pull-to-refresh";
 import { ShareManager } from "@/components/notes/ShareManager";
 import { toast } from "@/components/ui/sonner";
+import { useSubscription } from "@/hooks/useSubscription";
+import arcanaLogo from "@/assets/arcana-logo.png";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -63,7 +65,8 @@ const Index = () => {
   const [shareChanged, setShareChanged] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [openSelect, setOpenSelect] = useState<string | null>(null);
-  const [showSupportDialog, setShowSupportDialog] = useState(false);
+  const [showAccountDialog, setShowAccountDialog] = useState(false);
+  const { isSubscribed, status, aiUsageToday, aiLimit, createCheckout } = useSubscription();
 
   const filteredAndSortedNotes = useMemo(() => {
     const filtered = notes.filter((note) => {
@@ -168,6 +171,15 @@ const Index = () => {
     }
   };
 
+  const handleUpgrade = async () => {
+    try {
+      await createCheckout();
+    } catch (error) {
+      console.error("Failed to create checkout:", error);
+      toast.error("Failed to open upgrade page");
+    }
+  };
+
   console.log("Index render state:", { loading, notesLength: notes.length, hasUser: !!user, hasInitialLoad });
 
   if (!user) {
@@ -178,6 +190,22 @@ const Index = () => {
     console.log("Showing EmptyNotesPlaceholder - hasInitialLoad:", hasInitialLoad);
     return <EmptyNotesPlaceholder />;
   }
+
+  // Account status button
+  const accountButton = (
+    <button
+      onClick={() => setShowAccountDialog(true)}
+      className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center relative"
+      title="Account"
+    >
+      <img src={arcanaLogo} alt="Arcana" className="h-6 w-6 rounded-md" />
+      {isSubscribed && (
+        <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-accent flex items-center justify-center">
+          <Crown className="h-2 w-2 text-accent-foreground" />
+        </span>
+      )}
+    </button>
+  );
 
   // Header component - stays outside PullToRefresh for sticky to work on mobile
   const header = (
@@ -210,9 +238,8 @@ const Index = () => {
             </Button>
           </div>
 
-          {/* Right: Sync and Support */}
+          {/* Right: Sync and Account */}
           <div className="flex items-center gap-2">
-            {/* Sync button */}
             <button
               onClick={handleRefresh}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
@@ -220,14 +247,7 @@ const Index = () => {
             >
               <RefreshCw className="h-5 w-5" />
             </button>
-
-            {/* Support heart icon */}
-            <button
-              onClick={() => setShowSupportDialog(true)}
-              className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
-            >
-              <Heart className="h-5 w-5 text-accent" fill="currentColor" />
-            </button>
+            {accountButton}
           </div>
         </div>
       </div>
@@ -259,7 +279,6 @@ const Index = () => {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            {/* Notifications */}
             {user && unreadCount > 0 && (
               <div className="relative">
                 <button className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center">
@@ -267,8 +286,6 @@ const Index = () => {
                 </button>
               </div>
             )}
-
-            {/* Sync button */}
             <button
               onClick={handleRefresh}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
@@ -276,14 +293,7 @@ const Index = () => {
             >
               <RefreshCw className="h-5 w-5" />
             </button>
-
-            {/* Support */}
-            <button
-              onClick={() => setShowSupportDialog(true)}
-              className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
-            >
-              <Heart className="h-5 w-5 text-accent" fill="currentColor" />
-            </button>
+            {accountButton}
           </div>
         </div>
       </div>
@@ -392,25 +402,72 @@ const Index = () => {
         />
       )}
 
-      <AlertDialog open={showSupportDialog} onOpenChange={setShowSupportDialog}>
-        <AlertDialogContent className="max-w-sm">
+      <AlertDialog open={showAccountDialog} onOpenChange={setShowAccountDialog}>
+        <AlertDialogContent className="max-w-sm rounded-2xl">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 justify-center">
-              <Heart className="h-5 w-5 text-accent" fill="currentColor" />
-              Support Arcana Notes!
+            <AlertDialogTitle className="flex items-center gap-3 justify-center">
+              <img src={arcanaLogo} alt="Arcana" className="h-8 w-8 rounded-lg" />
+              <span>Your Account</span>
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-center">
-              Arcana Notes is made with love by Win The Night. If you enjoy using Arcana Notes, consider supporting our work!
+            <AlertDialogDescription asChild>
+              <div className="space-y-4 pt-2">
+                {/* Plan status */}
+                <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/50 border border-border/30">
+                  <div className="flex items-center gap-2">
+                    {isSubscribed ? (
+                      <Crown className="h-4 w-4 text-accent" />
+                    ) : (
+                      <Sparkles className="h-4 w-4 text-muted-foreground" />
+                    )}
+                    <span className="text-sm font-medium text-foreground">
+                      {isSubscribed ? "Pro Plan" : "Free Plan"}
+                    </span>
+                  </div>
+                  {isSubscribed && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent font-medium">Active</span>
+                  )}
+                </div>
+
+                {/* AI usage */}
+                {!isSubscribed && (
+                  <div className="p-3 rounded-xl bg-secondary/50 border border-border/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs text-muted-foreground">AI requests today</span>
+                      <span className="text-xs font-medium text-foreground">{aiUsageToday} / {aiLimit}</span>
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-secondary overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-accent transition-all duration-300"
+                        style={{ width: `${Math.min((aiUsageToday / aiLimit) * 100, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Email */}
+                <div className="text-center text-xs text-muted-foreground">
+                  {user?.email}
+                </div>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex-col sm:flex-col gap-2">
+          <AlertDialogFooter className="flex-col sm:flex-col gap-2 pt-2">
+            {!isSubscribed && (
+              <AlertDialogAction
+                onClick={handleUpgrade}
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+              >
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade to Pro
+              </AlertDialogAction>
+            )}
             <AlertDialogAction
-              onClick={() => window.open("https://winthenight.org/support", "_blank")}
-              className="w-full bg-accent hover:bg-accent/90"
+              onClick={() => navigate("/settings")}
+              className="w-full bg-secondary hover:bg-secondary/80 text-foreground"
             >
-              Support Us
+              Settings
             </AlertDialogAction>
-            <AlertDialogCancel className="w-full">Maybe Later</AlertDialogCancel>
+            <AlertDialogCancel className="w-full">Close</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -440,7 +497,6 @@ const Index = () => {
           const note = await addNote("checklist");
           if (note) {
             await updateNote(note.id, { title });
-            // Insert checklist items
             const rows = items.map((item, i) => ({
               note_id: note.id,
               content: item.content,
