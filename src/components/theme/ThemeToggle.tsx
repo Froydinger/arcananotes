@@ -1,4 +1,4 @@
-import { Sun, Moon, Waves, FileText, Sparkles } from 'lucide-react';
+import { Sun, Moon, Sparkles, Monitor } from 'lucide-react';
 import { Toggle } from '@/components/ui/toggle';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { usePreferences, ThemeType } from '@/contexts/PreferencesContext';
