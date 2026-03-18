@@ -1,6 +1,7 @@
 
-import { Plus, Heart } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { EmptyState } from '@/components/ui/empty-state';
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { useNotes } from '@/contexts/NoteContext';
 import { useNavigate } from 'react-router-dom';
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
