@@ -52,7 +52,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     if (!html.classList.contains(localTheme)) {
       applyTheme(localTheme);
     } else {
-      updateBrowserThemeColor(localTheme);
+      updateBrowserThemeColor(getResolvedTheme(localTheme));
     }
 
     if (!user) {
