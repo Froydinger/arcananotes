@@ -60,7 +60,7 @@ export default function LanderPage() {
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-8 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
-            <Heart className="h-6 w-6 text-accent" fill="currentColor" />
+            <img src={arcanaLogo} alt="Arcana" className="h-6 w-6" />
             <span className="font-display text-lg text-foreground tracking-tight">Arcana Notes</span>
           </div>
           <div className="flex items-center gap-4">
