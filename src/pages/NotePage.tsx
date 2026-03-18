@@ -199,7 +199,7 @@ const NotePage = () => {
       <header
         ref={headerRef}
         data-note-header
-        className="sticky top-0 z-[100] p-4 pwa-safe-top md:bg-background/60 md:backdrop-blur-md md:border-b md:border-border/20"
+        className="sticky top-0 z-[100] p-4 pwa-safe-top pointer-events-none [&_button]:pointer-events-auto [&_a]:pointer-events-auto [&_[data-radix-dropdown-menu-trigger]]:pointer-events-auto"
         style={{ position: "sticky", top: 0, zIndex: 100 }}
       >
         <div className="flex items-center justify-between">
