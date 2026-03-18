@@ -46,6 +46,7 @@ import { useTitleFont } from "@/hooks/useTitleFont";
 import { supabase } from "@/integrations/supabase/client";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 const SettingsPage = () => {
   const titleFont = useTitleFont();
