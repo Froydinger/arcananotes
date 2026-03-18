@@ -1,5 +1,5 @@
-const CURRENT_PROJECT_REF = 'zupjsghppxyvmgwxvycc';
-const STALE_PROJECT_REFS = ['viidccjyjeipulbqqwua'];
+const CURRENT_PROJECT_REF = 'cleqowfvjqnuybfdwrqc';
+const STALE_PROJECT_REFS = ['viidccjyjeipulbqqwua', 'zupjsghppxyvmgwxvycc'];
 const AUTH_KEY_PATTERNS = ['supabase.auth', 'sb-', CURRENT_PROJECT_REF];
 
 function collectMatchingStorageKeys(storage: Storage, patterns: string[]) {
