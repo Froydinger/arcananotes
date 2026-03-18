@@ -469,7 +469,7 @@ const SettingsPage = () => {
               </div>
 
               <a
-                href="mailto:help@noteily.app"
+                href="mailto:contact@winthenight.org"
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-secondary/50 border border-border/30 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
               >
                 <MessageCircle className="h-4 w-4" />
