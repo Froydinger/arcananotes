@@ -351,27 +351,56 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
     const lines = text.split('\n');
     const blocks: string[] = [];
     let paraLines: string[] = [];
+    let listItems: string[] = [];
+    let listType: 'ul' | 'ol' | null = null;
+
     const flushPara = () => {
       if (paraLines.length > 0) {
         blocks.push(`<p>${paraLines.join('<br>')}</p>`);
         paraLines = [];
       }
     };
+    const flushList = () => {
+      if (listItems.length > 0 && listType) {
+        blocks.push(`<${listType}>${listItems.join('')}</${listType}>`);
+        listItems = [];
+        listType = null;
+      }
+    };
+
     for (const line of lines) {
-      if (line.trim() === '') {
+      const trimmed = line.trim();
+      if (trimmed === '') {
         flushPara();
-      } else if (/^#{1,3}\s/.test(line)) {
+        flushList();
+      } else if (/^#{1,3}\s/.test(trimmed)) {
         flushPara();
-        const tag = line.startsWith('### ') ? 'h3' : 'h2';
-        blocks.push(`<${tag}>${applyInline(line.replace(/^#+\s/, '').trim())}</${tag}>`);
-      } else if (line.startsWith('> ')) {
+        flushList();
+        const tag = trimmed.startsWith('### ') ? 'h3' : 'h2';
+        blocks.push(`<${tag}>${applyInline(trimmed.replace(/^#+\s/, '').trim())}</${tag}>`);
+      } else if (trimmed.startsWith('> ')) {
         flushPara();
-        blocks.push(`<blockquote>${applyInline(line.slice(2).trim())}</blockquote>`);
+        flushList();
+        blocks.push(`<blockquote>${applyInline(trimmed.slice(2).trim())}</blockquote>`);
+      } else if (/^[-*]\s+/.test(trimmed)) {
+        flushPara();
+        if (listType !== 'ul') { flushList(); listType = 'ul'; }
+        listItems.push(`<li>${applyInline(trimmed.replace(/^[-*]\s+/, ''))}</li>`);
+      } else if (/^\d+[.)]\s+/.test(trimmed)) {
+        flushPara();
+        if (listType !== 'ol') { flushList(); listType = 'ol'; }
+        listItems.push(`<li>${applyInline(trimmed.replace(/^\d+[.)]\s+/, ''))}</li>`);
+      } else if (trimmed === '---' || trimmed === '***') {
+        flushPara();
+        flushList();
+        blocks.push('<hr>');
       } else {
-        paraLines.push(applyInline(line));
+        flushList();
+        paraLines.push(applyInline(trimmed));
       }
     }
     flushPara();
+    flushList();
     return blocks.join('');
   };
 
