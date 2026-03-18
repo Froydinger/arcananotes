@@ -379,9 +379,6 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
     return content
       .replace(/^(here'?s?\s+(a|your|the)\s+.*?[:\n]|sure[!,.]?\s*.*?[:\n]|absolutely[!,.]?\s*.*?[:\n])/i, '')
       .replace(/\n*(remember,?\s+i'?m?\s+just\s+arc.*$)/i, '')
-      .replace(/\n*(---\n*.*$)/s, '')
-      .replace(/\n*(tips?:.*$)/is, '')
-      .replace(/\n*(note:.*$)/is, '')
       .trim();
   };
 
