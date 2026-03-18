@@ -115,7 +115,19 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('OpenAI API error:', response.status, errorData);
+      console.error('AI gateway error:', response.status, errorData);
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: 'Rate limit exceeded, please try again later.' }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: 'AI usage limit reached.' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
       return new Response(
         JSON.stringify({ error: 'Failed to process spell check' }), 
         { 
