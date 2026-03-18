@@ -1,6 +1,7 @@
 
-import { Plus, Heart } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { EmptyState } from '@/components/ui/empty-state';
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { useNotes } from '@/contexts/NoteContext';
 import { useNavigate } from 'react-router-dom';
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
@@ -31,7 +32,7 @@ export default function EmptyNotesPlaceholder() {
           </div>
         )}
         <EmptyState
-          icon={Heart}
+          icon={() => <img src={arcanaLogo} alt="Arcana" className="h-12 w-12" />}
           title={
             <div className="flex items-center justify-center">
               Welcome to Arcana Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1">™</span>

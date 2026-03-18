@@ -63,7 +63,7 @@ export const EmailChangeEmail = ({
 
 export default EmailChangeEmail
 
-const LOGO_URL = 'https://cleqowfvjqnuybfdwrqc.supabase.co/storage/v1/object/public/email-assets/arc-logo.png'
+const LOGO_URL = 'https://cleqowfvjqnuybfdwrqc.supabase.co/storage/v1/object/public/email-assets/arcana-logo-2026.png'
 
 const main = { backgroundColor: '#f0ece6', fontFamily: "'DM Sans', Arial, sans-serif", padding: '40px 0' }
 const container = { maxWidth: '480px', margin: '0 auto', borderRadius: '16px', overflow: 'hidden' as const, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }

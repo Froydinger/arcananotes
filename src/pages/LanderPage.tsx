@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Heart, PenLine, CheckSquare, Brain, Shield, Smartphone, ArrowRight, Check, Menu, X } from "lucide-react";
+import { PenLine, CheckSquare, Brain, Shield, Smartphone, ArrowRight, Check, Menu, X } from "lucide-react";
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { Button } from "@/components/ui/button";
 import { LoginDialog } from "@/components/auth/LoginDialog";
 import FakeNoteEditor from "@/components/landing/FakeNoteEditor";
@@ -59,7 +60,7 @@ export default function LanderPage() {
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-8 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
-            <Heart className="h-6 w-6 text-accent" fill="currentColor" />
+            <img src={arcanaLogo} alt="Arcana" className="h-6 w-6" />
             <span className="font-display text-lg text-foreground tracking-tight">Arcana Notes</span>
           </div>
           <div className="flex items-center gap-4">
@@ -78,7 +79,7 @@ export default function LanderPage() {
       {/* Top Navigation */}
       <nav className="relative z-50 flex items-center justify-between px-4 py-4 md:px-8 max-w-7xl mx-auto pwa-safe-top">
         <div className="flex items-center gap-2.5">
-          <Heart className="h-8 w-8 text-accent" fill="currentColor" />
+          <img src={arcanaLogo} alt="Arcana" className="h-8 w-8" />
           <span className="font-display text-xl text-foreground tracking-tight">
             Arcana Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1 align-super">™</span>
           </span>
@@ -120,9 +121,10 @@ export default function LanderPage() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="mb-8 flex justify-center">
             <div className="relative">
-              <Heart
-                className="w-24 h-24 md:w-32 md:h-32 text-accent drop-shadow-lg"
-                fill="currentColor"
+              <img
+                src={arcanaLogo}
+                alt="Arcana"
+                className="w-24 h-24 md:w-32 md:h-32 drop-shadow-lg"
                 style={{ filter: 'drop-shadow(0 0 20px hsl(var(--accent) / 0.3))' }}
               />
               <div className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 bg-accent/20 rounded-full blur-2xl -z-10 animate-pulse-soft" />
@@ -148,7 +150,7 @@ export default function LanderPage() {
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-14 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-lg gap-3 transition-all hover:scale-105 shadow-glow-sm"
             >
-              <Heart className="h-5 w-5" fill="currentColor" />
+              <img src={arcanaLogo} alt="" className="h-5 w-5" />
               Start Writing — It's Free
             </Button>
             <span className="text-xs text-muted-foreground/60">Free to use · Unlimited AI for $5/mo</span>
@@ -280,7 +282,7 @@ export default function LanderPage() {
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-12 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-base gap-2 transition-all hover:scale-105 shadow-glow-sm"
             >
-              <Heart className="h-4 w-4" fill="currentColor" />
+              <img src={arcanaLogo} alt="" className="h-4 w-4" />
               Start Writing with Pro
             </Button>
           </div>
@@ -307,7 +309,7 @@ export default function LanderPage() {
       {/* Footer */}
       <footer className="relative z-10 py-12 px-6 border-t border-border/40 text-center space-y-3">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Heart className="h-5 w-5 text-accent/60" fill="currentColor" />
+          <img src={arcanaLogo} alt="Arcana" className="h-5 w-5 opacity-60" />
           <span className="font-display text-foreground/60">
             Arcana Notes<span className="text-xs text-muted-foreground/40 ml-0.5 align-super">™</span>
           </span>

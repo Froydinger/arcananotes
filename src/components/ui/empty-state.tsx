@@ -3,7 +3,7 @@ import { Button } from "./button"
 import { LucideIcon } from "lucide-react"
 
 interface EmptyStateProps {
-  icon: LucideIcon
+  icon: LucideIcon | React.ComponentType<{ className?: string }>
   title: React.ReactNode
   description: string
   action?: {

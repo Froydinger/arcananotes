@@ -22,6 +22,7 @@ import { usePreferences } from "@/contexts/PreferencesContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import arcanaLogo from '@/assets/arcana-logo.png';
 import {
   LogOut,
   User,
@@ -212,7 +213,7 @@ const SettingsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <Heart className="h-5 w-5 text-accent" fill="currentColor" />
+              <img src={arcanaLogo} alt="Arcana" className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -224,7 +225,7 @@ const SettingsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <Heart className="h-5 w-5 text-accent" fill="currentColor" />
+              <img src={arcanaLogo} alt="Arcana" className="h-5 w-5" />
             </button>
           </div>
         </div>
