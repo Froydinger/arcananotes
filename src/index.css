@@ -1,0 +1,1336 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme - warm cream tones */
+    --background: 40 30% 98%;
+    --foreground: 240 10% 15%;
+
+    --card: 40 25% 99%;
+    --card-foreground: 240 10% 15%;
+
+    --popover: 40 25% 99%;
+    --popover-foreground: 240 10% 15%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 94%;
+    --secondary-foreground: 240 10% 15%;
+
+    --muted: 40 20% 94%;
+    --muted-foreground: 240 5% 45%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 199 89% 48%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 40 20% 97%;
+    --sidebar-foreground: 240 10% 30%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 199 89% 48%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 40 15% 90%;
+    --sidebar-ring: 199 89% 48%;
+
+    /* Light theme background - warm gradient */
+    background: linear-gradient(
+      165deg,
+      hsl(40, 30%, 99%) 0%,
+      hsl(40, 25%, 97%) 35%,
+      hsl(45, 20%, 95%) 70%,
+      hsl(50, 15%, 93%) 100%
+    );
+    background-attachment: fixed;
+  }
+
+  .dark {
+    /* Dark theme - rich charcoal with subtle warmth */
+    --background: 240 10% 6%;
+    --foreground: 40 20% 96%;
+
+    --card: 240 10% 8%;
+    --card-foreground: 40 20% 96%;
+
+    --popover: 240 10% 8%;
+    --popover-foreground: 40 20% 96%;
+
+    --primary: 199 89% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 8% 14%;
+    --secondary-foreground: 40 20% 96%;
+
+    --muted: 240 8% 14%;
+    --muted-foreground: 40 10% 60%;
+
+    --accent: 199 89% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 8% 16%;
+    --input: 240 8% 16%;
+    --ring: 199 89% 53%;
+
+    --sidebar-background: 240 12% 5%;
+    --sidebar-foreground: 40 15% 80%;
+    --sidebar-primary: 199 89% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 199 89% 53%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 8% 14%;
+    --sidebar-ring: 199 89% 53%;
+
+    /* Dark theme background - deep gradient (darkened) */
+    background: linear-gradient(
+      165deg,
+      hsl(240, 15%, 5%) 0%,
+      hsl(250, 12%, 4%) 35%,
+      hsl(260, 10%, 3%) 70%,
+      hsl(270, 10%, 2%) 100%
+    );
+    background-attachment: fixed;
+  }
+
+  .navy {
+    /* Navy theme - elegant blue */
+    --background: 220 40% 10%;
+    --foreground: 40 25% 95%;
+
+    --card: 220 35% 12%;
+    --card-foreground: 40 25% 95%;
+
+    --popover: 220 35% 12%;
+    --popover-foreground: 40 25% 95%;
+
+    --primary: 199 89% 58%;
+    --primary-foreground: 220 40% 10%;
+
+    --secondary: 220 30% 16%;
+    --secondary-foreground: 40 25% 95%;
+
+    --muted: 220 30% 16%;
+    --muted-foreground: 40 15% 65%;
+
+    --accent: 199 89% 58%;
+    --accent-foreground: 220 40% 10%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 25% 95%;
+
+    --border: 220 30% 20%;
+    --input: 220 30% 20%;
+    --ring: 199 89% 58%;
+
+    --sidebar-background: 222 45% 7%;
+    --sidebar-foreground: 40 20% 80%;
+    --sidebar-primary: 199 89% 58%;
+    --sidebar-primary-foreground: 222 45% 7%;
+    --sidebar-accent: 199 89% 58%;
+    --sidebar-accent-foreground: 222 45% 7%;
+    --sidebar-border: 220 30% 18%;
+    --sidebar-ring: 199 89% 58%;
+
+    /* Navy theme - rich blue gradient */
+    background: linear-gradient(
+      165deg,
+      hsl(222, 45%, 8%) 0%,
+      hsl(224, 42%, 7%) 35%,
+      hsl(226, 40%, 5%) 70%,
+      hsl(228, 45%, 4%) 100%
+    );
+    background-attachment: fixed;
+  }
+
+  /* Apply navy mode by default only if no theme class exists */
+  html:not(.light):not(.dark):not(.navy) {
+    --background: 220 40% 10%;
+    --foreground: 40 25% 95%;
+    --card: 220 35% 12%;
+    --card-foreground: 40 25% 95%;
+    --popover: 220 35% 12%;
+    --popover-foreground: 40 25% 95%;
+    --primary: 199 89% 58%;
+    --primary-foreground: 220 40% 10%;
+    --secondary: 220 30% 16%;
+    --secondary-foreground: 40 25% 95%;
+    --muted: 220 30% 16%;
+    --muted-foreground: 40 15% 65%;
+    --accent: 199 89% 58%;
+    --accent-foreground: 220 40% 10%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 25% 95%;
+    --border: 220 30% 20%;
+    --input: 220 30% 20%;
+    --ring: 199 89% 58%;
+    --sidebar-background: 222 45% 7%;
+    --sidebar-foreground: 40 20% 80%;
+    --sidebar-primary: 199 89% 58%;
+    --sidebar-primary-foreground: 222 45% 7%;
+    --sidebar-accent: 199 89% 58%;
+    --sidebar-accent-foreground: 222 45% 7%;
+    --sidebar-border: 220 30% 18%;
+    --sidebar-ring: 199 89% 58%;
+    background: linear-gradient(
+      165deg,
+      hsl(222, 45%, 8%) 0%,
+      hsl(224, 42%, 7%) 35%,
+      hsl(226, 40%, 5%) 70%,
+      hsl(228, 45%, 4%) 100%
+    );
+    background-attachment: fixed;
+  }
+
+  body {
+    @apply text-foreground antialiased;
+    font-family: "DM Sans", system-ui, sans-serif;
+    background: inherit;
+    margin: 0;
+    padding: 0;
+    min-height: 100dvh;
+    /* Safe area: always respect left/right; top handled only in iOS standalone */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* PWA standalone mode: apply safe areas and proper height handling for ALL platforms */
+  @media (display-mode: standalone) {
+    :root {
+      --pwa-safe-top: env(safe-area-inset-top, 0px);
+      --pwa-safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    html,
+    body,
+    #root {
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
+    }
+
+    /* Sidebar header: add safe-area + existing padding */
+    .apple-pwa-sidebar-header {
+      padding-top: calc(var(--pwa-safe-top) + 1.25rem) !important;
+    }
+
+    /* Sidebar footer: keep actions above the home indicator */
+    .apple-pwa-sidebar-footer {
+      padding-bottom: calc(var(--pwa-safe-bottom) + 1rem) !important;
+    }
+
+    /* Sticky note header: add ONLY top safe area (keep existing padding) */
+    [data-note-header] {
+      padding-top: calc(var(--pwa-safe-top) + 1rem) !important;
+    }
+
+    /* Generic utility: add top safe-area to any block (useful for pages without sticky header) */
+    .pwa-safe-top {
+      padding-top: calc(var(--pwa-safe-top) + 1rem) !important;
+    }
+
+    /* Mac/iPad PWA fix: Force GPU compositing to fix WebKit rendering bug
+       where backdrop-filter in CSS columns layout causes tiles to not render properly.
+       This affects Safari PWA on macOS and iPadOS. */
+    
+    /* Force the masonry container to create a new stacking context and compositing layer */
+    [data-masonry-grid] {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-perspective: 1000px;
+      perspective: 1000px;
+      isolation: isolate;
+      /* Avoid WebKit “balance” repaint artifacts in standalone */
+      column-fill: auto;
+    }
+
+    /* Each card wrapper needs its own compositing layer */
+    .break-inside-avoid {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      isolation: isolate;
+    }
+
+    /* Glass cards need explicit layer promotion */
+    .glass-card {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    /* If WebKit still glitches, remove backdrop-filter in standalone on tablet+ sizes.
+       This is the most reliable fix for the “invisible tiles/mosaic” bug. */
+    @media (min-width: 768px) {
+      .glass,
+      .glass-card,
+      .glass-nav {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      .glass {
+        background: hsl(var(--card) / 0.85) !important;
+      }
+
+      .glass-card {
+        background: hsl(var(--card) / 0.82) !important;
+      }
+
+      .glass-nav {
+        background: hsl(var(--background) / 0.92) !important;
+      }
+    }
+  }
+
+  /* iOS-specific standalone (PWA): additional iOS-only handling */
+  @supports (-webkit-touch-callout: none) {
+    @media (display-mode: standalone) {
+      html,
+      body,
+      #root {
+        min-height: -webkit-fill-available;
+      }
+    }
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background-color: hsl(var(--background));
+  }
+
+  #root {
+    min-height: 100dvh;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .dark .toggle-active,
+  .navy .toggle-active {
+    box-shadow: 0 0 12px hsl(var(--accent) / 0.4);
+  }
+
+  .dark button:focus,
+  .dark a:focus,
+  .navy button:focus,
+  .navy a:focus {
+    outline-color: hsl(var(--accent));
+  }
+
+  /* Text selection highlight */
+  :root ::selection {
+    background: hsl(199 89% 48% / 0.25);
+    color: inherit;
+  }
+  :root ::-moz-selection {
+    background: hsl(199 89% 48% / 0.25);
+    color: inherit;
+  }
+
+  .dark ::selection,
+  .navy ::selection {
+    background: hsl(var(--accent) / 0.35);
+    color: hsl(var(--foreground));
+  }
+  .dark ::-moz-selection,
+  .navy ::-moz-selection {
+    background: hsl(var(--accent) / 0.35);
+    color: hsl(var(--foreground));
+  }
+
+  /* Marked text highlight */
+  :root mark {
+    background-color: hsl(199 89% 48% / 0.2);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+}
+
+/* Glass morphism utilities */
+.glass {
+  background: hsl(var(--card) / 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.3);
+}
+
+.glass-card {
+  background: hsl(var(--card) / 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid hsl(var(--border) / 0.2);
+  border-radius: 1.25rem;
+}
+
+/* Subtle blue outline for note cards - all themes */
+.note-card-outline {
+  box-shadow: 0 0 0 1px hsl(199 89% 48% / 0.12);
+}
+
+.note-card-outline:hover {
+  box-shadow: 0 0 0 1px hsl(199 89% 48% / 0.25);
+}
+
+.glass-nav {
+  background: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid hsl(var(--border) / 0.2);
+}
+
+.glass-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, hsl(var(--accent) / 0.05) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.glass-shimmer:hover::after {
+  transform: translateX(100%);
+}
+
+/* Safe area utilities */
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+@layer components {
+  /* Enhanced keyframe animations */
+  @keyframes bounce-in {
+    0% {
+      transform: translateX(-100%) scale(0.95);
+      opacity: 0;
+    }
+    50% {
+      transform: translateX(6px) scale(1.01);
+      opacity: 0.85;
+    }
+    75% {
+      transform: translateX(-2px) scale(1);
+      opacity: 0.95;
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: calc(200px + 100%) 0;
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 8px hsl(var(--accent) / 0.25);
+    }
+    50% {
+      box-shadow:
+        0 0 24px hsl(var(--accent) / 0.45),
+        0 0 40px hsl(var(--accent) / 0.2);
+    }
+  }
+
+  @keyframes bounce-out {
+    0% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+    25% {
+      transform: translateX(6px) scale(1.01);
+      opacity: 0.85;
+    }
+    100% {
+      transform: translateX(-100%) scale(0.95);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float-in {
+    0% {
+      transform: translateY(16px) scale(0.97);
+      opacity: 0;
+    }
+    70% {
+      transform: translateY(-2px) scale(1.005);
+      opacity: 0.95;
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+
+  @keyframes scale-in {
+    0% {
+      transform: scale(0.92);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.01);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes gentle-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 8px hsl(var(--primary) / 0.25);
+    }
+    50% {
+      box-shadow:
+        0 0 24px hsl(var(--primary) / 0.45),
+        0 0 40px hsl(var(--primary) / 0.2);
+    }
+  }
+
+  @keyframes slide-up-smooth {
+    0% {
+      transform: translateY(24px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes heartbeat {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.12);
+    }
+  }
+
+  @keyframes fade-in-half {
+    0% {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 0.7;
+    }
+  }
+
+  @keyframes subtle-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 2s ease-in-out infinite;
+  }
+
+  .animate-fade-in-half {
+    animation: fade-in-half 0.3s ease-out forwards;
+  }
+
+  .animate-subtle-pulse {
+    animation: subtle-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes card-hover {
+    0% {
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      transform: translateY(-6px) scale(1.01);
+    }
+  }
+
+  /* Apply bounce animations to sidebar */
+  [data-sidebar="sidebar"] {
+    animation: bounce-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Add smooth transition for collapsing */
+  .group[data-state="collapsed"] [data-sidebar="sidebar"] {
+    animation: bounce-out 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Enhanced sidebar transitions */
+  .group[data-state="expanded"] [data-sidebar="sidebar"] {
+    animation: bounce-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Sidebar toggle button bounce */
+  .sidebar-toggle:active {
+    animation: button-bounce 0.25s ease-in-out;
+  }
+
+  .note-editor {
+    @apply min-h-[60vh] w-full outline-none text-lg;
+    font-family: "DM Sans", system-ui, sans-serif;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    line-height: 1.75;
+  }
+
+  .note-editor h1 {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    @apply text-4xl font-medium mb-4 mt-6;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    text-indent: 0 !important;
+  }
+
+  .note-editor:empty:before {
+    content: attr(data-placeholder);
+    @apply text-muted-foreground italic;
+    opacity: 0.6;
+  }
+
+  /* Extra bold for note editor - make bold more noticeable */
+  .note-editor b,
+  .note-editor strong {
+    font-weight: 800;
+  }
+
+  /* Prevent browser repositioning during dynamic edits */
+  .editor-anchor {
+    overflow-anchor: none;
+  }
+
+  /* Loading shimmer effect */
+  .loading-shimmer {
+    background: linear-gradient(90deg, transparent, hsl(var(--muted) / 0.5), transparent);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Enhanced interactive elements - refined card effect */
+  .interactive-card {
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow:
+      0 1px 2px hsl(var(--foreground) / 0.03),
+      0 4px 8px hsl(var(--foreground) / 0.04);
+  }
+
+  .interactive-card:hover {
+    transform: translateY(-4px) scale(1.008);
+    box-shadow:
+      0 8px 16px hsl(var(--foreground) / 0.06),
+      0 16px 32px hsl(var(--foreground) / 0.08),
+      0 0 0 1px hsl(var(--accent) / 0.1);
+  }
+
+  /* Floating animation for special elements */
+  .float {
+    animation: gentle-bounce 3s ease-in-out infinite;
+  }
+
+  /* Enhanced focus states */
+  .enhanced-focus:focus-visible {
+    outline: 2px solid hsl(var(--accent));
+    outline-offset: 3px;
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  /* Image editing styles */
+  .note-editor .note-image {
+    border-radius: 12px;
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+    box-shadow: 0 4px 12px hsl(var(--foreground) / 0.08);
+  }
+
+  .note-editor .note-image:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 24px hsl(var(--foreground) / 0.12);
+  }
+
+  /* Sidebar note items should always use rounded-lg */
+  .sidebar-menu-button,
+  .btn-accessible.cursor-pointer {
+    border-radius: 0.5rem !important;
+  }
+
+  /* Sidebar hover states */
+  .sidebar-menu-button:hover,
+  .btn-accessible.cursor-pointer:hover {
+    @apply bg-accent/10 text-foreground;
+    border-radius: 0.5rem !important;
+  }
+
+  .sidebar-menu-active {
+    @apply border text-foreground;
+    border-color: hsl(var(--accent) / 0.3);
+    background: hsl(var(--accent) / 0.08);
+    border-radius: 0.5rem !important;
+  }
+
+  /* Main navigation items should be fully rounded */
+  .sidebar-nav-active {
+    @apply border text-foreground;
+    border-color: hsl(var(--accent) / 0.3);
+    background: hsl(var(--accent) / 0.08);
+    border-radius: 9999px !important;
+  }
+
+  /* PWA Slide up animation */
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .dark .sidebar-menu-active,
+  .navy .sidebar-menu-active {
+    @apply border text-foreground;
+    border-color: hsl(var(--accent) / 0.35);
+    background: hsl(var(--accent) / 0.1);
+    border-radius: 0.5rem !important;
+  }
+
+  /* Main navigation active states - fully rounded for all themes */
+  .dark .sidebar-nav-active,
+  .navy .sidebar-nav-active {
+    @apply border text-foreground;
+    border-color: hsl(var(--accent) / 0.35);
+    background: hsl(var(--accent) / 0.1);
+    border-radius: 9999px !important;
+  }
+
+  /* Button accessibility improvements */
+  .btn-accessible {
+    @apply transition-all duration-250 rounded-full;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-accessible:hover {
+    transform: scale(1.03);
+  }
+
+  .btn-accessible:active {
+    transform: scale(0.97);
+  }
+
+  /* Light theme button styles */
+  .btn-accessible {
+    @apply text-foreground hover:text-foreground hover:bg-accent/10 rounded-full;
+  }
+
+  /* Dark theme button styles */
+  .dark .btn-accessible,
+  .navy .btn-accessible {
+    @apply text-foreground hover:text-foreground hover:bg-accent/15 rounded-full;
+  }
+
+  /* Sidebar toggle button specific styles */
+  .sidebar-toggle {
+    @apply transition-all duration-250 rounded-full;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sidebar-toggle {
+    @apply text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-full;
+  }
+
+  .dark .sidebar-toggle,
+  .navy .sidebar-toggle {
+    @apply text-muted-foreground hover:text-foreground hover:bg-accent/15 rounded-full;
+  }
+
+  /* General button contrast improvements */
+  .btn-contrast {
+    @apply transition-all duration-250 rounded-full;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-contrast {
+    @apply text-foreground/80 hover:text-foreground hover:bg-accent/10 rounded-full;
+  }
+
+  .dark .btn-contrast,
+  .navy .btn-contrast {
+    @apply text-foreground/80 hover:text-foreground hover:bg-accent/15 rounded-full;
+  }
+
+  /* Shimmer effect for Google button */
+  .google-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .google-shimmer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+    animation: shimmer 2s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* Modern glass effect for cards */
+  .glass-card {
+    background: hsl(var(--card) / 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .dark .glass-card,
+  .navy .glass-card {
+    background: hsl(var(--card) / 0.75);
+    border: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  /* Glass button with shimmer border effect */
+  .glass-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-shimmer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--foreground) / 0.35) 0%,
+      hsl(var(--foreground) / 0.12) 25%,
+      transparent 50%,
+      hsl(var(--foreground) / 0.08) 75%,
+      hsl(var(--foreground) / 0.2) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .dark .glass-shimmer::before,
+  .navy .glass-shimmer::before {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--foreground) / 0.3) 0%,
+      hsl(var(--foreground) / 0.1) 25%,
+      transparent 50%,
+      hsl(var(--foreground) / 0.06) 75%,
+      hsl(var(--foreground) / 0.15) 100%
+    );
+  }
+}
+
+/* Glow shadow utilities for accent-colored elements */
+.shadow-glow-sm {
+  box-shadow: 0 0 10px hsl(var(--accent) / 0.3);
+}
+
+.shadow-glow {
+  box-shadow:
+    0 0 20px hsl(var(--accent) / 0.4),
+    0 0 40px hsl(var(--accent) / 0.2);
+}
+
+/* Dynamic font classes based on preferences */
+html[data-title-font="serif"] .dynamic-title-font {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+html[data-title-font="sans"] .dynamic-title-font {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+html[data-title-font="mono"] .dynamic-title-font {
+  font-family: "JetBrains Mono", Menlo, Monaco, monospace;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+html[data-body-font="serif"] .dynamic-body-font {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+html[data-body-font="sans"] .dynamic-body-font {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-weight: 300;
+  letter-spacing: -0.005em;
+}
+
+html[data-body-font="mono"] .dynamic-body-font {
+  font-family: "JetBrains Mono", Menlo, Monaco, monospace;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+/* Header blocks in notes should use the title font */
+html[data-title-font="serif"] .note-editor h1,
+html[data-title-font="serif"] .note-editor h2,
+html[data-title-font="serif"] .note-editor h3,
+html[data-title-font="serif"] .note-editor h4,
+html[data-title-font="serif"] .note-editor h5,
+html[data-title-font="serif"] .note-editor h6 {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+html[data-title-font="sans"] .note-editor h1,
+html[data-title-font="sans"] .note-editor h2,
+html[data-title-font="sans"] .note-editor h3,
+html[data-title-font="sans"] .note-editor h4,
+html[data-title-font="sans"] .note-editor h5,
+html[data-title-font="sans"] .note-editor h6 {
+  font-family: "DM Sans", system-ui, sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+}
+
+html[data-title-font="mono"] .note-editor h1,
+html[data-title-font="mono"] .note-editor h2,
+html[data-title-font="mono"] .note-editor h3,
+html[data-title-font="mono"] .note-editor h4,
+html[data-title-font="mono"] .note-editor h5,
+html[data-title-font="mono"] .note-editor h6 {
+  font-family: "JetBrains Mono", Menlo, Monaco, monospace !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Enhanced spell check button positioning */
+.spell-check-fab {
+  position: fixed !important;
+  z-index: 9999 !important;
+  pointer-events: all !important;
+  border-radius: 50% !important;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px hsl(var(--border) / 0.2) !important;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.spell-check-fab:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    0 0 0 1px hsl(var(--accent) / 0.3) !important;
+}
+
+/* Enhanced safe area support for Apple devices */
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) {
+    .spell-check-fab {
+      bottom: max(env(safe-area-inset-bottom), 24px) !important;
+      right: max(env(safe-area-inset-right), 24px) !important;
+      /* Ensure it stays within rounded corners */
+      margin-right: 8px !important;
+      margin-bottom: 8px !important;
+    }
+
+    /* Prevent top clipping on notes grid - iOS PWA mobile */
+    [data-masonry-grid] {
+      margin-top: 5px !important;
+    }
+
+    /* Prevent top clipping on search bar - iOS PWA mobile */
+    [data-search-container] {
+      margin-top: 5px !important;
+    }
+  }
+}
+
+/* Fallback for non-Apple platforms */
+@supports not (-webkit-touch-callout: none) {
+  .spell-check-fab {
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+  }
+}
+
+/* Smooth glow animation for accessibility */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(30, 174, 219, 0.4);
+  }
+  100% {
+    box-shadow:
+      0 0 20px rgba(30, 174, 219, 0.6),
+      0 0 35px rgba(30, 174, 219, 0.3);
+  }
+}
+
+@keyframes glowBlue {
+  0% {
+    box-shadow: 0 0 5px rgba(30, 174, 219, 0.4);
+  }
+  100% {
+    box-shadow:
+      0 0 20px rgba(30, 174, 219, 0.6),
+      0 0 35px rgba(30, 174, 219, 0.3);
+  }
+}
+
+/* Scrollbar styling - hidden to prevent layout shift */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
+
+/* Firefox scrollbar hiding */
+* {
+  scrollbar-width: none;
+}
+
+.dark ::-webkit-scrollbar-thumb,
+.navy ::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover,
+.navy ::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
+
+/* PWA mode - hide scrollbars only, no layout changes */
+@media (display-mode: standalone) {
+  /* Hide scrollbar in PWA mode but allow scrolling */
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    display: none;
+  }
+
+  /* Firefox scrollbar hiding */
+  * {
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for all scrollable elements */
+  *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+/* Desktop/tablet: use regular grid instead of masonry for consistent equal-height tiles */
+@media (min-width: 768px) {
+  [data-masonry-grid] {
+    columns: unset !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Make all cards stretch to fill row height */
+  [data-masonry-grid] > div {
+    height: 100% !important;
+    margin-bottom: 0 !important;
+  }
+
+  [data-masonry-grid] > div > * {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* Desktop/tablet: safe area for sidebar (traffic lights on Mac/iPad) */
+@media (min-width: 768px) {
+  /* Add top padding for traffic lights on sidebar */
+  .pwa-sidebar-safe {
+    padding-top: 2.75rem !important;
+  }
+}
+
+/* PWA standalone on desktop/tablet: disable glass backdrop-filter to prevent WebKit rendering issues */
+@media (display-mode: standalone) and (min-width: 768px) {
+  .glass,
+  .glass-card,
+  .glass-nav {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .glass-card {
+    background: hsl(var(--card) / 0.82) !important;
+  }
+}
+
+/* Larger desktop screens: 3 columns */
+@media (min-width: 1024px) {
+  [data-masonry-grid] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Extra large screens: 4 columns */
+@media (min-width: 1400px) {
+  [data-masonry-grid] {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Sonner Toast Styles */
+[data-sonner-toaster] {
+  --normal-bg: hsl(var(--background) / 0.85);
+  --normal-border: hsl(var(--border) / 0.5);
+  --normal-text: hsl(var(--foreground));
+}
+
+[data-sonner-toast] {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 9999px !important;
+  padding-left: 1.25rem !important;
+  padding-right: 2.5rem !important;
+}
+
+[data-sonner-toast] [data-close-button] {
+  position: absolute !important;
+  right: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  left: auto !important;
+  opacity: 1 !important;
+  background: hsl(var(--background) / 0.6) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  border-radius: 9999px !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  background: hsl(var(--secondary)) !important;
+  transform: translateY(-50%) scale(1.05) !important;
+}
+
+[data-sonner-toast] [data-close-button] svg {
+  width: 14px !important;
+  height: 14px !important;
+  stroke-width: 2.5 !important;
+}
+
+/* ===== LANDSCAPE MODE OPTIMIZATIONS ===== */
+/* Mobile landscape - reduce vertical spacing, use horizontal space better */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Reduce body padding */
+  body {
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Compact header spacing */
+  .apple-pwa-header-spacing {
+    padding-top: max(env(safe-area-inset-top), 8px) !important;
+    margin-top: 2px !important;
+  }
+
+  /* Reduce main content padding */
+  .p-4 {
+    padding: 0.75rem !important;
+  }
+
+  .p-8 {
+    padding: 0.75rem 1.5rem !important;
+  }
+
+  /* Compact margins between header and content */
+  .mb-6,
+  .mb-8 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Two-column grid on landscape mobile */
+  .grid-cols-1 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Reduce gap in grid */
+  .gap-5 {
+    gap: 0.75rem !important;
+  }
+
+  /* Smaller buttons in landscape */
+  .h-11 {
+    height: 2.5rem !important;
+  }
+
+  .h-10 {
+    height: 2.25rem !important;
+  }
+
+  .w-11,
+  .w-10 {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+
+  /* Reduce note card padding */
+  .pb-24 {
+    padding-bottom: 1rem !important;
+  }
+
+  /* Sidebar adjustments */
+  .apple-pwa-sidebar-header {
+    padding-top: 8px !important;
+    margin-top: 4px !important;
+  }
+
+  .apple-pwa-bottom-safe {
+    padding-bottom: 8px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Note editor header compact (safe-area top handled above in iOS standalone block) */
+  [data-note-header] {
+    padding-top: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    padding-left: 0.5rem !important;
+  }
+
+  [data-note-header] .p-2\.5 {
+    padding: 0.375rem !important;
+  }
+
+  /* Note editor title smaller */
+  .note-editor h1 {
+    font-size: 1.75rem !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Compact checklist items */
+  .checklist-item {
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.375rem !important;
+  }
+}
+
+/* Tablet landscape - better spacing */
+@media (min-width: 768px) and (max-height: 600px) and (orientation: landscape) {
+  .apple-pwa-header-spacing {
+    padding-top: max(env(safe-area-inset-top), 10px) !important;
+    margin-top: 4px !important;
+  }
+
+  /* Three-column grid */
+  .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .p-8 {
+    padding: 1rem 2rem !important;
+  }
+}

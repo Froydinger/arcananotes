@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Arcana Notes - Write What You Love</title>
+    <meta name="description" content="Write What You Love - A minimalist notes app focused on creative expression and passionate writing">
+    <meta name="author" content="Arcana Notes" />
+
+    <!-- PWA Configuration -->
+    <meta name="theme-color" content="#0a0a0a" id="theme-meta" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Arcana Notes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph / Facebook -->
+    
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://arcananotes.com" />
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/xTAe4UcDHdfm0iuHBhqWM2rUUXt1/social-images/social-1773761675903-arcananotes.webp">
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:type" content="image/png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/xTAe4UcDHdfm0iuHBhqWM2rUUXt1/social-images/social-1773761675903-arcananotes.webp">
+    
+    <!-- Additional SEO -->
+    <meta name="keywords" content="notes app, writing, minimalist, creative writing, note taking, secure notes, sync notes, progressive web app" />
+    <link rel="canonical" href="https://arcananotes.com" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta property="og:title" content="Arcana Notes - Write What You Love">
+  <meta name="twitter:title" content="Arcana Notes - Write What You Love">
+  <meta property="og:description" content="Write What You Love - A minimalist notes app focused on creative expression and passionate writing">
+  <meta name="twitter:description" content="Write What You Love - A minimalist notes app focused on creative expression and passionate writing">
+</head>
+
+  <body>
+    <script>
+      // SUPER AGGRESSIVE browser color setting - runs FIRST
+      (function() {
+        // IMMEDIATE fallback to black instead of white
+        const fallbackColor = '#0a0a0a';
+        
+        try {
+          const theme = localStorage.getItem('theme') || 'dark';
+          const colors = { light: '#ffffff', dark: '#0a0a0a', navy: '#192028', sepia: '#f5f1eb' };
+          const color = colors[theme] || fallbackColor;
+          
+          console.log('IMMEDIATE THEME SETUP:', theme, 'COLOR:', color, 'FROM LOCALSTORAGE:', localStorage.getItem('theme'));
+          
+          // SET BROWSER COLOR IMMEDIATELY - MULTIPLE WAYS
+          const setMetaColor = (color) => {
+            // Find all possible meta tags
+            const metas = [
+              document.querySelector('meta[name="theme-color"]'),
+              document.getElementById('theme-meta')
+            ];
+            
+            // Update existing ones
+            metas.forEach(meta => {
+              if (meta) meta.setAttribute('content', color);
+            });
+            
+            // Create if none exist
+            if (!metas[0] && !metas[1]) {
+              const newMeta = document.createElement('meta');
+              newMeta.name = 'theme-color';
+              newMeta.id = 'theme-meta';
+              newMeta.content = color;
+              document.head.appendChild(newMeta);
+            }
+          };
+          
+          // Set color IMMEDIATELY
+          setMetaColor(color);
+          
+          // Apply theme class
+          document.documentElement.className = theme;
+          
+          // Force body background immediately
+          document.documentElement.style.setProperty('background-color', color, 'important');
+          if (document.body) {
+            document.body.style.setProperty('background-color', color, 'important');
+          }
+          
+          // Wait for React to fully load before removing forced styles
+          const waitForReact = () => {
+            // Check if React app is loaded AND PreferencesContext has run
+            const reactLoaded = document.querySelector('#root > *');
+            const themeApplied = document.documentElement.classList.contains('light') || 
+                               document.documentElement.classList.contains('dark') || 
+                               document.documentElement.classList.contains('navy') || 
+                               document.documentElement.classList.contains('sepia');
+            
+            if (reactLoaded && themeApplied) {
+              // React and theme are loaded, safe to remove forced styles
+              document.documentElement.style.removeProperty('background-color');
+              if (document.body) {
+                document.body.style.removeProperty('background-color');
+              }
+              console.log('CLEANED UP forced styles - React and theme fully loaded');
+            } else {
+              // Keep checking every 50ms until both are ready
+              setTimeout(waitForReact, 50);
+            }
+          };
+          
+          // Start checking after initial delay
+          setTimeout(waitForReact, 300);
+          
+        } catch (e) {
+          console.error('Theme script failed, using fallback:', e);
+          // FALLBACK: Set to black instead of white
+          const setMetaColor = (color) => {
+            const metas = [
+              document.querySelector('meta[name="theme-color"]'),
+              document.getElementById('theme-meta')
+            ];
+            metas.forEach(meta => {
+              if (meta) meta.setAttribute('content', color);
+            });
+            if (!metas[0] && !metas[1]) {
+              const newMeta = document.createElement('meta');
+              newMeta.name = 'theme-color';
+              newMeta.id = 'theme-meta';
+              newMeta.content = color;
+              document.head.appendChild(newMeta);
+            }
+          };
+          setMetaColor(fallbackColor);
+          document.documentElement.style.setProperty('background-color', fallbackColor, 'important');
+          if (document.body) {
+            document.body.style.setProperty('background-color', fallbackColor, 'important');
+          }
+        }
+      })();
+    </script>
+    <div id="root"></div>
+    <script>
+      // Clear stale service worker caches (do NOT unregister SWs — breaks OAuth callback)
+      (function() {
+        try {
+          var BUILD_STAMP = 'arcana-notes-2025-03';
+          if ('caches' in window) {
+            caches.keys().then(function(names) {
+              names.forEach(function(name) {
+                if (!name.includes(BUILD_STAMP)) caches.delete(name);
+              });
+            });
+          }
+        } catch(e) {}
+      })();
+    </script>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
