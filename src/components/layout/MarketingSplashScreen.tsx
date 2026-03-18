@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Heart, PenTool, Shield, Users, Smartphone, Cloud, X } from 'lucide-react';
+import { PenTool, Shield, Users, Smartphone, Cloud, X } from 'lucide-react';
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { LoginDialog } from '@/components/auth/LoginDialog';
 
 export function MarketingSplashScreen() {
