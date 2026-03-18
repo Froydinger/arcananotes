@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
-export type ThemeType = 'light' | 'dark' | 'navy';
+export type ThemeType = 'light' | 'dark' | 'navy' | 'system';
 export type TitleFontType = 'serif' | 'sans' | 'mono';
 export type BodyFontType = 'serif' | 'sans' | 'mono';
 
