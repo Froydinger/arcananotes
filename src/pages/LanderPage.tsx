@@ -121,9 +121,10 @@ export default function LanderPage() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="mb-8 flex justify-center">
             <div className="relative">
-              <Heart
-                className="w-24 h-24 md:w-32 md:h-32 text-accent drop-shadow-lg"
-                fill="currentColor"
+              <img
+                src={arcanaLogo}
+                alt="Arcana"
+                className="w-24 h-24 md:w-32 md:h-32 drop-shadow-lg"
                 style={{ filter: 'drop-shadow(0 0 20px hsl(var(--accent) / 0.3))' }}
               />
               <div className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 bg-accent/20 rounded-full blur-2xl -z-10 animate-pulse-soft" />
