@@ -8,6 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { RefreshCw, Heart } from "lucide-react";
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { useTitleFont } from "@/hooks/useTitleFont";
 import { useBodyFont } from "@/hooks/useTitleFont";
 import {
