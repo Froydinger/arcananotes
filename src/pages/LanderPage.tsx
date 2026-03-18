@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Heart, PenLine, CheckSquare, Brain, Shield, Smartphone, ArrowRight, Check, Menu, X } from "lucide-react";
+import { PenLine, CheckSquare, Brain, Shield, Smartphone, ArrowRight, Check, Menu, X } from "lucide-react";
+import arcanaLogo from '@/assets/arcana-logo.png';
 import { Button } from "@/components/ui/button";
 import { LoginDialog } from "@/components/auth/LoginDialog";
 import FakeNoteEditor from "@/components/landing/FakeNoteEditor";
