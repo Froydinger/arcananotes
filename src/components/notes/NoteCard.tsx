@@ -89,7 +89,7 @@ export default function NoteCard({ note, onShareClick, isSelected = false, onPre
         cursor-pointer group relative overflow-hidden
         glass-card note-card-outline
         transition-all duration-350 ease-bounce-out
-        h-[200px]
+        h-[200px] flex flex-col
         ${!isTouchDevice ? 'hover:shadow-elevated-lg hover:-translate-y-1 hover:ring-1 hover:ring-accent/20' : ''}
         ${isSelected ? 'ring-2 ring-accent/40 shadow-glow' : ''}
       `}
@@ -257,7 +257,7 @@ export default function NoteCard({ note, onShareClick, isSelected = false, onPre
         <ArrowUpRight className="h-3.5 w-3.5" />
       </Button>
 
-      <CardContent className={`p-5 transition-all duration-300 ${!isTouchDevice ? 'group-hover:translate-y-[-1px]' : ''} select-none relative flex-1`}>
+      <CardContent className={`p-5 transition-all duration-300 ${!isTouchDevice ? 'group-hover:translate-y-[-1px]' : ''} select-none relative flex-1 min-h-0 overflow-hidden`}>
         {/* Shared note tags at top of content */}
         {isSharedWithUser && (
           <Badge
@@ -291,7 +291,7 @@ export default function NoteCard({ note, onShareClick, isSelected = false, onPre
             font-display font-semibold text-lg
             break-words overflow-wrap-anywhere leading-tight
             text-foreground transition-colors duration-300
-            dynamic-title-font
+            dynamic-title-font line-clamp-1
             ${!isTouchDevice ? 'group-hover:text-accent' : ''}
           `}>
             {note.title || (('note_type' in note && note.note_type === 'checklist') ? "Untitled Checklist" : "Untitled Note")}
@@ -299,9 +299,9 @@ export default function NoteCard({ note, onShareClick, isSelected = false, onPre
         </div>
 
         {isChecklist ? (
-          <div className="space-y-2">
+          <div className="space-y-2 overflow-hidden">
             {checklistItems.length > 0 ? (
-              checklistItems.slice(0, 5).map((item) => (
+              checklistItems.slice(0, 3).map((item) => (
                 <div key={item.id} className="flex items-center gap-2.5 text-sm">
                   {item.completed ? (
                     <CheckCircle2 className="h-4 w-4 text-accent flex-shrink-0" />
@@ -316,13 +316,13 @@ export default function NoteCard({ note, onShareClick, isSelected = false, onPre
             ) : (
               <p className="text-sm text-muted-foreground/50 italic">No items yet</p>
             )}
-            {checklistItems.length > 5 && (
-              <p className="text-xs text-muted-foreground/40 pl-6">+{checklistItems.length - 5} more</p>
+            {checklistItems.length > 3 && (
+              <p className="text-xs text-muted-foreground/40 pl-6">+{checklistItems.length - 3} more</p>
             )}
           </div>
         ) : (
           <p className={`
-            text-sm text-muted-foreground/80
+            text-sm text-muted-foreground/80 line-clamp-3
             ${!isTouchDevice ? 'group-hover:text-foreground/70' : ''}
             transition-colors duration-300 leading-relaxed
           `}>
