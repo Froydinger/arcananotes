@@ -309,7 +309,7 @@ export default function LanderPage() {
       {/* Footer */}
       <footer className="relative z-10 py-12 px-6 border-t border-border/40 text-center space-y-3">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Heart className="h-5 w-5 text-accent/60" fill="currentColor" />
+          <img src={arcanaLogo} alt="Arcana" className="h-5 w-5 opacity-60" />
           <span className="font-display text-foreground/60">
             Arcana Notes<span className="text-xs text-muted-foreground/40 ml-0.5 align-super">™</span>
           </span>
