@@ -310,12 +310,17 @@ const SettingsPage = () => {
                     </div>
                   </div>
 
-                  {/* Change Password */}
+                  {/* Set / Change Password */}
                   <div className="space-y-3 pt-2 border-t border-border/30">
                     <div className="flex items-center gap-2">
                       <Key className="h-4 w-4 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">Change Password</p>
+                      <p className="text-sm font-medium text-foreground">Set / Change Password</p>
                     </div>
+                    <p className="text-xs text-muted-foreground">
+                      {user?.app_metadata?.provider === 'google'
+                        ? 'Add a password to also sign in with email. Once set, you can use either method.'
+                        : 'Update your account password. Min. 6 characters.'}
+                    </p>
                     <div className="flex gap-2">
                       <Input
                         type="password"
@@ -333,16 +338,7 @@ const SettingsPage = () => {
                         {isChangingPassword ? "..." : "Update"}
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs text-muted-foreground">Min. 6 characters</p>
-                      <button
-                        type="button"
-                        onClick={() => navigate('/forgot-password')}
-                        className="text-xs text-accent hover:text-accent/80 transition-colors"
-                      >
-                        Forgot password?
-                      </button>
-                    </div>
+                  </div>
                   </div>
 
                   {/* Sign Out */}
