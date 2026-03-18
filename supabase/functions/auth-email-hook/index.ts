@@ -36,7 +36,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "noteily-minimal-notes"
+const SITE_NAME = "Arcana™ Notes App"
 const SENDER_DOMAIN = "notify.arcananotes.com"
 const ROOT_DOMAIN = "arcananotes.com"
 const FROM_DOMAIN = "arcananotes.com" // Domain shown in From address (may be root or sender subdomain)
