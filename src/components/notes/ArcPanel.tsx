@@ -376,12 +376,12 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
       } else if (/^#{1,3}\s/.test(trimmed)) {
         flushPara();
         flushList();
-        const tag = trimmed.startsWith('### ') ? 'h3' : 'h2';
-        blocks.push(`<${tag}>${applyInline(trimmed.replace(/^#+\s/, '').trim())}</${tag}>`);
+        const level = trimmed.startsWith('### ') ? 'h3' : trimmed.startsWith('## ') ? 'h2' : 'h1';
+        blocks.push(`<${level}>${applyInline(trimmed.replace(/^#+\s/, '').trim())}</${level}>`);
       } else if (trimmed.startsWith('> ')) {
         flushPara();
         flushList();
-        blocks.push(`<blockquote>${applyInline(trimmed.slice(2).trim())}</blockquote>`);
+        blocks.push(`<blockquote><p>${applyInline(trimmed.slice(2).trim())}</p></blockquote>`);
       } else if (/^[-*]\s+/.test(trimmed)) {
         flushPara();
         if (listType !== 'ul') { flushList(); listType = 'ul'; }
@@ -393,7 +393,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
       } else if (trimmed === '---' || trimmed === '***') {
         flushPara();
         flushList();
-        blocks.push('<hr>');
+        // Skip separators — use spacing between blocks instead
       } else {
         flushList();
         paraLines.push(applyInline(trimmed));
