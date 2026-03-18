@@ -448,9 +448,23 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
       onContentReplace(html);
       toast.success('Applied to note');
     } else if (onCreateNote) {
-      const firstLine = noteOnly.split('\n')[0].replace(/\*+/g, '').trim();
-      const title = firstLine.length > 60 ? firstLine.substring(0, 57) + '...' : firstLine;
-      onCreateNote(html, title);
+      // Extract title: use first heading or first line, strip markdown
+      const lines = noteOnly.split('\n');
+      let titleLine = '';
+      for (const l of lines) {
+        const t = l.trim();
+        if (t) {
+          titleLine = t.replace(/^#+\s*/, '').replace(/\*+/g, '').trim();
+          break;
+        }
+      }
+      const title = titleLine.length > 60 ? titleLine.substring(0, 57) + '...' : titleLine;
+
+      // Remove the first line from HTML since it becomes the title
+      // Find and remove the first block element
+      const htmlWithoutTitle = html.replace(/^<(h[1-3]|p)>[^<]*<\/\1>/, '').trim();
+
+      onCreateNote(htmlWithoutTitle || html, title);
       toast.success('Note created from Arc');
     }
   };
