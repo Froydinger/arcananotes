@@ -805,16 +805,16 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
   // Generate AI image from selected text
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [showImageGenModal, setShowImageGenModal] = useState(false);
+  const [imageGenInitialPrompt, setImageGenInitialPrompt] = useState("");
 
   const handleGenerateImage = async () => {
     const selection = window.getSelection();
     const selectedText = selection?.toString()?.trim();
 
-    // No text selected → open the modal instead
-    if (!selectedText) {
-      setShowImageGenModal(true);
-      return;
-    }
+    // Always open the modal — pre-fill with selected text if any
+    setImageGenInitialPrompt(selectedText || "");
+    setShowImageGenModal(true);
+  };
 
     setIsGeneratingImage(true);
 
