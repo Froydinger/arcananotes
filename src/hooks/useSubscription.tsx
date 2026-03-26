@@ -4,8 +4,9 @@ import { useAuth } from '@/contexts/AuthContext';
 
 interface SubscriptionState {
   isSubscribed: boolean;
-  status: string;
-  currentPeriodEnd: string | null;
+  source: string | null;
+  productId: string | null;
+  subscriptionEnd: string | null;
   loading: boolean;
   aiUsageToday: number;
   aiLimit: number;
@@ -15,8 +16,9 @@ export function useSubscription() {
   const { user } = useAuth();
   const [state, setState] = useState<SubscriptionState>({
     isSubscribed: false,
-    status: 'free',
-    currentPeriodEnd: null,
+    source: null,
+    productId: null,
+    subscriptionEnd: null,
     loading: true,
     aiUsageToday: 0,
     aiLimit: 10,
@@ -37,8 +39,9 @@ export function useSubscription() {
         setState(s => ({
           ...s,
           isSubscribed: data.subscribed || false,
-          status: data.status || 'free',
-          currentPeriodEnd: data.current_period_end || null,
+          source: data.source || null,
+          productId: data.product_id || null,
+          subscriptionEnd: data.subscription_end || null,
           aiLimit: data.subscribed ? -1 : 10,
           loading: false,
         }));
@@ -67,8 +70,11 @@ export function useSubscription() {
     }
   }, [user]);
 
+  // Check on mount + auto-refresh every 60 seconds
   useEffect(() => {
     checkSubscription();
+    const interval = setInterval(checkSubscription, 60_000);
+    return () => clearInterval(interval);
   }, [checkSubscription]);
 
   const createCheckout = async () => {
