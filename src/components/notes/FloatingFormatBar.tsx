@@ -197,7 +197,7 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       <Italic className="h-4 w-4" />
       </Button>
 
-      {onImageUpload && (
+      {onGenerateImage && isSubscribed && (
         <>
           <div className="w-px h-6 bg-border/50 mx-0.5" />
           <Button
@@ -206,11 +206,11 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
             className="h-9 w-9 p-0 rounded-full"
             onMouseDown={(e) => {
               e.preventDefault();
-              onImageUpload();
+              onGenerateImage();
             }}
-            title="Insert image"
+            title="Generate image from selected text (Pro)"
           >
-            <ImagePlus className="h-4 w-4" />
+            <Sparkles className="h-4 w-4" />
           </Button>
         </>
       )}
