@@ -11,6 +11,7 @@ interface ImageGenerateModalProps {
   isOpen: boolean;
   onClose: () => void;
   onImageGenerated: (imageUrl: string) => void;
+  initialPrompt?: string;
 }
 
 const MAX_CHARS = 300;
@@ -30,7 +31,7 @@ const STYLE_CHIPS = [
 
 type ModalPhase = "prompt" | "generating" | "preview" | "editing" | "editing-generating";
 
-export function ImageGenerateModal({ isOpen, onClose, onImageGenerated }: ImageGenerateModalProps) {
+export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialPrompt = "" }: ImageGenerateModalProps) {
   const [prompt, setPrompt] = useState("");
   const [activeChips, setActiveChips] = useState<string[]>([]);
   const [phase, setPhase] = useState<ModalPhase>("prompt");
@@ -38,6 +39,13 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated }: ImageG
   const [editInstruction, setEditInstruction] = useState("");
   const [shimmer, setShimmer] = useState(false);
   const editInputRef = useRef<HTMLInputElement>(null);
+
+  // Seed prompt from initialPrompt when modal opens
+  useEffect(() => {
+    if (isOpen && initialPrompt) {
+      setPrompt(initialPrompt);
+    }
+  }, [isOpen, initialPrompt]);
 
   const charsLeft = useMemo(() => Math.max(0, MAX_CHARS - prompt.length), [prompt]);
 
