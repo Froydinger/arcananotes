@@ -552,19 +552,100 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     selection.addRange(range);
   };
 
+  // Setup image reorder/delete controls
+  const setupImageControls = useCallback(() => {
+    if (!contentRef.current || isReadOnly) return;
+
+    // Remove any existing wrappers first
+    const existingWrappers = contentRef.current.querySelectorAll('.note-image-wrapper');
+    existingWrappers.forEach((wrapper) => {
+      const img = wrapper.querySelector('img');
+      if (img) {
+        wrapper.replaceWith(img);
+      }
+    });
+
+    const images = contentRef.current.querySelectorAll('img.note-image');
+    images.forEach((img) => {
+      if (!img.hasAttribute('data-image-id')) {
+        img.setAttribute('data-image-id', Date.now().toString());
+      }
+
+      // Create wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'note-image-wrapper';
+      wrapper.contentEditable = 'false';
+      img.parentNode?.insertBefore(wrapper, img);
+      wrapper.appendChild(img);
+
+      // Create reorder controls
+      const controls = document.createElement('div');
+      controls.className = 'image-reorder-controls';
+
+      const upBtn = document.createElement('button');
+      upBtn.className = 'image-reorder-btn';
+      upBtn.innerHTML = '↑';
+      upBtn.title = 'Move up';
+      upBtn.onmousedown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const prev = wrapper.previousElementSibling;
+        if (prev) {
+          wrapper.parentNode?.insertBefore(wrapper, prev);
+          contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      const downBtn = document.createElement('button');
+      downBtn.className = 'image-reorder-btn';
+      downBtn.innerHTML = '↓';
+      downBtn.title = 'Move down';
+      downBtn.onmousedown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const next = wrapper.nextElementSibling;
+        if (next) {
+          next.after(wrapper);
+          contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      controls.appendChild(upBtn);
+      controls.appendChild(downBtn);
+      wrapper.appendChild(controls);
+
+      // Delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'image-delete-btn';
+      deleteBtn.innerHTML = '✕';
+      deleteBtn.title = 'Remove image';
+      deleteBtn.onmousedown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        wrapper.remove();
+        contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      wrapper.appendChild(deleteBtn);
+    });
+  }, [isReadOnly]);
+
   // Handle existing images in loaded content
   useEffect(() => {
     if (!contentRef.current) return;
     
     const images = contentRef.current.querySelectorAll('img');
     images.forEach((img) => {
+      if (!img.classList.contains('note-image')) {
+        img.className = 'note-image';
+      }
       if (!img.hasAttribute('data-image-id')) {
         img.setAttribute('data-image-id', Date.now().toString());
-        img.className = 'note-image';
       }
     });
 
-  }, [note.id]);
+    // Small delay to let DOM settle then add controls
+    setTimeout(() => setupImageControls(), 100);
+  }, [note.id, setupImageControls]);
 
   // Track text selection for floating format bar
   useEffect(() => {

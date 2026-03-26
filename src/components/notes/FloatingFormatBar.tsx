@@ -8,6 +8,7 @@ interface FloatingFormatBarProps {
   visible: boolean;
   onFormat: (type: FormatType) => void;
   editorRef: React.RefObject<HTMLDivElement>;
+  onImageUpload?: () => void;
 }
 
 // Check if device is mobile/tablet
