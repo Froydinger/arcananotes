@@ -57,10 +57,22 @@ function debounce<T extends (...args: unknown[]) => unknown>(
   };
 }
 
-// Safe content getter - reduces direct innerHTML access
+// Safe content getter - strips image controls before returning content
 function getEditorContent(editor: HTMLDivElement | null): string {
   if (!editor) return '';
-  return editor.innerHTML;
+  const clone = editor.cloneNode(true) as HTMLDivElement;
+  // Unwrap image wrappers back to plain images
+  clone.querySelectorAll('.note-image-wrapper').forEach((wrapper) => {
+    const img = wrapper.querySelector('img');
+    if (img) {
+      wrapper.replaceWith(img);
+    } else {
+      wrapper.remove();
+    }
+  });
+  // Remove any stray control elements
+  clone.querySelectorAll('.image-reorder-controls, .image-delete-btn').forEach(el => el.remove());
+  return clone.innerHTML;
 }
 
 // Safe content setter - sanitizes before setting
