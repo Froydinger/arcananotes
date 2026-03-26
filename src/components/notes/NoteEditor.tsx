@@ -1001,6 +1001,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                     { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
                     { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
                     { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
+                    ...(isSubscribed ? [{ key: 'generate', label: 'Generate Image', icon: '✨', desc: 'AI image from text (Pro)' }] : []),
                   ].map((item, i) => (
                     <button
                       key={item.key}
@@ -1012,6 +1013,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                         setShowSlashMenu(false);
                         if (item.key === 'image') {
                           imageInputRef.current?.click();
+                        } else if (item.key === 'generate') {
+                          handleGenerateImage();
                         } else {
                           handleFormat(item.key as FormatType);
                         }
