@@ -816,73 +816,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     setShowImageGenModal(true);
   };
 
-    setIsGeneratingImage(true);
 
-    // Insert a skeleton placeholder inline
-    const placeholderId = `img-gen-${Date.now()}`;
-    selection?.collapseToEnd();
-    if (contentRef.current) {
-      const placeholder = document.createElement('div');
-      placeholder.id = placeholderId;
-      placeholder.className = 'note-image-skeleton';
-      placeholder.setAttribute('contenteditable', 'false');
-      placeholder.innerHTML = `
-        <div class="skeleton-glow"></div>
-        <div class="skeleton-content">
-          <svg class="skeleton-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <span class="skeleton-text">Creating image…</span>
-        </div>
-      `;
-
-      const sel = window.getSelection();
-      if (sel && sel.rangeCount > 0) {
-        const range = sel.getRangeAt(0);
-        range.collapse(false);
-        range.insertNode(placeholder);
-        range.setStartAfter(placeholder);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-    }
-
-    try {
-      const { data, error } = await supabase.functions.invoke('generate-image', {
-        body: { prompt: selectedText },
-      });
-
-      if (error) throw error;
-      if (data?.pro_required) {
-        document.getElementById(placeholderId)?.remove();
-        sonnerToast.error('Image generation requires a Pro subscription');
-        return;
-      }
-      if (data?.error) throw new Error(data.error);
-      if (data?.image_url) {
-        // Replace skeleton with the real image using a reveal animation
-        const skeleton = document.getElementById(placeholderId);
-        if (skeleton && contentRef.current) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'note-image-reveal';
-          wrapper.setAttribute('contenteditable', 'false');
-          wrapper.innerHTML = `<img src="${data.image_url}" class="note-image" alt="AI generated" />`;
-          skeleton.replaceWith(wrapper);
-          // Trigger reflow then add revealed class
-          requestAnimationFrame(() => {
-            wrapper.classList.add('revealed');
-          });
-          // Trigger save
-          contentRef.current.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-        sonnerToast.success('Image generated!');
-      }
-    } catch (err: any) {
-      console.error('Image generation failed:', err);
-      document.getElementById(placeholderId)?.remove();
-      sonnerToast.error(err.message || 'Failed to generate image');
-    } finally {
-      setIsGeneratingImage(false);
-    }
-  };
 
   return (
     <EditorErrorBoundary>
