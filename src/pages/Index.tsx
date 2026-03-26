@@ -195,7 +195,7 @@ const Index = () => {
   const accountButton = (
     <button
       onClick={() => setShowAccountDialog(true)}
-      className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center relative"
+      className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center relative overflow-visible"
       title="Account"
     >
       <img src={arcanaLogo} alt="Arcana" className="h-6 w-6 rounded-md" />
