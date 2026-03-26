@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic, ImagePlus } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, Sparkles } from 'lucide-react';
 
 export type FormatType = 'p' | 'h1' | 'bold' | 'italic';
 
@@ -8,7 +8,8 @@ interface FloatingFormatBarProps {
   visible: boolean;
   onFormat: (type: FormatType) => void;
   editorRef: React.RefObject<HTMLDivElement>;
-  onImageUpload?: () => void;
+  onGenerateImage?: () => void;
+  isSubscribed?: boolean;
 }
 
 // Check if device is mobile/tablet
