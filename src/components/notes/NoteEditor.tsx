@@ -6,6 +6,7 @@ import { ImageUploadButton } from './ImageUploadButton';
 import { FeaturedImage } from './FeaturedImage';
 import { sanitizeContent, sanitizeForDisplay, sanitizeImageUrl, isValidImageUrl } from "@/lib/sanitization";
 import { FloatingFormatBar, FormatType } from './FloatingFormatBar';
+import { ImageGenerateModal } from './ImageGenerateModal';
 import { usePageLeave } from '@/hooks/usePageLeave';
 import { useTitleFont, useBodyFont } from '@/hooks/useTitleFont';
 import { useSubscription } from '@/hooks/useSubscription';
