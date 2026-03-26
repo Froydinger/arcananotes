@@ -981,7 +981,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 visible={showFloatingBar}
                 onFormat={handleFormat}
                 editorRef={contentRef}
-                onImageUpload={() => imageInputRef.current?.click()}
+                onGenerateImage={handleGenerateImage}
+                isSubscribed={isSubscribed}
               />
 
               {/* Slash command menu */}
