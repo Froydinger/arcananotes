@@ -11,6 +11,7 @@ interface ImageGenerateModalProps {
   isOpen: boolean;
   onClose: () => void;
   onImageGenerated: (imageUrl: string) => void;
+  initialPrompt?: string;
 }
 
 const MAX_CHARS = 300;
