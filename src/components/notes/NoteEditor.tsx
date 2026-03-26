@@ -655,6 +655,22 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     setTimeout(() => setupImageControls(), 100);
   }, [note.id, setupImageControls]);
 
+  // Re-setup image controls whenever content changes (e.g. after save round-trip strips wrappers)
+  useEffect(() => {
+    if (!contentRef.current || isReadOnly) return;
+
+    const observer = new MutationObserver(() => {
+      // Check if there are unwrapped images
+      const unwrapped = contentRef.current?.querySelectorAll('img.note-image:not(.note-image-wrapper img)');
+      if (unwrapped && unwrapped.length > 0) {
+        setTimeout(() => setupImageControls(), 50);
+      }
+    });
+
+    observer.observe(contentRef.current, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [note.id, setupImageControls, isReadOnly]);
+
   // Track text selection for floating format bar
   useEffect(() => {
     if (isReadOnly) return;
