@@ -200,8 +200,8 @@ const Index = () => {
     >
       <img src={arcanaLogo} alt="Arcana" className="h-6 w-6 rounded-md" />
       {isSubscribed && (
-        <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-accent flex items-center justify-center">
-          <Crown className="h-2 w-2 text-accent-foreground" />
+        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent flex items-center justify-center shadow-sm ring-2 ring-background">
+          <Crown className="h-2.5 w-2.5 text-accent-foreground" />
         </span>
       )}
     </button>
