@@ -193,18 +193,20 @@ const Index = () => {
 
   // Account status button
   const accountButton = (
-    <button
-      onClick={() => setShowAccountDialog(true)}
-      className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center relative overflow-visible"
-      title="Account"
-    >
-      <img src={arcanaLogo} alt="Arcana" className="h-6 w-6 rounded-md" />
+    <div className="relative flex h-12 w-12 items-center justify-center shrink-0">
+      <button
+        onClick={() => setShowAccountDialog(true)}
+        className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
+        title="Account"
+      >
+        <img src={arcanaLogo} alt="Arcana" className="h-6 w-6 rounded-md" />
+      </button>
       {isSubscribed && (
-        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent flex items-center justify-center shadow-sm ring-2 ring-background">
+        <span className="pointer-events-none absolute right-0 top-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-accent shadow-sm ring-2 ring-background">
           <Crown className="h-2.5 w-2.5 text-accent-foreground" />
         </span>
       )}
-    </button>
+    </div>
   );
 
   // Header component - stays outside PullToRefresh for sticky to work on mobile
