@@ -1048,7 +1048,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                       <button
                         key={item.key}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-colors ${
-                          i === slashMenuIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+                          i === slashMenuIndex ? 'bg-muted/80 text-foreground' : 'hover:bg-muted/50'
                         }`}
                         onMouseDown={(e) => {
                           e.preventDefault();
