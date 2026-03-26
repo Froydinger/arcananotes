@@ -1048,7 +1048,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                       <button
                         key={item.key}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-colors ${
-                          i === slashMenuIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+                          i === slashMenuIndex ? 'bg-muted/80 text-foreground' : 'hover:bg-muted/50'
                         }`}
                         onMouseDown={(e) => {
                           e.preventDefault();
@@ -1064,13 +1064,13 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                         onMouseEnter={() => setSlashMenuIndex(i)}
                       >
                         <span className={`w-8 h-8 flex items-center justify-center rounded-lg font-semibold text-sm ${
-                          i === slashMenuIndex ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'
+                          i === slashMenuIndex ? 'bg-muted text-foreground' : 'bg-muted/60 text-muted-foreground'
                         }`}>
                           {item.icon}
                         </span>
                         <div>
                           <div className="font-medium">{item.label}</div>
-                          <div className={`text-xs ${i === slashMenuIndex ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{item.desc}</div>
+                          <div className={`text-xs ${i === slashMenuIndex ? 'text-muted-foreground' : 'text-muted-foreground'}`}>{item.desc}</div>
                         </div>
                       </button>
                     ))}
