@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic, ImagePlus } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, Sparkles } from 'lucide-react';
 
 export type FormatType = 'p' | 'h1' | 'bold' | 'italic';
 
@@ -8,7 +8,8 @@ interface FloatingFormatBarProps {
   visible: boolean;
   onFormat: (type: FormatType) => void;
   editorRef: React.RefObject<HTMLDivElement>;
-  onImageUpload?: () => void;
+  onGenerateImage?: () => void;
+  isSubscribed?: boolean;
 }
 
 // Check if device is mobile/tablet
@@ -20,7 +21,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   visible,
   onFormat,
   editorRef,
-  onImageUpload
+  onGenerateImage,
+  isSubscribed
 }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [currentFormats, setCurrentFormats] = useState<Set<FormatType>>(new Set());
@@ -195,7 +197,7 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       <Italic className="h-4 w-4" />
       </Button>
 
-      {onImageUpload && (
+      {onGenerateImage && isSubscribed && (
         <>
           <div className="w-px h-6 bg-border/50 mx-0.5" />
           <Button
@@ -204,11 +206,11 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
             className="h-9 w-9 p-0 rounded-full"
             onMouseDown={(e) => {
               e.preventDefault();
-              onImageUpload();
+              onGenerateImage();
             }}
-            title="Insert image"
+            title="Generate image from selected text (Pro)"
           >
-            <ImagePlus className="h-4 w-4" />
+            <Sparkles className="h-4 w-4" />
           </Button>
         </>
       )}

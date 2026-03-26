@@ -8,6 +8,9 @@ import { sanitizeContent, sanitizeForDisplay, sanitizeImageUrl, isValidImageUrl 
 import { FloatingFormatBar, FormatType } from './FloatingFormatBar';
 import { usePageLeave } from '@/hooks/usePageLeave';
 import { useTitleFont, useBodyFont } from '@/hooks/useTitleFont';
+import { useSubscription } from '@/hooks/useSubscription';
+import { supabase } from '@/integrations/supabase/client';
+import { toast as sonnerToast } from 'sonner';
 
 // Error boundary for the editor
 class EditorErrorBoundary extends Component<
@@ -75,6 +78,7 @@ interface NoteEditorProps {
 export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: NoteEditorProps) {
   const titleFont = useTitleFont();
   const bodyFont = useBodyFont();
+  const { isSubscribed } = useSubscription();
   const { updateNote } = useNotes();
 
   // Core state
@@ -798,6 +802,47 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     }
   };
 
+  // Generate AI image from selected text
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const handleGenerateImage = async () => {
+    const selection = window.getSelection();
+    const selectedText = selection?.toString()?.trim();
+    if (!selectedText) {
+      sonnerToast.error('Select some text to use as an image prompt');
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    sonnerToast.info('Generating image…', { duration: 10000, id: 'gen-img' });
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-image', {
+        body: { prompt: selectedText },
+      });
+
+      if (error) throw error;
+      if (data?.pro_required) {
+        sonnerToast.dismiss('gen-img');
+        sonnerToast.error('Image generation requires a Pro subscription');
+        return;
+      }
+      if (data?.error) throw new Error(data.error);
+      if (data?.image_url) {
+        // Collapse selection first, then insert image after
+        selection?.collapseToEnd();
+        insertImageAtCursor(data.image_url);
+        sonnerToast.dismiss('gen-img');
+        sonnerToast.success('Image generated!');
+      }
+    } catch (err: any) {
+      console.error('Image generation failed:', err);
+      sonnerToast.dismiss('gen-img');
+      sonnerToast.error(err.message || 'Failed to generate image');
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
   return (
     <EditorErrorBoundary>
       <div className="w-full max-w-3xl mx-auto px-4 pt-8 pb-8">
@@ -906,7 +951,9 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
               // Navigate slash menu with arrow keys
               if (showSlashMenu) {
-                const menuItems = ['h1', 'p', 'image'] as const;
+                const menuItems = isSubscribed
+                  ? ['h1', 'p', 'image', 'generate'] as const
+                  : ['h1', 'p', 'image'] as const;
                 if (e.key === 'ArrowDown') {
                   e.preventDefault();
                   setSlashMenuIndex((i) => (i + 1) % menuItems.length);
@@ -919,6 +966,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                   setShowSlashMenu(false);
                   if (selected === 'image') {
                     imageInputRef.current?.click();
+                  } else if (selected === 'generate') {
+                    handleGenerateImage();
                   } else {
                     handleFormat(selected as FormatType);
                   }
@@ -937,7 +986,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 visible={showFloatingBar}
                 onFormat={handleFormat}
                 editorRef={contentRef}
-                onImageUpload={() => imageInputRef.current?.click()}
+                onGenerateImage={handleGenerateImage}
+                isSubscribed={isSubscribed}
               />
 
               {/* Slash command menu */}
@@ -951,6 +1001,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                     { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
                     { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
                     { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
+                    ...(isSubscribed ? [{ key: 'generate', label: 'Generate Image', icon: '✨', desc: 'AI image from text (Pro)' }] : []),
                   ].map((item, i) => (
                     <button
                       key={item.key}
@@ -962,6 +1013,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                         setShowSlashMenu(false);
                         if (item.key === 'image') {
                           imageInputRef.current?.click();
+                        } else if (item.key === 'generate') {
+                          handleGenerateImage();
                         } else {
                           handleFormat(item.key as FormatType);
                         }
