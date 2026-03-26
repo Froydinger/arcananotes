@@ -868,11 +868,22 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
           {/* Floating format bar - appears above selected text */}
           {!isReadOnly && (
-            <FloatingFormatBar
-              visible={showFloatingBar}
-              onFormat={handleFormat}
-              editorRef={contentRef}
-            />
+            <>
+              <FloatingFormatBar
+                visible={showFloatingBar}
+                onFormat={handleFormat}
+                editorRef={contentRef}
+                onImageUpload={() => imageInputRef.current?.click()}
+              />
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageFileSelect}
+                className="hidden"
+                multiple={false}
+              />
+            </>
           )}
         </div>
         
