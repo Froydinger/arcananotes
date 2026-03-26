@@ -6,7 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import NoteEditor from "@/components/notes/NoteEditor";
 import ChecklistEditor from "@/components/notes/ChecklistEditor";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Trash, Users, Eye, Edit, Undo2, Redo2 } from "lucide-react";
+import { ChevronLeft, Trash, Users, Eye, Edit, Undo2, Redo2, HelpCircle } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ArcPanel } from "@/components/notes/ArcPanel";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -223,6 +230,57 @@ const NotePage = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Help button */}
+            {!isReadOnly && note.note_type !== "checklist" && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0 bg-background/40 backdrop-blur-md border border-border/20 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm opacity-50 hover:opacity-100"
+                    title="How to use"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-lg">How to use Arcana</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 text-sm text-muted-foreground">
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">✍️ Formatting text</h3>
+                      <p><strong>Highlight</strong> any text to bring up the format bar — bold, italic, heading, or paragraph.</p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">⌨️ Slash commands</h3>
+                      <p>Type <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">/</kbd> at the start of a line to insert a heading, paragraph, or image. Use arrow keys + Enter to select.</p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">🖼 Images — three ways</h3>
+                      <ul className="space-y-2 mt-1">
+                        <li><strong>Header image</strong> — Tap the image icon in the top toolbar to set a featured cover image for your note.</li>
+                        <li><strong>Inline upload</strong> — Type <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">/</kbd> → Image to upload a photo into your note body.</li>
+                        <li><strong>AI generation</strong> <span className="text-xs text-primary">(Pro)</span> — Highlight text, then tap ✨ in the format bar to generate an image. Also via <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">/</kbd> → Generate Image.</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">↕️ Moving images</h3>
+                      <p>Hover or tap an image to reveal arrow buttons — move it up or down between text blocks.</p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">↩️ Undo / Redo</h3>
+                      <p>Use the ↩ ↪ buttons in the header, or <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">⌘Z</kbd> / <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">⌘⇧Z</kbd>.</p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">🤖 Arc AI</h3>
+                      <p>Tap the Arc button in the bottom-right to chat with AI — rewrite, summarize, brainstorm, and more.</p>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
+
             {/* Undo/Redo buttons - only for editable notes */}
             {!isReadOnly && note.note_type !== "checklist" && (
               <>
