@@ -673,6 +673,11 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       const hasSelection = selectedText.length > 0 && !range.collapsed;
 
       setShowFloatingBar(isInEditor && hasSelection);
+
+      // Close slash menu if selection changes (user clicked elsewhere)
+      if (showSlashMenu && (!isInEditor || hasSelection)) {
+        setShowSlashMenu(false);
+      }
     };
 
     document.addEventListener('selectionchange', handleSelectionChange);
@@ -680,7 +685,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     return () => {
       document.removeEventListener('selectionchange', handleSelectionChange);
     };
-  }, [isReadOnly]);
+  }, [isReadOnly, showSlashMenu]);
 
   // Handle formatting from floating bar
   const handleFormat = useCallback((type: FormatType) => {
