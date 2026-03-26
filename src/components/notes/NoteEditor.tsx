@@ -586,6 +586,16 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       img.parentNode?.insertBefore(wrapper, img);
       wrapper.appendChild(img);
 
+      // Click/tap to toggle controls visibility
+      wrapper.onclick = (e) => {
+        e.stopPropagation();
+        // Remove active class from all other wrappers
+        contentRef.current?.querySelectorAll('.note-image-wrapper.controls-active').forEach(w => {
+          if (w !== wrapper) w.classList.remove('controls-active');
+        });
+        wrapper.classList.toggle('controls-active');
+      };
+
       // Create reorder controls
       const controls = document.createElement('div');
       controls.className = 'image-reorder-controls';
@@ -654,6 +664,36 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     // Small delay to let DOM settle then add controls
     setTimeout(() => setupImageControls(), 100);
   }, [note.id, setupImageControls]);
+
+  // Re-setup image controls whenever content changes (e.g. after save round-trip strips wrappers)
+  useEffect(() => {
+    if (!contentRef.current || isReadOnly) return;
+
+    const observer = new MutationObserver(() => {
+      // Check if there are unwrapped images
+      const unwrapped = contentRef.current?.querySelectorAll('img.note-image:not(.note-image-wrapper img)');
+      if (unwrapped && unwrapped.length > 0) {
+        setTimeout(() => setupImageControls(), 50);
+      }
+    });
+
+    observer.observe(contentRef.current, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [note.id, setupImageControls, isReadOnly]);
+
+  // Dismiss image controls when clicking outside images
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.note-image-wrapper')) {
+        contentRef.current?.querySelectorAll('.note-image-wrapper.controls-active').forEach(w => {
+          w.classList.remove('controls-active');
+        });
+      }
+    };
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
 
   // Track text selection for floating format bar
   useEffect(() => {
