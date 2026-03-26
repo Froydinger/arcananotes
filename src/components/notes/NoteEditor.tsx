@@ -894,7 +894,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                     if (editorRect) {
                       setSlashMenuPosition({
                         top: rect.bottom - editorRect.top + 4,
-                        left: rect.left - editorRect.left,
+                        left: Math.max(0, rect.left - editorRect.left),
                       });
                     }
                     setSlashMenuIndex(0);
@@ -945,7 +945,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 <div
                   ref={slashMenuRef}
                   className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-elevated p-1.5 min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150"
-                  style={{ top: `${slashMenuPosition.top}px`, left: `${slashMenuPosition.left}px` }}
+                  style={{ top: `${slashMenuPosition.top}px`, left: `${Math.max(0, slashMenuPosition.left)}px` }}
                 >
                   {[
                     { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
@@ -957,7 +957,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                     <button
                       key={item.key}
                       className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
-                        i === slashMenuIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'
+                        i === slashMenuIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
                       }`}
                       onMouseDown={(e) => {
                         e.preventDefault();
@@ -970,12 +970,14 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                       }}
                       onMouseEnter={() => setSlashMenuIndex(i)}
                     >
-                      <span className="w-7 h-7 flex items-center justify-center rounded-md bg-muted text-muted-foreground font-semibold text-xs">
+                      <span className={`w-7 h-7 flex items-center justify-center rounded-md font-semibold text-xs ${
+                        i === slashMenuIndex ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'
+                      }`}>
                         {item.icon}
                       </span>
                       <div>
                         <div className="font-medium">{item.label}</div>
-                        <div className="text-xs text-muted-foreground">{item.desc}</div>
+                        <div className={`text-xs ${i === slashMenuIndex ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{item.desc}</div>
                       </div>
                     </button>
                   ))}
