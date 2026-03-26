@@ -1070,7 +1070,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                         </span>
                         <div>
                           <div className="font-medium">{item.label}</div>
-                          <div className={`text-xs ${i === slashMenuIndex ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{item.desc}</div>
+                          <div className={`text-xs ${i === slashMenuIndex ? 'text-muted-foreground' : 'text-muted-foreground'}`}>{item.desc}</div>
                         </div>
                       </button>
                     ))}
