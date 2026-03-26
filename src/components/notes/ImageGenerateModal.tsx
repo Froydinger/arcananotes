@@ -40,6 +40,13 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
   const [shimmer, setShimmer] = useState(false);
   const editInputRef = useRef<HTMLInputElement>(null);
 
+  // Seed prompt from initialPrompt when modal opens
+  useEffect(() => {
+    if (isOpen && initialPrompt) {
+      setPrompt(initialPrompt);
+    }
+  }, [isOpen, initialPrompt]);
+
   const charsLeft = useMemo(() => Math.max(0, MAX_CHARS - prompt.length), [prompt]);
 
   // Focus edit input when entering edit mode
