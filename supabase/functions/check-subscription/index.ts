@@ -23,7 +23,12 @@ const QUALIFYING_PRODUCT_IDS = new Set([
   "prod_U4U5QGmibWU8wD", // ArcAi Pro (legacy)
 ]);
 
-type SubscriptionSource = "arcana" | "wtn" | "arcai" | "arcai_legacy" | null;
+type SubscriptionSource = "arcana" | "wtn" | "arcai" | "arcai_legacy" | "founder" | null;
+
+// Whitelisted emails that always get Pro access
+const WHITELISTED_EMAILS = new Set([
+  "josh@winthenight.info",
+]);
 
 function identifySource(priceId: string, productId: string): SubscriptionSource {
   if (priceId === "price_1TBoC0AB32948AKDSNYNhxHG") return "arcana";
@@ -57,6 +62,27 @@ serve(async (req) => {
     const user = userData.user;
     if (!user?.email) throw new Error("Not authenticated");
     logStep("User authenticated", { userId: user.id, email: user.email });
+
+    // Check whitelist first
+    if (WHITELISTED_EMAILS.has(user.email.toLowerCase())) {
+      logStep("Whitelisted founder account", { email: user.email });
+      await supabaseClient.from("subscriptions").upsert({
+        user_id: user.id,
+        status: "active",
+        stripe_customer_id: null,
+        stripe_subscription_id: null,
+        current_period_end: null,
+      }, { onConflict: "user_id" });
+
+      return new Response(JSON.stringify({
+        subscribed: true,
+        source: "founder",
+        product_id: null,
+        subscription_end: null,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
