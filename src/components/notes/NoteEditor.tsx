@@ -8,6 +8,9 @@ import { sanitizeContent, sanitizeForDisplay, sanitizeImageUrl, isValidImageUrl 
 import { FloatingFormatBar, FormatType } from './FloatingFormatBar';
 import { usePageLeave } from '@/hooks/usePageLeave';
 import { useTitleFont, useBodyFont } from '@/hooks/useTitleFont';
+import { useSubscription } from '@/hooks/useSubscription';
+import { supabase } from '@/integrations/supabase/client';
+import { toast as sonnerToast } from 'sonner';
 
 // Error boundary for the editor
 class EditorErrorBoundary extends Component<
