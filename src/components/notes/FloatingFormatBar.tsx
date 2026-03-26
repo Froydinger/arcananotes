@@ -192,8 +192,26 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
         }}
         title="Italic (⌘I)"
       >
-        <Italic className="h-4 w-4" />
+      <Italic className="h-4 w-4" />
       </Button>
+
+      {onImageUpload && (
+        <>
+          <div className="w-px h-6 bg-border/50 mx-0.5" />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-9 w-9 p-0 rounded-full"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onImageUpload();
+            }}
+            title="Insert image"
+          >
+            <ImagePlus className="h-4 w-4" />
+          </Button>
+        </>
+      )}
     </div>
   );
 };
