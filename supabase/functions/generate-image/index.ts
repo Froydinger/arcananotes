@@ -58,7 +58,7 @@ serve(async (req) => {
       });
     }
 
-    const { prompt } = await req.json();
+    const { prompt, edit_instruction, source_image_url } = await req.json();
     if (!prompt || typeof prompt !== "string") {
       return new Response(JSON.stringify({ error: "Prompt is required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -68,6 +68,25 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    // Build messages depending on generate vs edit mode
+    const isEdit = edit_instruction && source_image_url;
+    const messages = isEdit
+      ? [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: `Edit this image: ${edit_instruction}` },
+              { type: "image_url", image_url: { url: source_image_url } },
+            ],
+          },
+        ]
+      : [
+          {
+            role: "user",
+            content: `Generate a beautiful, high-quality image based on this description: ${prompt}`,
+          },
+        ];
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -76,12 +95,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "google/gemini-3.1-flash-image-preview",
-        messages: [
-          {
-            role: "user",
-            content: `Generate a beautiful, high-quality image based on this description: ${prompt}`,
-          },
-        ],
+        messages,
         modalities: ["image", "text"],
       }),
     });
