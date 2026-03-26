@@ -951,7 +951,9 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
               // Navigate slash menu with arrow keys
               if (showSlashMenu) {
-                const menuItems = ['h1', 'p', 'image'] as const;
+                const menuItems = isSubscribed
+                  ? ['h1', 'p', 'image', 'generate'] as const
+                  : ['h1', 'p', 'image'] as const;
                 if (e.key === 'ArrowDown') {
                   e.preventDefault();
                   setSlashMenuIndex((i) => (i + 1) % menuItems.length);
@@ -964,6 +966,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                   setShowSlashMenu(false);
                   if (selected === 'image') {
                     imageInputRef.current?.click();
+                  } else if (selected === 'generate') {
+                    handleGenerateImage();
                   } else {
                     handleFormat(selected as FormatType);
                   }
