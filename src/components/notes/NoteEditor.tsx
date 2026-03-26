@@ -724,6 +724,71 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     }
   }, []);
 
+  // Ref for hidden file input used by format bar image button
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (imageInputRef.current) imageInputRef.current.value = '';
+
+    // Reuse the ImageUploadButton's upload logic inline
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { default: { toast } } = await import('sonner').then(m => ({ default: m }));
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) { toast.error('Please sign in to upload images'); return; }
+      if (!file.type.startsWith('image/')) { toast.error('Please select an image file'); return; }
+      if (file.size > 10 * 1024 * 1024) { toast.error('Image must be less than 10MB'); return; }
+
+      // Compress
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let { width, height } = img;
+          const max = 1600;
+          if (width > max || height > max) {
+            const r = Math.min(max / width, max / height);
+            width *= r; height *= r;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) { reject(new Error('No context')); return; }
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(b => b ? resolve(b) : reject(new Error('Compress failed')), 'image/jpeg', 0.85);
+        };
+        img.onerror = () => reject(new Error('Load failed'));
+        img.src = URL.createObjectURL(file);
+      });
+
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
+      const filePath = `${user.id}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('note-images')
+        .upload(filePath, blob, { contentType: 'image/jpeg' });
+      if (uploadError) throw uploadError;
+
+      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+        .from('note-images')
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+      if (signedUrlError || !signedUrlData?.signedUrl) {
+        toast.error('Could not generate image URL');
+        return;
+      }
+
+      insertImageAtCursor(signedUrlData.signedUrl);
+      toast.success('Image uploaded');
+    } catch (error: any) {
+      console.error('Image upload failed:', error);
+      const { toast } = await import('sonner');
+      toast.error(`Upload failed: ${error.message || 'Unknown error'}`);
+    }
+  };
+
   return (
     <EditorErrorBoundary>
       <div className="w-full max-w-3xl mx-auto px-4 pt-8 pb-8">
