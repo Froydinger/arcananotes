@@ -802,7 +802,47 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     }
   };
 
-  return (
+  // Generate AI image from selected text
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const handleGenerateImage = async () => {
+    const selection = window.getSelection();
+    const selectedText = selection?.toString()?.trim();
+    if (!selectedText) {
+      sonnerToast.error('Select some text to use as an image prompt');
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    sonnerToast.info('Generating image…', { duration: 10000, id: 'gen-img' });
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-image', {
+        body: { prompt: selectedText },
+      });
+
+      if (error) throw error;
+      if (data?.pro_required) {
+        sonnerToast.dismiss('gen-img');
+        sonnerToast.error('Image generation requires a Pro subscription');
+        return;
+      }
+      if (data?.error) throw new Error(data.error);
+      if (data?.image_url) {
+        // Collapse selection first, then insert image after
+        selection?.collapseToEnd();
+        insertImageAtCursor(data.image_url);
+        sonnerToast.dismiss('gen-img');
+        sonnerToast.success('Image generated!');
+      }
+    } catch (err: any) {
+      console.error('Image generation failed:', err);
+      sonnerToast.dismiss('gen-img');
+      sonnerToast.error(err.message || 'Failed to generate image');
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
     <EditorErrorBoundary>
       <div className="w-full max-w-3xl mx-auto px-4 pt-8 pb-8">
         <div className="relative">
