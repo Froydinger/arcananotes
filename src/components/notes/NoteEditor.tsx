@@ -804,11 +804,15 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
   // Generate AI image from selected text
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [showImageGenModal, setShowImageGenModal] = useState(false);
+
   const handleGenerateImage = async () => {
     const selection = window.getSelection();
     const selectedText = selection?.toString()?.trim();
+
+    // No text selected → open the modal instead
     if (!selectedText) {
-      sonnerToast.error('Select some text to use as an image prompt');
+      setShowImageGenModal(true);
       return;
     }
 
