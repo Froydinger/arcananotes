@@ -962,7 +962,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                   } else {
                     handleFormat(selected as FormatType);
                   }
-                } else if (e.key === 'Escape') {
+                } else if (e.key === 'Escape' || e.key === 'Backspace') {
                   e.preventDefault();
                   setShowSlashMenu(false);
                 }
