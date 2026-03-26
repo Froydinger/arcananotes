@@ -289,7 +289,7 @@ const NotePage = () => {
                   size="sm"
                   onClick={handleUndo}
                   disabled={!canUndo}
-                  className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer disabled:opacity-30"
+                  className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm glass-shimmer disabled:opacity-30"
                   title="Undo"
                 >
                   <Undo2 className="h-5 w-5" />
