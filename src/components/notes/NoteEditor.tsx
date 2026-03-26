@@ -105,7 +105,6 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
   // UI state
   const [showFloatingBar, setShowFloatingBar] = useState(false);
   const [showSlashMenu, setShowSlashMenu] = useState(false);
-  const [slashMenuPosition, setSlashMenuPosition] = useState({ top: 0, left: 0 });
   const slashMenuRef = useRef<HTMLDivElement>(null);
   const [slashMenuIndex, setSlashMenuIndex] = useState(0);
 
@@ -934,14 +933,6 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
                   if (isEmptyBlock || isStartOfLine) {
                     e.preventDefault();
-                    const rect = range.getBoundingClientRect();
-                    const editorRect = contentRef.current?.getBoundingClientRect();
-                    if (editorRect) {
-                      setSlashMenuPosition({
-                        top: rect.bottom - editorRect.top + 4,
-                        left: Math.max(0, rect.left - editorRect.left),
-                      });
-                    }
                     setSlashMenuIndex(0);
                     setShowSlashMenu(true);
                     return;
@@ -990,48 +981,58 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 isSubscribed={isSubscribed}
               />
 
-              {/* Slash command menu */}
+              {/* Slash command menu - centered modal */}
               {showSlashMenu && (
                 <div
-                  ref={slashMenuRef}
-                  className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-elevated p-1.5 min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150"
-                  style={{ top: `${slashMenuPosition.top}px`, left: `${Math.max(0, slashMenuPosition.left)}px` }}
+                  className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-150"
+                  onMouseDown={(e) => {
+                    if (e.target === e.currentTarget) {
+                      e.preventDefault();
+                      setShowSlashMenu(false);
+                    }
+                  }}
                 >
-                  {[
-                    { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
-                    { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
-                    { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
-                    ...(isSubscribed ? [{ key: 'generate', label: 'Generate Image', icon: '✨', desc: 'AI image from text (Pro)' }] : []),
-                  ].map((item, i) => (
-                    <button
-                      key={item.key}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
-                        i === slashMenuIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
-                      }`}
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setShowSlashMenu(false);
-                        if (item.key === 'image') {
-                          imageInputRef.current?.click();
-                        } else if (item.key === 'generate') {
-                          handleGenerateImage();
-                        } else {
-                          handleFormat(item.key as FormatType);
-                        }
-                      }}
-                      onMouseEnter={() => setSlashMenuIndex(i)}
-                    >
-                      <span className={`w-7 h-7 flex items-center justify-center rounded-md font-semibold text-xs ${
-                        i === slashMenuIndex ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'
-                      }`}>
-                        {item.icon}
-                      </span>
-                      <div>
-                        <div className="font-medium">{item.label}</div>
-                        <div className={`text-xs ${i === slashMenuIndex ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{item.desc}</div>
-                      </div>
-                    </button>
-                  ))}
+                  <div
+                    ref={slashMenuRef}
+                    className="bg-card/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-elevated p-2 min-w-[240px] animate-in zoom-in-95 slide-in-from-bottom-4 duration-200"
+                  >
+                    <div className="px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">Insert block</div>
+                    {[
+                      { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
+                      { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
+                      { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
+                      ...(isSubscribed ? [{ key: 'generate', label: 'Generate Image', icon: '✨', desc: 'AI image from text (Pro)' }] : []),
+                    ].map((item, i) => (
+                      <button
+                        key={item.key}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm transition-colors ${
+                          i === slashMenuIndex ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+                        }`}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setShowSlashMenu(false);
+                          if (item.key === 'image') {
+                            imageInputRef.current?.click();
+                          } else if (item.key === 'generate') {
+                            handleGenerateImage();
+                          } else {
+                            handleFormat(item.key as FormatType);
+                          }
+                        }}
+                        onMouseEnter={() => setSlashMenuIndex(i)}
+                      >
+                        <span className={`w-8 h-8 flex items-center justify-center rounded-lg font-semibold text-sm ${
+                          i === slashMenuIndex ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'
+                        }`}>
+                          {item.icon}
+                        </span>
+                        <div>
+                          <div className="font-medium">{item.label}</div>
+                          <div className={`text-xs ${i === slashMenuIndex ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>{item.desc}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
