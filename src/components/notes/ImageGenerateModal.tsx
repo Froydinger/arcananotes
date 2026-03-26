@@ -31,7 +31,7 @@ const STYLE_CHIPS = [
 
 type ModalPhase = "prompt" | "generating" | "preview" | "editing" | "editing-generating";
 
-export function ImageGenerateModal({ isOpen, onClose, onImageGenerated }: ImageGenerateModalProps) {
+export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialPrompt = "" }: ImageGenerateModalProps) {
   const [prompt, setPrompt] = useState("");
   const [activeChips, setActiveChips] = useState<string[]>([]);
   const [phase, setPhase] = useState<ModalPhase>("prompt");
