@@ -906,7 +906,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
               // Navigate slash menu with arrow keys
               if (showSlashMenu) {
-                const menuItems = ['h1', 'p', 'bold', 'italic', 'image'] as const;
+                const menuItems = ['h1', 'p', 'image'] as const;
                 if (e.key === 'ArrowDown') {
                   e.preventDefault();
                   setSlashMenuIndex((i) => (i + 1) % menuItems.length);
@@ -950,8 +950,6 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                   {[
                     { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
                     { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
-                    { key: 'bold', label: 'Bold', icon: 'B', desc: 'Bold text' },
-                    { key: 'italic', label: 'Italic', icon: 'I', desc: 'Italic text' },
                     { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
                   ].map((item, i) => (
                     <button
