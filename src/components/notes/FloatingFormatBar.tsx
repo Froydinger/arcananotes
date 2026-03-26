@@ -21,7 +21,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   visible,
   onFormat,
   editorRef,
-  onImageUpload
+  onGenerateImage,
+  isSubscribed
 }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [currentFormats, setCurrentFormats] = useState<Set<FormatType>>(new Set());
