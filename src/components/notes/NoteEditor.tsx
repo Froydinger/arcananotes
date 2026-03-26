@@ -105,7 +105,6 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
   // UI state
   const [showFloatingBar, setShowFloatingBar] = useState(false);
   const [showSlashMenu, setShowSlashMenu] = useState(false);
-  const [slashMenuPosition, setSlashMenuPosition] = useState({ top: 0, left: 0 });
   const slashMenuRef = useRef<HTMLDivElement>(null);
   const [slashMenuIndex, setSlashMenuIndex] = useState(0);
 
