@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, ImagePlus } from 'lucide-react';
 
 export type FormatType = 'p' | 'h1' | 'bold' | 'italic';
 
@@ -8,6 +8,7 @@ interface FloatingFormatBarProps {
   visible: boolean;
   onFormat: (type: FormatType) => void;
   editorRef: React.RefObject<HTMLDivElement>;
+  onImageUpload?: () => void;
 }
 
 // Check if device is mobile/tablet
@@ -18,7 +19,8 @@ const isMobileDevice = () => {
 export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   visible,
   onFormat,
-  editorRef
+  editorRef,
+  onImageUpload
 }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [currentFormats, setCurrentFormats] = useState<Set<FormatType>>(new Set());
@@ -190,8 +192,26 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
         }}
         title="Italic (⌘I)"
       >
-        <Italic className="h-4 w-4" />
+      <Italic className="h-4 w-4" />
       </Button>
+
+      {onImageUpload && (
+        <>
+          <div className="w-px h-6 bg-border/50 mx-0.5" />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-9 w-9 p-0 rounded-full"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              onImageUpload();
+            }}
+            title="Insert image"
+          >
+            <ImagePlus className="h-4 w-4" />
+          </Button>
+        </>
+      )}
     </div>
   );
 };

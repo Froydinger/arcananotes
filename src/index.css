@@ -700,6 +700,10 @@
 
   /* Image editing styles */
   .note-editor .note-image {
+    width: 60%;
+    height: auto;
+    display: block;
+    margin: 1rem auto;
     border-radius: 12px;
     transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: pointer;
@@ -709,6 +713,83 @@
   .note-editor .note-image:hover {
     transform: scale(1.01);
     box-shadow: 0 8px 24px hsl(var(--foreground) / 0.12);
+  }
+
+  /* Image reorder controls */
+  .note-image-wrapper {
+    position: relative;
+    display: block;
+    margin: 1rem auto;
+    width: 60%;
+  }
+
+  .note-image-wrapper .note-image {
+    width: 100%;
+    margin: 0;
+  }
+
+  .image-reorder-controls {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+
+  .note-image-wrapper:hover .image-reorder-controls,
+  .note-image-wrapper:focus-within .image-reorder-controls {
+    opacity: 1;
+  }
+
+  .image-reorder-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: hsl(var(--card) / 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid hsl(var(--border) / 0.5);
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .image-reorder-btn:hover {
+    background: hsl(var(--accent) / 0.2);
+  }
+
+  .image-delete-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: hsl(var(--destructive) / 0.9);
+    border: 1px solid hsl(var(--destructive) / 0.5);
+    color: hsl(var(--destructive-foreground));
+    cursor: pointer;
+    transition: background 0.15s ease;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    opacity: 0;
+    z-index: 10;
+  }
+
+  .note-image-wrapper:hover .image-delete-btn,
+  .note-image-wrapper:focus-within .image-delete-btn {
+    opacity: 1;
+  }
+
+  .image-delete-btn:hover {
+    background: hsl(var(--destructive));
   }
 
   /* Sidebar note items should always use rounded-lg */

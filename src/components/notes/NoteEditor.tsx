@@ -318,17 +318,11 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     if (!contentRef.current) return;
 
     try {
-      // Validate and sanitize the image URL
       const { url: sanitizedUrl, alt } = sanitizeImageUrl(imageUrl, 'Uploaded image');
       
       const img = document.createElement('img');
       img.src = sanitizedUrl;
       img.alt = alt;
-      img.style.width = '50%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-      img.style.margin = '1rem auto';
-      img.style.borderRadius = '8px';
       img.className = 'note-image';
       img.setAttribute('data-image-id', Date.now().toString());
 
@@ -339,22 +333,28 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
         range.deleteContents();
         range.insertNode(img);
         
-        // Move cursor after the image
+        // Add a paragraph after the image so user can keep typing
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+        img.after(p);
+        
         const newRange = document.createRange();
-        newRange.setStartAfter(img);
+        newRange.setStart(p, 0);
         newRange.collapse(true);
         selection?.removeAllRanges();
         selection?.addRange(newRange);
       } else {
-        // Fallback: append to end
         contentRef.current.appendChild(img);
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+        contentRef.current.appendChild(p);
       }
 
       // Trigger content change to save
       contentRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+      setupImageControls();
     } catch (error) {
       console.error('Failed to insert image:', error);
-      // Could show a toast notification here
     }
   };
 
@@ -552,19 +552,100 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     selection.addRange(range);
   };
 
+  // Setup image reorder/delete controls
+  const setupImageControls = useCallback(() => {
+    if (!contentRef.current || isReadOnly) return;
+
+    // Remove any existing wrappers first
+    const existingWrappers = contentRef.current.querySelectorAll('.note-image-wrapper');
+    existingWrappers.forEach((wrapper) => {
+      const img = wrapper.querySelector('img');
+      if (img) {
+        wrapper.replaceWith(img);
+      }
+    });
+
+    const images = contentRef.current.querySelectorAll('img.note-image');
+    images.forEach((img) => {
+      if (!img.hasAttribute('data-image-id')) {
+        img.setAttribute('data-image-id', Date.now().toString());
+      }
+
+      // Create wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'note-image-wrapper';
+      wrapper.contentEditable = 'false';
+      img.parentNode?.insertBefore(wrapper, img);
+      wrapper.appendChild(img);
+
+      // Create reorder controls
+      const controls = document.createElement('div');
+      controls.className = 'image-reorder-controls';
+
+      const upBtn = document.createElement('button');
+      upBtn.className = 'image-reorder-btn';
+      upBtn.innerHTML = '↑';
+      upBtn.title = 'Move up';
+      upBtn.onmousedown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const prev = wrapper.previousElementSibling;
+        if (prev) {
+          wrapper.parentNode?.insertBefore(wrapper, prev);
+          contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      const downBtn = document.createElement('button');
+      downBtn.className = 'image-reorder-btn';
+      downBtn.innerHTML = '↓';
+      downBtn.title = 'Move down';
+      downBtn.onmousedown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const next = wrapper.nextElementSibling;
+        if (next) {
+          next.after(wrapper);
+          contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      controls.appendChild(upBtn);
+      controls.appendChild(downBtn);
+      wrapper.appendChild(controls);
+
+      // Delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'image-delete-btn';
+      deleteBtn.innerHTML = '✕';
+      deleteBtn.title = 'Remove image';
+      deleteBtn.onmousedown = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        wrapper.remove();
+        contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      wrapper.appendChild(deleteBtn);
+    });
+  }, [isReadOnly]);
+
   // Handle existing images in loaded content
   useEffect(() => {
     if (!contentRef.current) return;
     
     const images = contentRef.current.querySelectorAll('img');
     images.forEach((img) => {
+      if (!img.classList.contains('note-image')) {
+        img.className = 'note-image';
+      }
       if (!img.hasAttribute('data-image-id')) {
         img.setAttribute('data-image-id', Date.now().toString());
-        img.className = 'note-image';
       }
     });
 
-  }, [note.id]);
+    // Small delay to let DOM settle then add controls
+    setTimeout(() => setupImageControls(), 100);
+  }, [note.id, setupImageControls]);
 
   // Track text selection for floating format bar
   useEffect(() => {
@@ -642,6 +723,71 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       console.error('Error applying format:', error);
     }
   }, []);
+
+  // Ref for hidden file input used by format bar image button
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (imageInputRef.current) imageInputRef.current.value = '';
+
+    // Reuse the ImageUploadButton's upload logic inline
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { default: { toast } } = await import('sonner').then(m => ({ default: m }));
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) { toast.error('Please sign in to upload images'); return; }
+      if (!file.type.startsWith('image/')) { toast.error('Please select an image file'); return; }
+      if (file.size > 10 * 1024 * 1024) { toast.error('Image must be less than 10MB'); return; }
+
+      // Compress
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let { width, height } = img;
+          const max = 1600;
+          if (width > max || height > max) {
+            const r = Math.min(max / width, max / height);
+            width *= r; height *= r;
+          }
+          canvas.width = width; canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) { reject(new Error('No context')); return; }
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(b => b ? resolve(b) : reject(new Error('Compress failed')), 'image/jpeg', 0.85);
+        };
+        img.onerror = () => reject(new Error('Load failed'));
+        img.src = URL.createObjectURL(file);
+      });
+
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
+      const filePath = `${user.id}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('note-images')
+        .upload(filePath, blob, { contentType: 'image/jpeg' });
+      if (uploadError) throw uploadError;
+
+      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+        .from('note-images')
+        .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+      if (signedUrlError || !signedUrlData?.signedUrl) {
+        toast.error('Could not generate image URL');
+        return;
+      }
+
+      insertImageAtCursor(signedUrlData.signedUrl);
+      toast.success('Image uploaded');
+    } catch (error: any) {
+      console.error('Image upload failed:', error);
+      const { toast } = await import('sonner');
+      toast.error(`Upload failed: ${error.message || 'Unknown error'}`);
+    }
+  };
 
   return (
     <EditorErrorBoundary>
@@ -722,11 +868,22 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
           {/* Floating format bar - appears above selected text */}
           {!isReadOnly && (
-            <FloatingFormatBar
-              visible={showFloatingBar}
-              onFormat={handleFormat}
-              editorRef={contentRef}
-            />
+            <>
+              <FloatingFormatBar
+                visible={showFloatingBar}
+                onFormat={handleFormat}
+                editorRef={contentRef}
+                onImageUpload={() => imageInputRef.current?.click()}
+              />
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageFileSelect}
+                className="hidden"
+                multiple={false}
+              />
+            </>
           )}
         </div>
         
