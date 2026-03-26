@@ -215,7 +215,7 @@ const NotePage = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate("/home")}
-              className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer"
+              className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm glass-shimmer"
               title="Back to notes"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -237,7 +237,7 @@ const NotePage = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-7 w-7 p-0 bg-background/40 backdrop-blur-md border border-border/20 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm opacity-50 hover:opacity-100"
+                    className="h-7 w-7 p-0 bg-background/40 backdrop-blur-md border border-border/20 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm opacity-50 hover:opacity-100"
                     title="How to use"
                   >
                     <HelpCircle className="h-3.5 w-3.5" />
@@ -289,7 +289,7 @@ const NotePage = () => {
                   size="sm"
                   onClick={handleUndo}
                   disabled={!canUndo}
-                  className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer disabled:opacity-30"
+                  className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm glass-shimmer disabled:opacity-30"
                   title="Undo"
                 >
                   <Undo2 className="h-5 w-5" />
@@ -299,7 +299,7 @@ const NotePage = () => {
                   size="sm"
                   onClick={handleRedo}
                   disabled={!canRedo}
-                  className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer disabled:opacity-30"
+                  className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm glass-shimmer disabled:opacity-30"
                   title="Redo"
                 >
                   <Redo2 className="h-5 w-5" />
@@ -314,7 +314,7 @@ const NotePage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowShareManager(true)}
-                className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer"
+                className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm glass-shimmer"
                 title={note.isOwnedByUser ? "Share note" : "Manage sharing"}
               >
                 <Users className="h-5 w-5" />
