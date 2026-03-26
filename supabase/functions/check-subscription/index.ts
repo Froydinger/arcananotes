@@ -23,7 +23,12 @@ const QUALIFYING_PRODUCT_IDS = new Set([
   "prod_U4U5QGmibWU8wD", // ArcAi Pro (legacy)
 ]);
 
-type SubscriptionSource = "arcana" | "wtn" | "arcai" | "arcai_legacy" | null;
+type SubscriptionSource = "arcana" | "wtn" | "arcai" | "arcai_legacy" | "founder" | null;
+
+// Whitelisted emails that always get Pro access
+const WHITELISTED_EMAILS = new Set([
+  "josh@winthenight.info",
+]);
 
 function identifySource(priceId: string, productId: string): SubscriptionSource {
   if (priceId === "price_1TBoC0AB32948AKDSNYNhxHG") return "arcana";
