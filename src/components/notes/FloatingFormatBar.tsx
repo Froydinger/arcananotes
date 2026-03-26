@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, ImagePlus } from 'lucide-react';
 
 export type FormatType = 'p' | 'h1' | 'bold' | 'italic';
 
