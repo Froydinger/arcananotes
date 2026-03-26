@@ -6,6 +6,7 @@ import { ImageUploadButton } from './ImageUploadButton';
 import { FeaturedImage } from './FeaturedImage';
 import { sanitizeContent, sanitizeForDisplay, sanitizeImageUrl, isValidImageUrl } from "@/lib/sanitization";
 import { FloatingFormatBar, FormatType } from './FloatingFormatBar';
+import { ImageGenerateModal } from './ImageGenerateModal';
 import { usePageLeave } from '@/hooks/usePageLeave';
 import { useTitleFont, useBodyFont } from '@/hooks/useTitleFont';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -803,11 +804,15 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
   // Generate AI image from selected text
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [showImageGenModal, setShowImageGenModal] = useState(false);
+
   const handleGenerateImage = async () => {
     const selection = window.getSelection();
     const selectedText = selection?.toString()?.trim();
+
+    // No text selected → open the modal instead
     if (!selectedText) {
-      sonnerToast.error('Select some text to use as an image prompt');
+      setShowImageGenModal(true);
       return;
     }
 
@@ -1043,6 +1048,11 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 onChange={handleImageFileSelect}
                 className="hidden"
                 multiple={false}
+              />
+              <ImageGenerateModal
+                isOpen={showImageGenModal}
+                onClose={() => setShowImageGenModal(false)}
+                onImageGenerated={(url) => insertImageAtCursor(url)}
               />
             </>
           )}
