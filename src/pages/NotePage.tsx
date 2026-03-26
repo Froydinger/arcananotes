@@ -314,7 +314,7 @@ const NotePage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowShareManager(true)}
-                className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer"
+                className="h-10 w-10 p-0 bg-background/60 backdrop-blur-md border border-border/30 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm glass-shimmer"
                 title={note.isOwnedByUser ? "Share note" : "Manage sharing"}
               >
                 <Users className="h-5 w-5" />
