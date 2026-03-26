@@ -63,6 +63,27 @@ serve(async (req) => {
     if (!user?.email) throw new Error("Not authenticated");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
+    // Check whitelist first
+    if (WHITELISTED_EMAILS.has(user.email.toLowerCase())) {
+      logStep("Whitelisted founder account", { email: user.email });
+      await supabaseClient.from("subscriptions").upsert({
+        user_id: user.id,
+        status: "active",
+        stripe_customer_id: null,
+        stripe_subscription_id: null,
+        current_period_end: null,
+      }, { onConflict: "user_id" });
+
+      return new Response(JSON.stringify({
+        subscribed: true,
+        source: "founder",
+        product_id: null,
+        subscription_end: null,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
 
     const customers = await stripe.customers.list({ email: user.email, limit: 5 });
