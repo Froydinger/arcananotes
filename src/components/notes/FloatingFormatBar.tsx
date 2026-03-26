@@ -66,8 +66,9 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       let left = rect.left - editorRect.left + (rect.width / 2);
 
       // Ensure toolbar stays within horizontal viewport bounds
+      // Use editorRect.left as the effective left edge (accounts for sidebar)
       const absoluteLeft = editorRect.left + left;
-      const minLeft = barWidth / 2 + 16; // 16px padding from edge
+      const minLeft = Math.max(editorRect.left, barWidth / 2) + 16;
       const maxLeft = viewportWidth - barWidth / 2 - 16;
 
       if (absoluteLeft < minLeft) {
