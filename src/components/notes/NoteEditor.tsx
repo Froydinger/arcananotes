@@ -78,6 +78,7 @@ interface NoteEditorProps {
 export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: NoteEditorProps) {
   const titleFont = useTitleFont();
   const bodyFont = useBodyFont();
+  const { isSubscribed } = useSubscription();
   const { updateNote } = useNotes();
 
   // Core state
