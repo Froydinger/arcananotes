@@ -1088,8 +1088,9 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
               />
               <ImageGenerateModal
                 isOpen={showImageGenModal}
-                onClose={() => setShowImageGenModal(false)}
+                onClose={() => { setShowImageGenModal(false); setImageGenInitialPrompt(""); }}
                 onImageGenerated={(url) => insertImageAtCursor(url)}
+                initialPrompt={imageGenInitialPrompt}
               />
             </>
           )}
