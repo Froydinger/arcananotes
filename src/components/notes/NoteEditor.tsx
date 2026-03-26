@@ -586,6 +586,16 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       img.parentNode?.insertBefore(wrapper, img);
       wrapper.appendChild(img);
 
+      // Click/tap to toggle controls visibility
+      wrapper.onclick = (e) => {
+        e.stopPropagation();
+        // Remove active class from all other wrappers
+        contentRef.current?.querySelectorAll('.note-image-wrapper.controls-active').forEach(w => {
+          if (w !== wrapper) w.classList.remove('controls-active');
+        });
+        wrapper.classList.toggle('controls-active');
+      };
+
       // Create reorder controls
       const controls = document.createElement('div');
       controls.className = 'image-reorder-controls';

@@ -741,7 +741,8 @@
   }
 
   .note-image-wrapper:hover .image-reorder-controls,
-  .note-image-wrapper:focus-within .image-reorder-controls {
+  .note-image-wrapper:focus-within .image-reorder-controls,
+  .note-image-wrapper.controls-active .image-reorder-controls {
     opacity: 1;
   }
 
@@ -784,7 +785,8 @@
   }
 
   .note-image-wrapper:hover .image-delete-btn,
-  .note-image-wrapper:focus-within .image-delete-btn {
+  .note-image-wrapper:focus-within .image-delete-btn,
+  .note-image-wrapper.controls-active .image-delete-btn {
     opacity: 1;
   }
 
