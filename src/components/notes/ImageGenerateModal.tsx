@@ -101,7 +101,7 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated }: ImageG
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-[95vw] max-w-lg p-0 gap-0 overflow-hidden border-border/50 mx-auto" hideCloseButton>
+      <DialogContent className="w-[95vw] max-w-lg p-0 gap-0 overflow-hidden border-border/50 mx-auto [&>button]:hidden">
         <div className="flex flex-col max-h-[85vh] overflow-hidden">
           {/* Header */}
           <div className="relative px-5 pt-5 pb-3 border-b border-border/30">
