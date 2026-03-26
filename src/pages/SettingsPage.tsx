@@ -61,7 +61,7 @@ const SettingsPage = () => {
   const [showSupportDialog, setShowSupportDialog] = useState(false);
   const {
     isSubscribed,
-    status,
+    source,
     aiUsageToday,
     aiLimit,
     loading: subLoading,
