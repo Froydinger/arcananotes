@@ -318,17 +318,11 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     if (!contentRef.current) return;
 
     try {
-      // Validate and sanitize the image URL
       const { url: sanitizedUrl, alt } = sanitizeImageUrl(imageUrl, 'Uploaded image');
       
       const img = document.createElement('img');
       img.src = sanitizedUrl;
       img.alt = alt;
-      img.style.width = '50%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-      img.style.margin = '1rem auto';
-      img.style.borderRadius = '8px';
       img.className = 'note-image';
       img.setAttribute('data-image-id', Date.now().toString());
 
@@ -339,22 +333,28 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
         range.deleteContents();
         range.insertNode(img);
         
-        // Move cursor after the image
+        // Add a paragraph after the image so user can keep typing
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+        img.after(p);
+        
         const newRange = document.createRange();
-        newRange.setStartAfter(img);
+        newRange.setStart(p, 0);
         newRange.collapse(true);
         selection?.removeAllRanges();
         selection?.addRange(newRange);
       } else {
-        // Fallback: append to end
         contentRef.current.appendChild(img);
+        const p = document.createElement('p');
+        p.innerHTML = '<br>';
+        contentRef.current.appendChild(p);
       }
 
       // Trigger content change to save
       contentRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+      setupImageControls();
     } catch (error) {
       console.error('Failed to insert image:', error);
-      // Could show a toast notification here
     }
   };
 
