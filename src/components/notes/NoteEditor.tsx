@@ -1064,7 +1064,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                         onMouseEnter={() => setSlashMenuIndex(i)}
                       >
                         <span className={`w-8 h-8 flex items-center justify-center rounded-lg font-semibold text-sm ${
-                          i === slashMenuIndex ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-muted-foreground'
+                          i === slashMenuIndex ? 'bg-muted text-foreground' : 'bg-muted/60 text-muted-foreground'
                         }`}>
                           {item.icon}
                         </span>
