@@ -1049,6 +1049,11 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 className="hidden"
                 multiple={false}
               />
+              <ImageGenerateModal
+                isOpen={showImageGenModal}
+                onClose={() => setShowImageGenModal(false)}
+                onImageGenerated={(url) => insertImageAtCursor(url)}
+              />
             </>
           )}
         </div>
