@@ -237,7 +237,7 @@ const NotePage = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-7 w-7 p-0 bg-background/40 backdrop-blur-md border border-border/20 rounded-full hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm opacity-50 hover:opacity-100"
+                    className="h-7 w-7 p-0 bg-background/40 backdrop-blur-md border border-border/20 rounded-full hover:bg-accent/15 hover:text-accent hover:border-accent/40 transition-all duration-200 shadow-sm opacity-50 hover:opacity-100"
                     title="How to use"
                   >
                     <HelpCircle className="h-3.5 w-3.5" />
