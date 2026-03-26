@@ -100,6 +100,10 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
   // UI state
   const [showFloatingBar, setShowFloatingBar] = useState(false);
+  const [showSlashMenu, setShowSlashMenu] = useState(false);
+  const [slashMenuPosition, setSlashMenuPosition] = useState({ top: 0, left: 0 });
+  const slashMenuRef = useRef<HTMLDivElement>(null);
+  const [slashMenuIndex, setSlashMenuIndex] = useState(0);
 
   // Timers
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -863,6 +867,61 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 e.preventDefault();
                 handleFormat('bold');
               }
+
+              // Slash command menu
+              if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
+                // Check if cursor is at the start of an empty block or line
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount > 0) {
+                  const range = selection.getRangeAt(0);
+                  const node = range.startContainer;
+                  const text = node.textContent || '';
+                  const offset = range.startOffset;
+
+                  // Show slash menu if at start of empty line/block or entire content is empty
+                  const isEmptyBlock = text.trim() === '' || (offset === 0 && text.trim().length === 0);
+                  const isStartOfLine = offset === 0;
+
+                  if (isEmptyBlock || isStartOfLine) {
+                    e.preventDefault();
+                    const rect = range.getBoundingClientRect();
+                    const editorRect = contentRef.current?.getBoundingClientRect();
+                    if (editorRect) {
+                      setSlashMenuPosition({
+                        top: rect.bottom - editorRect.top + 4,
+                        left: rect.left - editorRect.left,
+                      });
+                    }
+                    setSlashMenuIndex(0);
+                    setShowSlashMenu(true);
+                    return;
+                  }
+                }
+              }
+
+              // Navigate slash menu with arrow keys
+              if (showSlashMenu) {
+                const menuItems = ['h1', 'p', 'bold', 'italic', 'image'] as const;
+                if (e.key === 'ArrowDown') {
+                  e.preventDefault();
+                  setSlashMenuIndex((i) => (i + 1) % menuItems.length);
+                } else if (e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  setSlashMenuIndex((i) => (i - 1 + menuItems.length) % menuItems.length);
+                } else if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const selected = menuItems[slashMenuIndex];
+                  setShowSlashMenu(false);
+                  if (selected === 'image') {
+                    imageInputRef.current?.click();
+                  } else {
+                    handleFormat(selected as FormatType);
+                  }
+                } else if (e.key === 'Escape') {
+                  e.preventDefault();
+                  setShowSlashMenu(false);
+                }
+              }
             }}
           />
 
@@ -875,6 +934,49 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                 editorRef={contentRef}
                 onImageUpload={() => imageInputRef.current?.click()}
               />
+
+              {/* Slash command menu */}
+              {showSlashMenu && (
+                <div
+                  ref={slashMenuRef}
+                  className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-elevated p-1.5 min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150"
+                  style={{ top: `${slashMenuPosition.top}px`, left: `${slashMenuPosition.left}px` }}
+                >
+                  {[
+                    { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
+                    { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
+                    { key: 'bold', label: 'Bold', icon: 'B', desc: 'Bold text' },
+                    { key: 'italic', label: 'Italic', icon: 'I', desc: 'Italic text' },
+                    { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
+                  ].map((item, i) => (
+                    <button
+                      key={item.key}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
+                        i === slashMenuIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'
+                      }`}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setShowSlashMenu(false);
+                        if (item.key === 'image') {
+                          imageInputRef.current?.click();
+                        } else {
+                          handleFormat(item.key as FormatType);
+                        }
+                      }}
+                      onMouseEnter={() => setSlashMenuIndex(i)}
+                    >
+                      <span className="w-7 h-7 flex items-center justify-center rounded-md bg-muted text-muted-foreground font-semibold text-xs">
+                        {item.icon}
+                      </span>
+                      <div>
+                        <div className="font-medium">{item.label}</div>
+                        <div className="text-xs text-muted-foreground">{item.desc}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <input
                 ref={imageInputRef}
                 type="file"
