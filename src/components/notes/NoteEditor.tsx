@@ -681,6 +681,20 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     return () => observer.disconnect();
   }, [note.id, setupImageControls, isReadOnly]);
 
+  // Dismiss image controls when clicking outside images
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.note-image-wrapper')) {
+        contentRef.current?.querySelectorAll('.note-image-wrapper.controls-active').forEach(w => {
+          w.classList.remove('controls-active');
+        });
+      }
+    };
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
+
   // Track text selection for floating format bar
   useEffect(() => {
     if (isReadOnly) return;
