@@ -934,14 +934,6 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
                   if (isEmptyBlock || isStartOfLine) {
                     e.preventDefault();
-                    const rect = range.getBoundingClientRect();
-                    const editorRect = contentRef.current?.getBoundingClientRect();
-                    if (editorRect) {
-                      setSlashMenuPosition({
-                        top: rect.bottom - editorRect.top + 4,
-                        left: Math.max(0, rect.left - editorRect.left),
-                      });
-                    }
                     setSlashMenuIndex(0);
                     setShowSlashMenu(true);
                     return;
