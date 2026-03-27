@@ -350,14 +350,31 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       const range = selection?.getRangeAt(0);
 
       if (range && contentRef.current.contains(range.commonAncestorContainer)) {
-        // Collapse to end of selection so we insert AFTER the text, not replacing it
-        range.collapse(false);
-        range.insertNode(img);
+        // Find the parent block element so we insert the image as its OWN block after it
+        let blockParent = range.commonAncestorContainer as HTMLElement;
+        if (blockParent.nodeType === Node.TEXT_NODE) {
+          blockParent = blockParent.parentElement!;
+        }
+        // Walk up to find the direct child of the editor
+        while (blockParent && blockParent.parentElement !== contentRef.current) {
+          blockParent = blockParent.parentElement!;
+        }
+
+        // Insert image as a standalone block after the text block
+        const imgWrapper = document.createElement('p');
+        imgWrapper.appendChild(img);
         
         // Add a paragraph after the image so user can keep typing
         const p = document.createElement('p');
         p.innerHTML = '<br>';
-        img.after(p);
+
+        if (blockParent && contentRef.current.contains(blockParent)) {
+          blockParent.after(imgWrapper);
+          imgWrapper.after(p);
+        } else {
+          contentRef.current.appendChild(imgWrapper);
+          contentRef.current.appendChild(p);
+        }
         
         const newRange = document.createRange();
         newRange.setStart(p, 0);
