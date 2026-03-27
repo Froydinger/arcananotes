@@ -350,7 +350,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       const range = selection?.getRangeAt(0);
 
       if (range && contentRef.current.contains(range.commonAncestorContainer)) {
-        range.deleteContents();
+        // Collapse to end of selection so we insert AFTER the text, not replacing it
+        range.collapse(false);
         range.insertNode(img);
         
         // Add a paragraph after the image so user can keep typing
