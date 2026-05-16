@@ -802,6 +802,14 @@ export const NoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
           if (currentNote?.id === id) {
             setCurrentNote(noteToDelete);
           }
+        } else {
+          // Notify everyone the note was shared with
+          for (const email of sharedRecipients) {
+            sendShareEmail('shared-note-deleted', email, {
+              ownerName: getOwnerDisplayName(user),
+              noteTitle: noteToDelete.title || 'a note',
+            }, `note-deleted-${id}-${email}`);
+          }
         }
       } else {
         console.error('User does not have permission to delete this note');
