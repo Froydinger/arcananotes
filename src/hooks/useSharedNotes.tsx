@@ -175,14 +175,25 @@ export function useSharedNotes(noteId?: string) {
       // Fire notification email if shared by email address
       if (trimmedInput.includes('@')) {
         try {
-          const { data: noteRow } = await supabase
-            .from('notes').select('title').eq('id', noteId).single();
-          sendShareEmail('note-shared', trimmedInput, {
-            ownerName: getOwnerDisplayName(user),
-            noteTitle: noteRow?.title || 'a note',
-            permission,
-            noteUrl: `${window.location.origin}/note/${noteId}`,
-          }, `note-shared-${noteId}-${trimmedInput}`);
+          const [{ data: noteRow }, { data: shareRow }] = await Promise.all([
+            supabase.from('notes').select('title').eq('id', noteId).single(),
+            supabase.from('shared_notes').select('shared_with_user_id')
+              .eq('note_id', noteId).eq('shared_with_email', trimmedInput).maybeSingle(),
+          ]);
+          const isRegistered = !!shareRow?.shared_with_user_id;
+          sendShareEmail(
+            isRegistered ? 'note-shared' : 'note-shared-invite',
+            trimmedInput,
+            {
+              ownerName: getOwnerDisplayName(user),
+              noteTitle: noteRow?.title || 'a note',
+              permission,
+              noteUrl: `${window.location.origin}/note/${noteId}`,
+              signupUrl: window.location.origin,
+              recipient: trimmedInput,
+            },
+            `note-shared-${noteId}-${trimmedInput}`,
+          );
         } catch (e) { console.error(e); }
       }
 
