@@ -10,11 +10,13 @@ export interface TemplateEntry {
 }
 
 import { template as noteShared } from './note-shared.tsx'
+import { template as noteSharedInvite } from './note-shared-invite.tsx'
 import { template as noteAccessRevoked } from './note-access-revoked.tsx'
 import { template as sharedNoteDeleted } from './shared-note-deleted.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'note-shared': noteShared,
+  'note-shared-invite': noteSharedInvite,
   'note-access-revoked': noteAccessRevoked,
   'shared-note-deleted': sharedNoteDeleted,
 }
