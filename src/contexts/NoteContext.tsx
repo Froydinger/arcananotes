@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { offlineStorage } from '@/lib/offlineStorage';
 import { useOfflineStatus } from '@/hooks/useOfflineStatus';
+import { sendShareEmail, getOwnerDisplayName } from '@/lib/shareEmails';
 
 import type { NoteWithSharing, NoteType } from '@/types/sharing';
 
@@ -776,6 +777,19 @@ export const NoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.log('Successfully removed share access');
         }
       } else if (isOwner) {
+        // Capture shared recipients BEFORE deletion so we can notify them
+        let sharedRecipients: string[] = [];
+        try {
+          const { data: rows } = await supabase
+            .from('shared_notes')
+            .select('shared_with_email')
+            .eq('note_id', id)
+            .eq('owner_id', user.id);
+          sharedRecipients = (rows || [])
+            .map((r) => r.shared_with_email)
+            .filter((e): e is string => !!e);
+        } catch (e) { console.error(e); }
+
         // Permanently delete owned notes
         const { data, error } = await supabase.rpc('permanently_delete_note', {
           note_id_param: id
