@@ -9,10 +9,12 @@ export interface TemplateEntry {
   to?: string | ((data: any) => string)
 }
 
-// Register transactional email templates here as you add them.
-// Example:
-//   import { template as welcomeTemplate } from './welcome.tsx'
-//   export const TEMPLATES: Record<string, TemplateEntry> = {
-//     welcome: welcomeTemplate,
-//   }
-export const TEMPLATES: Record<string, TemplateEntry> = {}
+import { template as noteShared } from './note-shared.tsx'
+import { template as noteAccessRevoked } from './note-access-revoked.tsx'
+import { template as sharedNoteDeleted } from './shared-note-deleted.tsx'
+
+export const TEMPLATES: Record<string, TemplateEntry> = {
+  'note-shared': noteShared,
+  'note-access-revoked': noteAccessRevoked,
+  'shared-note-deleted': sharedNoteDeleted,
+}

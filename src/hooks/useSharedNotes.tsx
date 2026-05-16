@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/components/ui/sonner';
 import type { SharedNote, ShareRequest, ShareUpdateRequest, ShareDeleteRequest } from '@/types/sharing';
+import { sendShareEmail, getOwnerDisplayName } from '@/lib/shareEmails';
 
 export function useSharedNotes(noteId?: string) {
   const [sharedUsers, setSharedUsers] = useState<SharedNote[]>([]);
@@ -171,6 +172,20 @@ export function useSharedNotes(noteId?: string) {
 
       if (error) throw error;
 
+      // Fire notification email if shared by email address
+      if (trimmedInput.includes('@')) {
+        try {
+          const { data: noteRow } = await supabase
+            .from('notes').select('title').eq('id', noteId).single();
+          sendShareEmail('note-shared', trimmedInput, {
+            ownerName: getOwnerDisplayName(user),
+            noteTitle: noteRow?.title || 'a note',
+            permission,
+            noteUrl: `${window.location.origin}/note/${noteId}`,
+          }, `note-shared-${noteId}-${trimmedInput}`);
+        } catch (e) { console.error(e); }
+      }
+
       // Refresh shares list
       await loadShares(noteId);
 
@@ -219,6 +234,12 @@ export function useSharedNotes(noteId?: string) {
     if (!user) return { success: false, error: 'Not authenticated' };
 
     try {
+      const { data: shareRow } = await supabase
+        .from('shared_notes')
+        .select('shared_with_email, note_id, notes(title)')
+        .eq('id', shareId)
+        .single();
+
       const { error } = await supabase
         .from('shared_notes')
         .delete()
@@ -226,6 +247,13 @@ export function useSharedNotes(noteId?: string) {
         .eq('owner_id', user.id);
 
       if (error) throw error;
+
+      if (shareRow?.shared_with_email) {
+        sendShareEmail('note-access-revoked', shareRow.shared_with_email, {
+          ownerName: getOwnerDisplayName(user),
+          noteTitle: (shareRow as any).notes?.title || 'a note',
+        }, `note-revoked-${shareId}`);
+      }
 
       // Update local state
       setSharedUsers(prev => prev.filter(share => share.id !== shareId));
