@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/components/ui/sonner';
+import { sendShareEmail, getOwnerDisplayName } from '@/lib/shareEmails';
 
 export interface EmailShare {
   id: string;
@@ -72,6 +73,18 @@ export function useEmailSharing(noteId?: string) {
 
       if (error) throw error;
 
+      // Fire share-notification email (fire-and-forget)
+      try {
+        const { data: noteRow } = await supabase
+          .from('notes').select('title').eq('id', noteId).single();
+        sendShareEmail('note-shared', trimmedEmail, {
+          ownerName: getOwnerDisplayName(user),
+          noteTitle: noteRow?.title || 'a note',
+          permission,
+          noteUrl: `${window.location.origin}/note/${noteId}`,
+        }, `note-shared-${noteId}-${trimmedEmail}`);
+      } catch (e) { console.error(e); }
+
       // Reload shares
       await loadShares(noteId);
 
@@ -117,6 +130,13 @@ export function useEmailSharing(noteId?: string) {
     if (!user) return false;
 
     try {
+      // Capture details BEFORE delete for the notification email
+      const { data: shareRow } = await supabase
+        .from('shared_notes')
+        .select('shared_with_email, note_id, notes(title)')
+        .eq('id', shareId)
+        .single();
+
       const { error } = await supabase
         .from('shared_notes')
         .delete()
@@ -124,6 +144,13 @@ export function useEmailSharing(noteId?: string) {
         .eq('owner_id', user.id);
 
       if (error) throw error;
+
+      if (shareRow?.shared_with_email) {
+        sendShareEmail('note-access-revoked', shareRow.shared_with_email, {
+          ownerName: getOwnerDisplayName(user),
+          noteTitle: (shareRow as any).notes?.title || 'a note',
+        }, `note-revoked-${shareId}`);
+      }
 
       // Update local state
       setShares(prev => prev.filter(share => share.id !== shareId));
