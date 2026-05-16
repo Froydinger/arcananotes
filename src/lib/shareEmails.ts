@@ -7,7 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 export async function sendShareEmail(
   templateName: 'note-shared' | 'note-shared-invite' | 'note-access-revoked' | 'shared-note-deleted',
   recipientEmail: string,
-  templateData: { ownerName?: string; noteTitle?: string; permission?: string; noteUrl?: string },
+  templateData: Record<string, string | undefined>,
   idempotencyKey: string,
 ) {
   try {
