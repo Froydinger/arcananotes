@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
  * Never throws — errors are logged so they don't break the UI flow.
  */
 export async function sendShareEmail(
-  templateName: 'note-shared' | 'note-access-revoked' | 'shared-note-deleted',
+  templateName: 'note-shared' | 'note-shared-invite' | 'note-access-revoked' | 'shared-note-deleted',
   recipientEmail: string,
   templateData: { ownerName?: string; noteTitle?: string; permission?: string; noteUrl?: string },
   idempotencyKey: string,
