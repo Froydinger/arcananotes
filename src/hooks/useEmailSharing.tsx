@@ -75,14 +75,25 @@ export function useEmailSharing(noteId?: string) {
 
       // Fire share-notification email (fire-and-forget)
       try {
-        const { data: noteRow } = await supabase
-          .from('notes').select('title').eq('id', noteId).single();
-        sendShareEmail('note-shared', trimmedEmail, {
-          ownerName: getOwnerDisplayName(user),
-          noteTitle: noteRow?.title || 'a note',
-          permission,
-          noteUrl: `${window.location.origin}/note/${noteId}`,
-        }, `note-shared-${noteId}-${trimmedEmail}`);
+        const [{ data: noteRow }, { data: shareRow }] = await Promise.all([
+          supabase.from('notes').select('title').eq('id', noteId).single(),
+          supabase.from('shared_notes').select('shared_with_user_id')
+            .eq('note_id', noteId).eq('shared_with_email', trimmedEmail).maybeSingle(),
+        ]);
+        const isRegistered = !!shareRow?.shared_with_user_id;
+        sendShareEmail(
+          isRegistered ? 'note-shared' : 'note-shared-invite',
+          trimmedEmail,
+          {
+            ownerName: getOwnerDisplayName(user),
+            noteTitle: noteRow?.title || 'a note',
+            permission,
+            noteUrl: `${window.location.origin}/note/${noteId}`,
+            signupUrl: window.location.origin,
+            recipient: trimmedEmail,
+          },
+          `note-shared-${noteId}-${trimmedEmail}`,
+        );
       } catch (e) { console.error(e); }
 
       // Reload shares
