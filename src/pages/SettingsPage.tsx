@@ -59,22 +59,8 @@ const SettingsPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [showSupportDialog, setShowSupportDialog] = useState(false);
-  const {
-    isSubscribed,
-    aiUsageToday,
-    aiLimit,
-    loading: subLoading,
-    createCheckout,
-    openPortal,
-    checkSubscription,
-  } = useSubscription();
+  const {} = useSubscription();
 
-  // Refresh subscription after returning from checkout
-  useEffect(() => {
-    if (searchParams.get("checkout") === "success") {
-      checkSubscription();
-    }
-  }, [searchParams]);
 
   const getThemeLabel = (theme: string) => {
     switch (theme) {
@@ -288,70 +274,25 @@ const SettingsPage = () => {
               </div>
             </div>
 
-            {/* Arcana Notes Pro Subscription */}
+            {/* All features free for everyone */}
             {user && (
               <div className="bg-card rounded-lg p-4 border border-accent/20">
                 <h2 className="text-lg font-medium mb-3 font-serif flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-accent" />
-                  Arcana Notes Pro
+                  Arcana Notes
                 </h2>
-                {isSubscribed ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Crown className="h-4 w-4 text-accent" />
-                      <span className="text-sm font-medium text-accent">Active — Unlimited AI</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Unlimited AI requests included. Today: {aiUsageToday} requests.
-                    </p>
-                    <Button variant="outline" size="sm" onClick={openPortal} className="w-full">
-                      Manage Subscription
-                    </Button>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Crown className="h-4 w-4 text-accent" />
+                    <span className="text-sm font-medium text-accent">All features unlocked — free forever</span>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="text-sm text-muted-foreground">
-                      You're on the free plan — <strong>{aiUsageToday}/10</strong> AI requests used today.
-                    </p>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div
-                        className="bg-accent h-2 rounded-full transition-all"
-                        style={{ width: `${Math.min((aiUsageToday / 10) * 100, 100)}%` }}
-                      />
-                    </div>
-                    <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
-                      <p className="text-sm font-medium text-foreground mb-1">Upgrade to Arcana Notes Pro</p>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        $6/month — Unlimited AI requests and priority access.
-                      </p>
-                      <Button
-                        onClick={async () => {
-                          setIsCheckingOut(true);
-                          try {
-                            await createCheckout();
-                          } catch (err) {
-                            toast.error("Could not open checkout. Please try again.");
-                            console.error("Checkout error:", err);
-                          } finally {
-                            setIsCheckingOut(false);
-                          }
-                        }}
-                        disabled={isCheckingOut}
-                        size="sm"
-                        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-                      >
-                        {isCheckingOut ? (
-                          <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
-                        ) : (
-                          <Sparkles className="h-3.5 w-3.5 mr-1.5" />
-                        )}
-                        {isCheckingOut ? "Opening checkout…" : "Upgrade — $6/mo"}
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                  <p className="text-xs text-muted-foreground">
+                    Unlimited AI requests. No credits, no limits, no paywall.
+                  </p>
+                </div>
               </div>
             )}
+
 
             <div className="bg-card rounded-lg p-4 border">
               <h2 className="text-lg font-medium mb-3 font-serif">Account</h2>

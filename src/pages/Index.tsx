@@ -66,7 +66,7 @@ const Index = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [openSelect, setOpenSelect] = useState<string | null>(null);
   const [showAccountDialog, setShowAccountDialog] = useState(false);
-  const { isSubscribed, aiUsageToday, aiLimit, createCheckout } = useSubscription();
+  const { isSubscribed } = useSubscription();
 
   const filteredAndSortedNotes = useMemo(() => {
     const filtered = notes.filter((note) => {
@@ -171,14 +171,8 @@ const Index = () => {
     }
   };
 
-  const handleUpgrade = async () => {
-    try {
-      await createCheckout();
-    } catch (error) {
-      console.error("Failed to create checkout:", error);
-      toast.error("Failed to open upgrade page");
-    }
-  };
+
+
 
   console.log("Index render state:", { loading, notesLength: notes.length, hasUser: !!user, hasInitialLoad });
 
@@ -413,38 +407,15 @@ const Index = () => {
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-4 pt-2">
-                {/* Plan status */}
+                {/* Plan status — all features free */}
                 <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/50 border border-border/30">
                   <div className="flex items-center gap-2">
-                    {isSubscribed ? (
-                      <Crown className="h-4 w-4 text-accent" />
-                    ) : (
-                      <Sparkles className="h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span className="text-sm font-medium text-foreground">
-                      {isSubscribed ? "Pro Plan" : "Free Plan"}
-                    </span>
+                    <Crown className="h-4 w-4 text-accent" />
+                    <span className="text-sm font-medium text-foreground">All features unlocked</span>
                   </div>
-                  {isSubscribed && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent font-medium">Active</span>
-                  )}
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent font-medium">Free</span>
                 </div>
 
-                {/* AI usage */}
-                {!isSubscribed && (
-                  <div className="p-3 rounded-xl bg-secondary/50 border border-border/30">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs text-muted-foreground">AI requests today</span>
-                      <span className="text-xs font-medium text-foreground">{aiUsageToday} / {aiLimit}</span>
-                    </div>
-                    <div className="w-full h-1.5 rounded-full bg-secondary overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-accent transition-all duration-300"
-                        style={{ width: `${Math.min((aiUsageToday / aiLimit) * 100, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
 
                 {/* Email */}
                 <div className="text-center text-xs text-muted-foreground">
@@ -454,15 +425,8 @@ const Index = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col sm:flex-col gap-2 pt-2">
-            {!isSubscribed && (
-              <AlertDialogAction
-                onClick={handleUpgrade}
-                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-              >
-                <Crown className="h-4 w-4 mr-2" />
-                Upgrade to Pro
-              </AlertDialogAction>
-            )}
+
+
             <AlertDialogAction
               onClick={() => navigate("/settings")}
               className="w-full bg-secondary hover:bg-secondary/80 text-foreground"
