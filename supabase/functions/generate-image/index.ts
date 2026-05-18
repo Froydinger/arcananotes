@@ -31,32 +31,12 @@ serve(async (req) => {
       });
     }
 
-    // Check subscription - pro only
+    // Free for everyone — no subscription or usage gating.
     const serviceClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    const { data: sub } = await serviceClient
-      .from("subscriptions")
-      .select("status")
-      .eq("user_id", user.id)
-      .in("status", ["active", "trialing"])
-      .maybeSingle();
-
-    if (!sub) {
-      return new Response(JSON.stringify({ error: "Image generation requires a Pro subscription.", pro_required: true }), {
-        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Check AI usage
-    const { data: usageResult } = await serviceClient.rpc("increment_ai_usage", { p_user_id: user.id });
-    if (usageResult && !usageResult.allowed) {
-      return new Response(JSON.stringify({ error: "Daily AI limit reached.", limit_reached: true }), {
-        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
     const { prompt, edit_instruction, source_image_url } = await req.json();
     if (!prompt || typeof prompt !== "string") {
