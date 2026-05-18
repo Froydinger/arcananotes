@@ -37,17 +37,12 @@ export default function LanderPage() {
   const freeHighlights = [
     "Unlimited notes & checklists",
     "Rich text editor with formatting",
+    "Unlimited AI requests with Arc",
     "Cloud sync across all devices",
     "Private & secure by default",
     "Works offline as a PWA",
-    "10 AI requests per day",
   ];
 
-  const proHighlights = [
-    "Everything in Free",
-    "Unlimited AI requests",
-    "Priority AI access",
-  ];
 
   return (
     <div className="relative min-h-screen w-full bg-background">
