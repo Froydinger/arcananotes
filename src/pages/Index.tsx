@@ -66,7 +66,7 @@ const Index = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [openSelect, setOpenSelect] = useState<string | null>(null);
   const [showAccountDialog, setShowAccountDialog] = useState(false);
-  const { isSubscribed, aiUsageToday, aiLimit, createCheckout } = useSubscription();
+  const { isSubscribed } = useSubscription();
 
   const filteredAndSortedNotes = useMemo(() => {
     const filtered = notes.filter((note) => {
