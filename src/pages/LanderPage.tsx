@@ -222,22 +222,22 @@ export default function LanderPage() {
       <section className="relative z-10 py-24 px-6 max-w-4xl mx-auto text-center">
         <div className="space-y-6 flex flex-col items-center mb-10">
           <h2 className="font-display text-3xl md:text-5xl text-foreground leading-tight">
-            Simple pricing,<br />
-            <span className="text-accent">powerful writing.</span>
+            Everything,<br />
+            <span className="text-accent">free forever.</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed max-w-lg font-sans">
-            Start for free. Upgrade when you need unlimited AI.
+            No paywalls. No credits. No catch.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          {/* Free Plan */}
-          <div className="rounded-3xl p-8 bg-card/60 backdrop-blur-sm border border-border/50 relative overflow-hidden">
+        <div className="max-w-md mx-auto">
+          <div className="rounded-3xl p-8 bg-card/60 backdrop-blur-sm border-2 border-accent/40 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-accent/50" />
             <div className="mb-6">
               <div className="flex items-baseline justify-center gap-1 mb-2">
                 <span className="font-display text-4xl text-foreground">Free</span>
               </div>
-              <p className="text-sm text-muted-foreground font-sans">No credit card required</p>
+              <p className="text-sm text-accent font-sans font-medium">All features included</p>
             </div>
             <div className="space-y-3 text-left mb-8">
               {freeHighlights.map((feature, i) => (
@@ -249,40 +249,15 @@ export default function LanderPage() {
             </div>
             <Button
               onClick={() => setShowLoginDialog(true)}
-              className="w-full h-12 rounded-full bg-muted border border-border text-foreground hover:bg-muted/80 font-sans text-base gap-2 transition-all"
-            >
-              Get Started Free
-            </Button>
-          </div>
-
-          {/* Pro Plan */}
-          <div className="rounded-3xl p-8 bg-card/60 backdrop-blur-sm border-2 border-accent/40 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-accent/50" />
-            <div className="mb-6">
-              <div className="flex items-baseline justify-center gap-1 mb-2">
-                <span className="font-display text-4xl text-foreground">$6</span>
-                <span className="text-muted-foreground font-sans">/mo</span>
-              </div>
-              <p className="text-sm text-accent font-sans font-medium">Arcana Notes Pro</p>
-            </div>
-            <div className="space-y-3 text-left mb-8">
-              {proHighlights.map((feature, i) => (
-                <div key={i} className="flex items-center gap-3 text-sm text-foreground/80 font-sans">
-                  <Check className="w-4 h-4 text-accent shrink-0" />
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
-            <Button
-              onClick={() => setShowLoginDialog(true)}
               className="w-full h-12 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-base gap-2 transition-all hover:scale-105 shadow-glow-sm"
             >
               <img src={arcanaLogo} alt="" className="h-4 w-4" />
-              Start Writing with Pro
+              Get Started Free
             </Button>
           </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="relative z-10 py-16 pb-32 px-6 text-center">
