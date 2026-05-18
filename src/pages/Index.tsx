@@ -431,15 +431,8 @@ const Index = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col sm:flex-col gap-2 pt-2">
-            {!isSubscribed && (
-              <AlertDialogAction
-                onClick={handleUpgrade}
-                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-              >
-                <Crown className="h-4 w-4 mr-2" />
-                Upgrade to Pro
-              </AlertDialogAction>
-            )}
+
+
             <AlertDialogAction
               onClick={() => navigate("/settings")}
               className="w-full bg-secondary hover:bg-secondary/80 text-foreground"
