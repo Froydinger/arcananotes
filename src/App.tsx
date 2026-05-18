@@ -107,6 +107,7 @@ const App = () => {
               <Route path="/reset-password" element={<ForceDarkTheme><ResetPasswordPage /></ForceDarkTheme>} />
               <Route path="/privacy" element={<ForceDarkTheme><PrivacyPage /></ForceDarkTheme>} />
               <Route path="/terms" element={<ForceDarkTheme><TermsPage /></ForceDarkTheme>} />
+              <Route path="/refunds" element={<ForceDarkTheme><RefundsPage /></ForceDarkTheme>} />
 
               <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/note/:id" element={<ProtectedRoute><NotePage /></ProtectedRoute>} />
