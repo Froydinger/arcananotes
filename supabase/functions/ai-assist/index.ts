@@ -34,23 +34,8 @@ serve(async (req) => {
       });
     }
 
-    // Check usage limits
-    const serviceClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
-    const { data: usageResult } = await serviceClient.rpc("increment_ai_usage", { p_user_id: user.id });
-    if (usageResult && !usageResult.allowed) {
-      return new Response(JSON.stringify({
-        error: "Daily AI limit reached. Upgrade to Arcana Notes Pro for unlimited access.",
-        limit_reached: true,
-        count: usageResult.count,
-        limit: usageResult.limit,
-      }), {
-        status: 429,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Free for everyone — no usage limits.
+
 
     const { messages, stream } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
