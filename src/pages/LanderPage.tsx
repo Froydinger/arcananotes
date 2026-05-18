@@ -45,7 +45,7 @@ export default function LanderPage() {
 
   const proHighlights = [
     "Everything in Free",
-    "Unlimited AI powered by ArcAi™",
+    "Unlimited AI requests",
     "Priority AI access",
   ];
 
@@ -265,13 +265,13 @@ export default function LanderPage() {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-accent/50" />
             <div className="mb-6">
               <div className="flex items-baseline justify-center gap-1 mb-2">
-                <span className="font-display text-4xl text-foreground">$5</span>
+                <span className="font-display text-4xl text-foreground">$6</span>
                 <span className="text-muted-foreground font-sans">/mo</span>
               </div>
               <p className="text-sm text-accent font-sans font-medium">Arcana Notes Pro</p>
             </div>
             <div className="space-y-3 text-left mb-8">
-              {["Everything in Free", "Unlimited AI powered by ArcAi™", "Priority AI access"].map((feature, i) => (
+              {proHighlights.map((feature, i) => (
                 <div key={i} className="flex items-center gap-3 text-sm text-foreground/80 font-sans">
                   <Check className="w-4 h-4 text-accent shrink-0" />
                   <span>{feature}</span>
@@ -319,12 +319,6 @@ export default function LanderPage() {
             By{" "}
             <a href="https://winthenight.org" target="_blank" rel="noopener noreferrer" className="text-muted-foreground/70 hover:text-muted-foreground transition-colors">
               Win The Night™ Productions
-            </a>
-          </p>
-          <p className="text-xs text-muted-foreground/50 font-sans">
-            Powered by{" "}
-            <a href="https://askarc.chat" target="_blank" rel="noopener noreferrer" className="text-accent/60 hover:text-accent transition-colors">
-              ArcAi™
             </a>
           </p>
         </div>

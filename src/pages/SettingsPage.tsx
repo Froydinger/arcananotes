@@ -61,7 +61,6 @@ const SettingsPage = () => {
   const [showSupportDialog, setShowSupportDialog] = useState(false);
   const {
     isSubscribed,
-    source,
     aiUsageToday,
     aiLimit,
     loading: subLoading,
@@ -70,9 +69,9 @@ const SettingsPage = () => {
     checkSubscription,
   } = useSubscription();
 
-  // Check subscription on return from Stripe
+  // Refresh subscription after returning from checkout
   useEffect(() => {
-    if (searchParams.get("session_id")) {
+    if (searchParams.get("checkout") === "success") {
       checkSubscription();
     }
   }, [searchParams]);
@@ -303,16 +302,7 @@ const SettingsPage = () => {
                       <span className="text-sm font-medium text-accent">Active — Unlimited AI</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Unlimited AI requests powered by{" "}
-                      <a
-                        href="https://askarc.chat"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-accent hover:underline"
-                      >
-                        ArcAi™
-                      </a>
-                      . Today: {aiUsageToday} requests.
+                      Unlimited AI requests included. Today: {aiUsageToday} requests.
                     </p>
                     <Button variant="outline" size="sm" onClick={openPortal} className="w-full">
                       Manage Subscription
@@ -332,16 +322,7 @@ const SettingsPage = () => {
                     <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
                       <p className="text-sm font-medium text-foreground mb-1">Upgrade to Arcana Notes Pro</p>
                       <p className="text-xs text-muted-foreground mb-3">
-                        $5/month — Unlimited AI powered by{" "}
-                        <a
-                          href="https://askarc.chat"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-accent hover:underline"
-                        >
-                          ArcAi™
-                        </a>
-                        .
+                        $6/month — Unlimited AI requests and priority access.
                       </p>
                       <Button
                         onClick={async () => {
@@ -364,7 +345,7 @@ const SettingsPage = () => {
                         ) : (
                           <Sparkles className="h-3.5 w-3.5 mr-1.5" />
                         )}
-                        {isCheckingOut ? "Opening checkout…" : "Upgrade — $5/mo"}
+                        {isCheckingOut ? "Opening checkout…" : "Upgrade — $6/mo"}
                       </Button>
                     </div>
                   </div>
