@@ -1,12 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { getPaddleEnvironment } from '@/lib/paddle';
+import { usePaddleCheckout } from '@/hooks/usePaddleCheckout';
+
+const FOUNDER_EMAILS = new Set(['josh@winthenight.info']);
 
 interface SubscriptionState {
   isSubscribed: boolean;
-  source: string | null;
-  productId: string | null;
+  isFounder: boolean;
   subscriptionEnd: string | null;
+  cancelAtPeriodEnd: boolean;
   loading: boolean;
   aiUsageToday: number;
   aiLimit: number;
@@ -14,11 +18,12 @@ interface SubscriptionState {
 
 export function useSubscription() {
   const { user } = useAuth();
+  const { openCheckout } = usePaddleCheckout();
   const [state, setState] = useState<SubscriptionState>({
     isSubscribed: false,
-    source: null,
-    productId: null,
+    isFounder: false,
     subscriptionEnd: null,
+    cancelAtPeriodEnd: false,
     loading: true,
     aiUsageToday: 0,
     aiLimit: 10,
@@ -30,29 +35,41 @@ export function useSubscription() {
       return;
     }
 
-    try {
-      const { data, error } = await supabase.functions.invoke('check-subscription', {
-        body: {},
-      });
+    const isFounder = FOUNDER_EMAILS.has((user.email || '').toLowerCase());
 
-      if (!error && data) {
-        setState(s => ({
-          ...s,
-          isSubscribed: data.subscribed || false,
-          source: data.source || null,
-          productId: data.product_id || null,
-          subscriptionEnd: data.subscription_end || null,
-          aiLimit: data.subscribed ? -1 : 10,
-          loading: false,
-        }));
-      } else {
-        setState(s => ({ ...s, loading: false }));
-      }
+    try {
+      const env = getPaddleEnvironment();
+      const { data: sub } = await (supabase as any)
+        .from('subscriptions')
+        .select('status, current_period_end, cancel_at_period_end')
+        .eq('user_id', user.id)
+        .eq('environment', env)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const now = Date.now();
+      const periodEnd = sub?.current_period_end ? new Date(sub.current_period_end).getTime() : null;
+      const activeSub = !!sub && (
+        (['active', 'trialing', 'past_due'].includes(sub.status) && (!periodEnd || periodEnd > now)) ||
+        (sub.status === 'canceled' && periodEnd && periodEnd > now)
+      );
+
+      const isSubscribed = isFounder || activeSub;
+
+      setState(s => ({
+        ...s,
+        isSubscribed,
+        isFounder,
+        subscriptionEnd: sub?.current_period_end ?? null,
+        cancelAtPeriodEnd: !!sub?.cancel_at_period_end,
+        aiLimit: isSubscribed ? -1 : 10,
+        loading: false,
+      }));
     } catch {
-      setState(s => ({ ...s, loading: false }));
+      setState(s => ({ ...s, isFounder, isSubscribed: isFounder, loading: false }));
     }
 
-    // Get today's usage
     try {
       const today = new Date().toISOString().split('T')[0];
       const { data: usage } = await supabase
@@ -61,16 +78,12 @@ export function useSubscription() {
         .eq('user_id', user.id)
         .eq('usage_date', today)
         .maybeSingle();
-
-      if (usage) {
-        setState(s => ({ ...s, aiUsageToday: usage.request_count }));
-      }
+      if (usage) setState(s => ({ ...s, aiUsageToday: usage.request_count }));
     } catch {
       // ignore
     }
   }, [user]);
 
-  // Check on mount + auto-refresh every 60 seconds
   useEffect(() => {
     checkSubscription();
     const interval = setInterval(checkSubscription, 60_000);
@@ -78,23 +91,19 @@ export function useSubscription() {
   }, [checkSubscription]);
 
   const createCheckout = async () => {
-    const { data, error } = await supabase.functions.invoke('create-checkout', {
-      body: { returnUrl: window.location.origin + '/settings' },
+    if (!user) return;
+    await openCheckout({
+      priceId: 'arcana_pro_monthly',
+      customerEmail: user.email,
+      userId: user.id,
+      successUrl: `${window.location.origin}/settings?checkout=success`,
     });
-    if (error) throw error;
-    if (data?.url) {
-      // Use window.open for PWA/mobile compatibility; fallback to href
-      const opened = window.open(data.url, '_self');
-      if (!opened) window.location.href = data.url;
-    }
   };
 
   const openPortal = async () => {
-    const { data, error } = await supabase.functions.invoke('create-portal', {
-      body: { returnUrl: window.location.origin + '/settings' },
-    });
+    const { data, error } = await supabase.functions.invoke('customer-portal', { body: {} });
     if (error) throw error;
-    if (data?.url) window.location.href = data.url;
+    if (data?.url) window.open(data.url, '_blank');
   };
 
   return {
