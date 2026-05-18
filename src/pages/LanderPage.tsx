@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { PenLine, CheckSquare, Brain, Shield, Smartphone, ArrowRight, Check, Menu, X } from "lucide-react";
-import arcanaLogo from '@/assets/arcana-logo.png';
+import arcanaLogo from "@/assets/arcana-logo.png";
 import { Button } from "@/components/ui/button";
 import { LoginDialog } from "@/components/auth/LoginDialog";
 import FakeNoteEditor from "@/components/landing/FakeNoteEditor";
@@ -43,7 +43,6 @@ export default function LanderPage() {
     "Works offline as a PWA",
   ];
 
-
   return (
     <div className="relative min-h-screen w-full bg-background">
       {/* Sticky Header */}
@@ -51,7 +50,7 @@ export default function LanderPage() {
         className={`fixed left-0 right-0 z-50 border-b border-border/40 backdrop-blur-xl bg-background/80 transition-all duration-300 ${
           showStickyHeader ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
         }`}
-        style={{ top: 0, paddingTop: 'env(safe-area-inset-top, 0px)' }}
+        style={{ top: 0, paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-8 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
@@ -59,8 +58,18 @@ export default function LanderPage() {
             <span className="font-display text-lg text-foreground tracking-tight">Arcana Notes</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#features" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
-            <a href="#why" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">Why Arcana Notes</a>
+            <a
+              href="#features"
+              className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#why"
+              className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Why Arcana Notes
+            </a>
             <button
               onClick={() => setShowLoginDialog(true)}
               className="px-4 py-2 rounded-full text-sm font-semibold bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 transition-all"
@@ -80,8 +89,12 @@ export default function LanderPage() {
           </span>
         </div>
         <div className="hidden md:flex items-center gap-6">
-          <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Features</a>
-          <a href="#why" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Why Arcana Notes</a>
+          <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Features
+          </a>
+          <a href="#why" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Why Arcana Notes
+          </a>
           <button
             onClick={() => setShowLoginDialog(true)}
             className="px-5 py-2.5 rounded-full text-sm font-semibold bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 transition-all"
@@ -98,12 +111,27 @@ export default function LanderPage() {
       {showMobileMenu && (
         <div
           className="md:hidden fixed right-6 z-50 rounded-2xl p-4 space-y-3 min-w-[200px] bg-card/95 backdrop-blur-xl border border-border/50 shadow-elevated-lg animate-scale-in"
-          style={{ top: 'calc(env(safe-area-inset-top, 0px) + 5rem)' }}
+          style={{ top: "calc(env(safe-area-inset-top, 0px) + 5rem)" }}
         >
-          <a href="#features" onClick={() => setShowMobileMenu(false)} className="block text-muted-foreground hover:text-foreground transition-colors">Features</a>
-          <a href="#why" onClick={() => setShowMobileMenu(false)} className="block text-muted-foreground hover:text-foreground transition-colors">Why Arcana Notes</a>
+          <a
+            href="#features"
+            onClick={() => setShowMobileMenu(false)}
+            className="block text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Features
+          </a>
+          <a
+            href="#why"
+            onClick={() => setShowMobileMenu(false)}
+            className="block text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Why Arcana Notes
+          </a>
           <button
-            onClick={() => { setShowLoginDialog(true); setShowMobileMenu(false); }}
+            onClick={() => {
+              setShowLoginDialog(true);
+              setShowMobileMenu(false);
+            }}
             className="w-full px-4 py-2 rounded-full text-sm font-semibold bg-accent/15 border-2 border-accent text-accent text-center"
           >
             Get Started Free
@@ -120,27 +148,20 @@ export default function LanderPage() {
                 src={arcanaLogo}
                 alt="Arcana"
                 className="w-24 h-24 md:w-32 md:h-32 drop-shadow-lg"
-                style={{ filter: 'drop-shadow(0 0 20px hsl(var(--accent) / 0.3))' }}
+                style={{ filter: "drop-shadow(0 0 20px hsl(var(--accent) / 0.3))" }}
               />
               <div className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 bg-accent/20 rounded-full blur-2xl -z-10 animate-pulse-soft" />
             </div>
           </div>
 
-          <h1
-            className="font-display text-5xl md:text-7xl text-foreground tracking-tight mb-6 leading-tight"
-          >
-            Write what you{" "}
-            <span className="text-accent">love.</span>
+          <h1 className="font-display text-5xl md:text-7xl text-foreground tracking-tight mb-6 leading-tight">
+            Write what you <span className="text-accent">love.</span>
           </h1>
-          <p
-            className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed font-sans"
-          >
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto leading-relaxed font-sans">
             The note-taking app designed for passionate writers. Beautiful, fast, and built for your creative flow.
           </p>
 
-          <div
-            className="flex flex-col items-center justify-center space-y-4 w-full max-w-sm mx-auto"
-          >
+          <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-sm mx-auto">
             <Button
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-14 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-lg gap-3 transition-all hover:scale-105 shadow-glow-sm"
@@ -148,7 +169,7 @@ export default function LanderPage() {
               <img src={arcanaLogo} alt="" className="h-5 w-5" />
               Start Writing — It's Free
             </Button>
-            <span className="text-xs text-muted-foreground/60">Free to use · Unlimited AI for $5/mo</span>
+            <span className="text-xs text-muted-foreground/60">Free to use forever</span>
           </div>
         </div>
 
@@ -164,7 +185,8 @@ export default function LanderPage() {
             Built for writers
           </div>
           <h2 className="font-display text-3xl md:text-5xl text-foreground leading-tight">
-            Everything you need<br />
+            Everything you need
+            <br />
             <span className="text-accent">to write beautifully.</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed max-w-lg font-sans">
@@ -198,7 +220,8 @@ export default function LanderPage() {
             <Shield className="w-6 h-6 text-accent" />
           </div>
           <h2 className="font-display text-3xl md:text-5xl text-foreground leading-tight">
-            Private, secure,<br />
+            Private, secure,
+            <br />
             <span className="text-accent">and truly yours.</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed max-w-lg font-sans">
@@ -207,14 +230,16 @@ export default function LanderPage() {
         </div>
 
         <div className="flex flex-wrap justify-center gap-3">
-          {['Private by Default', 'Cloud Synced', 'Works Offline', 'Share & Collaborate', 'Beautiful Themes'].map((tag, i) => (
-            <div
-              key={i}
-              className="px-5 py-3 rounded-full text-sm text-foreground/80 bg-card/60 backdrop-blur-sm border border-border/50 hover:border-accent/30 transition-colors cursor-default"
-            >
-              {tag}
-            </div>
-          ))}
+          {["Private by Default", "Cloud Synced", "Works Offline", "Share & Collaborate", "Beautiful Themes"].map(
+            (tag, i) => (
+              <div
+                key={i}
+                className="px-5 py-3 rounded-full text-sm text-foreground/80 bg-card/60 backdrop-blur-sm border border-border/50 hover:border-accent/30 transition-colors cursor-default"
+              >
+                {tag}
+              </div>
+            ),
+          )}
         </div>
       </section>
 
@@ -222,7 +247,8 @@ export default function LanderPage() {
       <section className="relative z-10 py-24 px-6 max-w-4xl mx-auto text-center">
         <div className="space-y-6 flex flex-col items-center mb-10">
           <h2 className="font-display text-3xl md:text-5xl text-foreground leading-tight">
-            Everything,<br />
+            Everything,
+            <br />
             <span className="text-accent">free forever.</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed max-w-lg font-sans">
@@ -258,12 +284,12 @@ export default function LanderPage() {
         </div>
       </section>
 
-
       {/* CTA */}
       <section className="relative z-10 py-16 pb-32 px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           <h2 className="font-display text-3xl md:text-5xl text-foreground leading-tight">
-            Ready to write<br />
+            Ready to write
+            <br />
             <span className="text-accent">what you love?</span>
           </h2>
           <Button
@@ -287,19 +313,32 @@ export default function LanderPage() {
         <div className="space-y-1">
           <p className="text-xs text-muted-foreground/50 font-sans">
             By{" "}
-            <a href="https://winthenight.org" target="_blank" rel="noopener noreferrer" className="text-muted-foreground/70 hover:text-muted-foreground transition-colors">
+            <a
+              href="https://winthenight.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground/70 hover:text-muted-foreground transition-colors"
+            >
               Win The Night™ Productions
             </a>
           </p>
         </div>
         <p className="text-xs text-muted-foreground/40 font-sans">
-          <a href="mailto:contact@winthenight.org" className="hover:text-muted-foreground transition-colors">contact@winthenight.org</a>
+          <a href="mailto:contact@winthenight.org" className="hover:text-muted-foreground transition-colors">
+            contact@winthenight.org
+          </a>
           {" · "}
-          <a href="/terms" className="hover:text-muted-foreground transition-colors">Terms</a>
+          <a href="/terms" className="hover:text-muted-foreground transition-colors">
+            Terms
+          </a>
           {" · "}
-          <a href="/privacy" className="hover:text-muted-foreground transition-colors">Privacy</a>
+          <a href="/privacy" className="hover:text-muted-foreground transition-colors">
+            Privacy
+          </a>
           {" · "}
-          <a href="/refunds" className="hover:text-muted-foreground transition-colors">Refunds</a>
+          <a href="/refunds" className="hover:text-muted-foreground transition-colors">
+            Refunds
+          </a>
         </p>
       </footer>
 
