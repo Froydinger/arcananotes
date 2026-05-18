@@ -59,22 +59,8 @@ const SettingsPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [showSupportDialog, setShowSupportDialog] = useState(false);
-  const {
-    isSubscribed,
-    aiUsageToday,
-    aiLimit,
-    loading: subLoading,
-    createCheckout,
-    openPortal,
-    checkSubscription,
-  } = useSubscription();
+  const {} = useSubscription();
 
-  // Refresh subscription after returning from checkout
-  useEffect(() => {
-    if (searchParams.get("checkout") === "success") {
-      checkSubscription();
-    }
-  }, [searchParams]);
 
   const getThemeLabel = (theme: string) => {
     switch (theme) {
