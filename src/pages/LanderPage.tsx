@@ -328,6 +328,8 @@ export default function LanderPage() {
           <a href="/terms" className="hover:text-muted-foreground transition-colors">Terms</a>
           {" · "}
           <a href="/privacy" className="hover:text-muted-foreground transition-colors">Privacy</a>
+          {" · "}
+          <a href="/refunds" className="hover:text-muted-foreground transition-colors">Refunds</a>
         </p>
       </footer>
 
