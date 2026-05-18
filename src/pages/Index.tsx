@@ -171,14 +171,8 @@ const Index = () => {
     }
   };
 
-  const handleUpgrade = async () => {
-    try {
-      await createCheckout();
-    } catch (error) {
-      console.error("Failed to create checkout:", error);
-      toast.error("Failed to open upgrade page");
-    }
-  };
+
+
 
   console.log("Index render state:", { loading, notesLength: notes.length, hasUser: !!user, hasInitialLoad });
 
