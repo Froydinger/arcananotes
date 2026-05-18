@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Shield, Sparkles, Mail, Database } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 const PrivacyPage = () => {
   const navigate = useNavigate();
@@ -19,144 +18,124 @@ const PrivacyPage = () => {
           Back
         </Button>
 
-        <div className="space-y-6">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
-              Privacy & Terms
-            </h1>
+        <article className="prose prose-invert max-w-none text-foreground space-y-6">
+          <header>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2">Privacy Notice</h1>
+            <p className="text-muted-foreground">Last updated: May 2026</p>
+          </header>
+
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">1. Who we are</h2>
             <p className="text-muted-foreground">
-              Simple, honest, and transparent
+              Arcana Notes ("Arcana", "we", "us") is operated by{' '}
+              <strong className="text-foreground">Win The Night™ Productions | Froydinger™ Design Systems</strong>{' '}
+              ("the Company"). The Company is the data controller responsible for personal data processed through the
+              Arcana service.
             </p>
-          </div>
+          </section>
 
-          {/* The Short Version */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Shield className="h-5 w-5 text-accent" />
-                The Short Version
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-foreground space-y-3">
-              <p>
-                Arcana Notes is a free note-taking tool. We keep it simple:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li><strong className="text-foreground">We don't collect your data</strong> - Your notes stay on your device and sync to your account. That's it.</li>
-                <li><strong className="text-foreground">We don't spam you</strong> - No marketing emails, no newsletters, no nonsense.</li>
-                <li><strong className="text-foreground">We don't sell anything</strong> - No ads, no premium tiers, no hidden monetization.</li>
-                <li><strong className="text-foreground">We don't read your notes</strong> - Your content is yours. We don't look at it.</li>
-              </ul>
-            </CardContent>
-          </Card>
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">2. Categories of personal data we collect</h2>
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li><strong className="text-foreground">Account data:</strong> email address, authentication identifiers, and (if you use social login) the name/avatar provided by Google or Apple.</li>
+              <li><strong className="text-foreground">Content data:</strong> notes, checklists, images, and preferences you create or upload.</li>
+              <li><strong className="text-foreground">Usage and telemetry:</strong> AI request counts, feature usage, error logs, device type, browser, and IP address.</li>
+              <li><strong className="text-foreground">Support data:</strong> messages you send to help@noteily.app.</li>
+              <li><strong className="text-foreground">Billing data:</strong> handled directly by Paddle (see Section 5). We receive only a subscription status, plan, and customer reference — never your full card details.</li>
+            </ul>
+          </section>
 
-          {/* AI Features */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Sparkles className="h-5 w-5 text-accent" />
-                AI Features (Gemini)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-foreground space-y-3">
-              <p>
-                Our AI rewrite and spell/grammar check features are powered by Google's Gemini API.
-              </p>
-              <p className="text-muted-foreground">
-                When you use these features, your selected text is sent to Google for processing. Here's what you should know:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li>We've configured our API to <strong className="text-foreground">not share or store your data</strong> for Google's training purposes</li>
-                <li>Data is processed in real-time and not retained by our systems</li>
-                <li>However, Google's data handling is subject to their own privacy policies</li>
-                <li>If you're concerned, simply don't use the AI features - everything else works without them</li>
-              </ul>
-              <p className="text-sm text-muted-foreground mt-4">
-                For more information about how Google handles API data, see{' '}
-                <a
-                  href="https://ai.google.dev/gemini-api/terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent hover:underline"
-                >
-                  Google's Gemini API Terms
-                </a>
-              </p>
-            </CardContent>
-          </Card>
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">3. Purposes and legal bases</h2>
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li><strong className="text-foreground">Providing the service</strong> (account creation, syncing notes, AI features) — legal basis: performance of a contract.</li>
+              <li><strong className="text-foreground">Security, fraud prevention, abuse detection</strong> — legal basis: legitimate interests.</li>
+              <li><strong className="text-foreground">Product improvement and aggregate analytics</strong> — legal basis: legitimate interests.</li>
+              <li><strong className="text-foreground">Customer support</strong> — legal basis: performance of a contract / legitimate interests.</li>
+              <li><strong className="text-foreground">Legal and tax compliance</strong> (via Paddle) — legal basis: legal obligation.</li>
+            </ul>
+          </section>
 
-          {/* Data Storage */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Database className="h-5 w-5 text-accent" />
-                Data Storage
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-foreground space-y-3">
-              <p>
-                Your notes are stored securely using Supabase (hosted on AWS). We store:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li>Your email address (for login)</li>
-                <li>Your notes and checklists</li>
-                <li>Your app preferences (theme, fonts, etc.)</li>
-              </ul>
-              <p className="text-muted-foreground mt-3">
-                You can delete your account and all associated data at any time from the Settings page.
-              </p>
-            </CardContent>
-          </Card>
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">4. AI processing (Arc AI)</h2>
+            <p className="text-muted-foreground">
+              When you use Arc AI features, the text or image you select is sent to our model providers (Google Gemini
+              and OpenAI) through the Lovable AI Gateway for real-time processing. We configure these APIs so that your
+              data is <strong className="text-foreground">not used to train</strong> third-party models. Outputs are
+              returned to you and not retained beyond what is needed to deliver the feature.
+            </p>
+          </section>
 
-          {/* Terms of Use */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                Terms of Use
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-foreground space-y-3">
-              <p className="text-muted-foreground">
-                By using Arcana Notes, you agree to:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li>Not use the service for anything illegal</li>
-                <li>Keep your login credentials secure</li>
-                <li>Accept that the service is provided "as is" without warranties</li>
-              </ul>
-              <p className="text-muted-foreground mt-3">
-                That's really it. We're not trying to trap you in legal jargon. Just use the app responsibly and we're good.
-              </p>
-            </CardContent>
-          </Card>
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">5. Data sharing and recipients</h2>
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li><strong className="text-foreground">Paddle.com Market Ltd</strong> — our Merchant of Record. Paddle processes payments, manages subscriptions, handles taxes, invoicing, and refunds, and receives the personal data necessary for those purposes. See{' '}
+                <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">Paddle's Privacy Notice</a>.</li>
+              <li><strong className="text-foreground">Hosting and backend:</strong> Supabase (hosted on AWS) stores your account, notes, and preferences.</li>
+              <li><strong className="text-foreground">AI providers:</strong> Google (Gemini) and OpenAI, via the Lovable AI Gateway, for AI features only.</li>
+              <li><strong className="text-foreground">Authentication providers:</strong> Google and Apple, if you choose social login.</li>
+              <li><strong className="text-foreground">Professional advisers</strong> (legal, accounting) where strictly necessary.</li>
+              <li><strong className="text-foreground">Authorities</strong> where required by law or to protect our rights.</li>
+            </ul>
+            <p className="text-muted-foreground">We do not sell your personal data.</p>
+          </section>
 
-          {/* Contact */}
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Mail className="h-5 w-5 text-accent" />
-                Questions?
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-foreground">
-              <p className="text-muted-foreground">
-                If you have any questions or concerns, reach out:{' '}
-                <a
-                  href="mailto:contact@winthenight.org"
-                  className="text-accent hover:underline"
-                >
-                  contact@winthenight.org
-                </a>
-              </p>
-            </CardContent>
-          </Card>
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">6. International transfers</h2>
+            <p className="text-muted-foreground">
+              Some recipients (including Paddle, Supabase/AWS, Google, OpenAI) are located outside the UK/EEA. Where
+              required, we rely on adequacy decisions or Standard Contractual Clauses to safeguard such transfers.
+            </p>
+          </section>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-muted-foreground pt-4">
-            Last updated: December 2024
-          </p>
-        </div>
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">7. Data retention</h2>
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li>Account, content and preference data: kept while your account is active and deleted within 30 days of account deletion.</li>
+              <li>Billing records held by Paddle: retained by Paddle for the period required by tax and accounting law (typically 7–10 years).</li>
+              <li>Support correspondence: up to 24 months after the last contact.</li>
+              <li>Server logs and security data: up to 90 days, then deleted or anonymised.</li>
+            </ul>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">8. Your rights</h2>
+            <p className="text-muted-foreground">
+              Depending on where you live, you have the right to access, correct, delete, export (portability), restrict
+              or object to processing of your personal data, and to withdraw consent at any time. UK/EEA users may
+              lodge a complaint with their local supervisory authority. California residents have rights under the CCPA
+              including the right to know, delete, and opt out of "sale" or "sharing" of personal information (we do
+              neither). You can exercise most rights directly from the in-app Settings page, or by emailing{' '}
+              <a href="mailto:help@noteily.app" className="text-accent hover:underline">help@noteily.app</a>. We
+              respond within 30 days.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">9. Security</h2>
+            <p className="text-muted-foreground">
+              We use appropriate technical and organisational measures including TLS in transit, encryption at rest,
+              row-level security on our database, least-privilege access controls, and regular review of our
+              dependencies.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">10. Cookies and similar technologies</h2>
+            <p className="text-muted-foreground">
+              We use only essential cookies and local storage needed to keep you signed in and to remember your
+              preferences. We do not use advertising or third-party tracking cookies.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-2xl font-semibold">11. Contact</h2>
+            <p className="text-muted-foreground">
+              Win The Night™ Productions | Froydinger™ Design Systems —{' '}
+              <a href="mailto:help@noteily.app" className="text-accent hover:underline">help@noteily.app</a>
+            </p>
+          </section>
+        </article>
       </div>
     </div>
   );
