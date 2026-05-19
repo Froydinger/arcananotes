@@ -636,8 +636,26 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       const wrapper = document.createElement('div');
       wrapper.className = 'note-image-wrapper';
       wrapper.contentEditable = 'false';
+      wrapper.setAttribute('draggable', 'true');
       img.parentNode?.insertBefore(wrapper, img);
       wrapper.appendChild(img);
+
+      // Drag to move the image block (not copy)
+      wrapper.ondragstart = (e) => {
+        if (!e.dataTransfer) return;
+        draggingWrapperRef.current = wrapper;
+        e.dataTransfer.effectAllowed = 'move';
+        // Required for Firefox to initiate drag
+        try { e.dataTransfer.setData('text/plain', 'note-image'); } catch {}
+        wrapper.classList.add('is-dragging');
+      };
+      wrapper.ondragend = () => {
+        wrapper.classList.remove('is-dragging');
+        draggingWrapperRef.current = null;
+        contentRef.current?.querySelectorAll('.drop-indicator-active').forEach(el => {
+          el.classList.remove('drop-indicator-active', 'drop-before', 'drop-after');
+        });
+      };
 
       // Click/tap to toggle controls visibility
       wrapper.onclick = (e) => {
