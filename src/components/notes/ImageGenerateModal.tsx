@@ -97,12 +97,14 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
 
     try {
       const { data, error } = await supabase.functions.invoke("generate-image", {
-        body: { prompt: fullPrompt },
+        body: { prompt: fullPrompt, aspect_ratio: aspectRatio },
       });
       if (error) throw error;
-      if (data?.pro_required) { toast.error("Image generation requires a Pro subscription"); setPhase("prompt"); return; }
-      if (data?.error) throw new Error(data.error);
+      if (data?.error) { toast.error(data.error); setPhase("prompt"); return; }
       if (data?.image_url) {
+        setPreviewUrl(data.image_url);
+        setPhase("preview");
+      }
         setPreviewUrl(data.image_url);
         setPhase("preview");
       }
