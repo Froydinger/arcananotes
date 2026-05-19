@@ -721,6 +721,21 @@
     display: block;
     margin: 1rem auto;
     width: 60%;
+    cursor: grab;
+    transition: opacity 0.15s ease;
+  }
+
+  .note-image-wrapper:active { cursor: grabbing; }
+  .note-image-wrapper.is-dragging { opacity: 0.4; }
+
+  /* Drop indicators for image drag-and-drop reorder */
+  .drop-before {
+    box-shadow: 0 -3px 0 0 hsl(var(--primary));
+    border-radius: 2px;
+  }
+  .drop-after {
+    box-shadow: 0 3px 0 0 hsl(var(--primary));
+    border-radius: 2px;
   }
 
   .note-image-wrapper .note-image {
