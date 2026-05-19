@@ -1085,6 +1085,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                           e.preventDefault();
                           setShowSlashMenu(false);
                           if (item.key === 'image') {
+                            saveSelectionRange();
                             imageInputRef.current?.click();
                           } else if (item.key === 'generate') {
                             handleGenerateImage();
