@@ -752,6 +752,91 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     return () => observer.disconnect();
   }, [note.id, setupImageControls, isReadOnly]);
 
+  // Drag-and-drop: move image blocks within the editor (no copy)
+  useEffect(() => {
+    const editor = contentRef.current;
+    if (!editor || isReadOnly) return;
+
+    const clearIndicators = () => {
+      editor.querySelectorAll('.drop-before, .drop-after').forEach(el => {
+        el.classList.remove('drop-before', 'drop-after');
+      });
+    };
+
+    // Find the direct child block of the editor at a given Y
+    const findBlockAtY = (y: number): HTMLElement | null => {
+      const children = Array.from(editor.children) as HTMLElement[];
+      for (const child of children) {
+        const rect = child.getBoundingClientRect();
+        if (y >= rect.top && y <= rect.bottom) return child;
+      }
+      // Fallback to nearest
+      let nearest: HTMLElement | null = null;
+      let minDist = Infinity;
+      for (const child of children) {
+        const rect = child.getBoundingClientRect();
+        const mid = (rect.top + rect.bottom) / 2;
+        const d = Math.abs(y - mid);
+        if (d < minDist) { minDist = d; nearest = child; }
+      }
+      return nearest;
+    };
+
+    const onDragOver = (e: DragEvent) => {
+      if (!draggingWrapperRef.current) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      const target = findBlockAtY(e.clientY);
+      clearIndicators();
+      if (!target || target === draggingWrapperRef.current) return;
+      const rect = target.getBoundingClientRect();
+      const after = e.clientY > rect.top + rect.height / 2;
+      target.classList.add(after ? 'drop-after' : 'drop-before');
+    };
+
+    const onDrop = (e: DragEvent) => {
+      const wrapper = draggingWrapperRef.current;
+      if (!wrapper) return;
+      e.preventDefault();
+      const target = findBlockAtY(e.clientY);
+      clearIndicators();
+      if (!target || target === wrapper) return;
+      const rect = target.getBoundingClientRect();
+      const after = e.clientY > rect.top + rect.height / 2;
+      if (after) target.after(wrapper);
+      else target.before(wrapper);
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+
+    const onDragLeave = (e: DragEvent) => {
+      if (e.target === editor) clearIndicators();
+    };
+
+    editor.addEventListener('dragover', onDragOver);
+    editor.addEventListener('drop', onDrop);
+    editor.addEventListener('dragleave', onDragLeave);
+    return () => {
+      editor.removeEventListener('dragover', onDragOver);
+      editor.removeEventListener('drop', onDrop);
+      editor.removeEventListener('dragleave', onDragLeave);
+    };
+  }, [note.id, isReadOnly]);
+
+  // Continuously remember the caret position inside the editor so
+  // modals/file pickers can insert at the right spot even after focus is stolen
+  useEffect(() => {
+    const onSelectionChange = () => {
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      const range = sel.getRangeAt(0);
+      if (contentRef.current?.contains(range.commonAncestorContainer)) {
+        savedRangeRef.current = range.cloneRange();
+      }
+    };
+    document.addEventListener('selectionchange', onSelectionChange);
+    return () => document.removeEventListener('selectionchange', onSelectionChange);
+  }, []);
+
   // Dismiss image controls when clicking outside images
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
