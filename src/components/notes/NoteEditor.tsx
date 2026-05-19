@@ -1028,6 +1028,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                   const selected = menuItems[slashMenuIndex];
                   setShowSlashMenu(false);
                   if (selected === 'image') {
+                    saveSelectionRange();
                     imageInputRef.current?.click();
                   } else if (selected === 'generate') {
                     handleGenerateImage();
