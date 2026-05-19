@@ -122,6 +122,7 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
           prompt: editInstruction.trim(),
           edit_instruction: editInstruction.trim(),
           source_image_url: previewUrl,
+          aspect_ratio: aspectRatio,
         },
       });
       if (error) throw error;
