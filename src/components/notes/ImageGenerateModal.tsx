@@ -105,9 +105,6 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
         setPreviewUrl(data.image_url);
         setPhase("preview");
       }
-        setPreviewUrl(data.image_url);
-        setPhase("preview");
-      }
     } catch (err: any) {
       console.error("Image generation failed:", err);
       toast.error(err.message || "Failed to generate image");
