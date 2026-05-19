@@ -94,13 +94,11 @@ serve(async (req) => {
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({ error: "AI credits exhausted." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
-      return new Response(JSON.stringify({ error: "Image generation failed" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ error: `Image generation failed (${response.status}). ${errText.slice(0, 200)}` }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -108,8 +106,10 @@ serve(async (req) => {
     const imageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
 
     if (!imageUrl) {
-      return new Response(JSON.stringify({ error: "No image was generated. Try a different prompt." }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      const textOut = data.choices?.[0]?.message?.content;
+      console.error("No image in response:", JSON.stringify(data).slice(0, 500));
+      return new Response(JSON.stringify({ error: textOut ? `Model returned text instead of an image: ${String(textOut).slice(0,160)}` : "No image was generated. Try a different prompt." }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
