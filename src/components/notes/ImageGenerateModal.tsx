@@ -29,11 +29,20 @@ const STYLE_CHIPS = [
   "Pop art",
 ];
 
+const ASPECT_RATIOS: { label: string; value: string }[] = [
+  { label: "Square", value: "1:1" },
+  { label: "Landscape", value: "16:9" },
+  { label: "Portrait", value: "9:16" },
+  { label: "4:3", value: "4:3" },
+  { label: "3:2", value: "3:2" },
+];
+
 type ModalPhase = "prompt" | "generating" | "preview" | "editing" | "editing-generating";
 
 export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialPrompt = "" }: ImageGenerateModalProps) {
   const [prompt, setPrompt] = useState("");
   const [activeChips, setActiveChips] = useState<string[]>([]);
+  const [aspectRatio, setAspectRatio] = useState<string>("1:1");
   const [phase, setPhase] = useState<ModalPhase>("prompt");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [editInstruction, setEditInstruction] = useState("");
