@@ -307,6 +307,32 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
               </div>
             )}
 
+            {/* Aspect ratio - prompt phase only */}
+            {phase === "prompt" && (
+              <div>
+                <label className="text-[11px] font-medium text-muted-foreground mb-2 block uppercase tracking-wider">Aspect ratio</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {ASPECT_RATIOS.map(r => {
+                    const active = aspectRatio === r.value;
+                    return (
+                      <button
+                        key={r.value}
+                        type="button"
+                        onClick={() => setAspectRatio(r.value)}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                          active
+                            ? "bg-accent text-accent-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.5)]"
+                            : "bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {r.label} <span className="opacity-60">{r.value}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Prompt input - prompt phase only */}
             {phase === "prompt" && (
               <div>
