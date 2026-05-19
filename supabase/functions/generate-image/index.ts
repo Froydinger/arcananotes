@@ -38,7 +38,7 @@ serve(async (req) => {
     );
 
 
-    const { prompt, edit_instruction, source_image_url } = await req.json();
+    const { prompt, edit_instruction, source_image_url, aspect_ratio } = await req.json();
     if (!prompt || typeof prompt !== "string") {
       return new Response(JSON.stringify({ error: "Prompt is required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -48,6 +48,10 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    const allowedRatios = ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "21:9"];
+    const ratio = allowedRatios.includes(aspect_ratio) ? aspect_ratio : "1:1";
+    const ratioSuffix = ` Output the image in a ${ratio} aspect ratio.`;
+
     // Build messages depending on generate vs edit mode
     const isEdit = edit_instruction && source_image_url;
     const messages = isEdit
@@ -55,7 +59,7 @@ serve(async (req) => {
           {
             role: "user",
             content: [
-              { type: "text", text: `Edit this image: ${edit_instruction}` },
+              { type: "text", text: `Edit this image: ${edit_instruction}.${ratioSuffix}` },
               { type: "image_url", image_url: { url: source_image_url } },
             ],
           },
@@ -63,7 +67,7 @@ serve(async (req) => {
       : [
           {
             role: "user",
-            content: `Generate a beautiful, high-quality image based on this description: ${prompt}`,
+            content: `Generate a beautiful, high-quality image based on this description: ${prompt}.${ratioSuffix}`,
           },
         ];
 
@@ -81,9 +85,11 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
+      const errText = await response.text().catch(() => "");
+      console.error("AI gateway error:", response.status, errText);
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (response.status === 402) {
