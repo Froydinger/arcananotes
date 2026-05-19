@@ -29,11 +29,20 @@ const STYLE_CHIPS = [
   "Pop art",
 ];
 
+const ASPECT_RATIOS: { label: string; value: string }[] = [
+  { label: "Square", value: "1:1" },
+  { label: "Landscape", value: "16:9" },
+  { label: "Portrait", value: "9:16" },
+  { label: "4:3", value: "4:3" },
+  { label: "3:2", value: "3:2" },
+];
+
 type ModalPhase = "prompt" | "generating" | "preview" | "editing" | "editing-generating";
 
 export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialPrompt = "" }: ImageGenerateModalProps) {
   const [prompt, setPrompt] = useState("");
   const [activeChips, setActiveChips] = useState<string[]>([]);
+  const [aspectRatio, setAspectRatio] = useState<string>("1:1");
   const [phase, setPhase] = useState<ModalPhase>("prompt");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [editInstruction, setEditInstruction] = useState("");
@@ -88,11 +97,10 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
 
     try {
       const { data, error } = await supabase.functions.invoke("generate-image", {
-        body: { prompt: fullPrompt },
+        body: { prompt: fullPrompt, aspect_ratio: aspectRatio },
       });
       if (error) throw error;
-      if (data?.pro_required) { toast.error("Image generation requires a Pro subscription"); setPhase("prompt"); return; }
-      if (data?.error) throw new Error(data.error);
+      if (data?.error) { toast.error(data.error); setPhase("prompt"); return; }
       if (data?.image_url) {
         setPreviewUrl(data.image_url);
         setPhase("preview");
@@ -114,6 +122,7 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
           prompt: editInstruction.trim(),
           edit_instruction: editInstruction.trim(),
           source_image_url: previewUrl,
+          aspect_ratio: aspectRatio,
         },
       });
       if (error) throw error;
@@ -292,6 +301,32 @@ export function ImageGenerateModal({ isOpen, onClose, onImageGenerated, initialP
                         }`}
                       >
                         {chip}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Aspect ratio - prompt phase only */}
+            {phase === "prompt" && (
+              <div>
+                <label className="text-[11px] font-medium text-muted-foreground mb-2 block uppercase tracking-wider">Aspect ratio</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {ASPECT_RATIOS.map(r => {
+                    const active = aspectRatio === r.value;
+                    return (
+                      <button
+                        key={r.value}
+                        type="button"
+                        onClick={() => setAspectRatio(r.value)}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
+                          active
+                            ? "bg-accent text-accent-foreground shadow-[0_0_12px_-3px_hsl(var(--accent)/0.5)]"
+                            : "bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {r.label} <span className="opacity-60">{r.value}</span>
                       </button>
                     );
                   })}
