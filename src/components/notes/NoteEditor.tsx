@@ -335,40 +335,60 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     }
   }, [onAIContentReplace, replaceContentFromAI]);
 
+  // Save current selection range if it lives inside the editor
+  const saveSelectionRange = () => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0);
+    if (contentRef.current && contentRef.current.contains(range.commonAncestorContainer)) {
+      savedRangeRef.current = range.cloneRange();
+    }
+  };
+
   // Handle image insertion at cursor position with validation
   const insertImageAtCursor = (imageUrl: string) => {
     if (!contentRef.current) return;
 
     try {
       const { url: sanitizedUrl, alt } = sanitizeImageUrl(imageUrl, 'Uploaded image');
-      
+
       const img = document.createElement('img');
       img.src = sanitizedUrl;
       img.alt = alt;
       img.className = 'note-image';
       img.setAttribute('data-image-id', Date.now().toString());
 
+      // Prefer current live selection, fall back to the last saved range
+      // (selection is typically lost when a modal/file picker steals focus)
       const selection = window.getSelection();
-      const range = selection?.getRangeAt(0);
+      let range: Range | null = null;
+      if (
+        selection &&
+        selection.rangeCount > 0 &&
+        contentRef.current.contains(selection.getRangeAt(0).commonAncestorContainer)
+      ) {
+        range = selection.getRangeAt(0);
+      } else if (
+        savedRangeRef.current &&
+        contentRef.current.contains(savedRangeRef.current.commonAncestorContainer)
+      ) {
+        range = savedRangeRef.current;
+      }
 
-      if (range && contentRef.current.contains(range.commonAncestorContainer)) {
-        // Find the parent block element so we insert the image as its OWN block after it
-        let blockParent = range.commonAncestorContainer as HTMLElement;
+      const imgWrapper = document.createElement('p');
+      imgWrapper.appendChild(img);
+      const p = document.createElement('p');
+      p.innerHTML = '<br>';
+
+      if (range) {
+        // Walk up to the direct child block of the editor
+        let blockParent: HTMLElement | null = range.commonAncestorContainer as HTMLElement;
         if (blockParent.nodeType === Node.TEXT_NODE) {
-          blockParent = blockParent.parentElement!;
+          blockParent = blockParent.parentElement;
         }
-        // Walk up to find the direct child of the editor
         while (blockParent && blockParent.parentElement !== contentRef.current) {
-          blockParent = blockParent.parentElement!;
+          blockParent = blockParent.parentElement;
         }
-
-        // Insert image as a standalone block after the text block
-        const imgWrapper = document.createElement('p');
-        imgWrapper.appendChild(img);
-        
-        // Add a paragraph after the image so user can keep typing
-        const p = document.createElement('p');
-        p.innerHTML = '<br>';
 
         if (blockParent && contentRef.current.contains(blockParent)) {
           blockParent.after(imgWrapper);
@@ -377,18 +397,19 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
           contentRef.current.appendChild(imgWrapper);
           contentRef.current.appendChild(p);
         }
-        
-        const newRange = document.createRange();
-        newRange.setStart(p, 0);
-        newRange.collapse(true);
-        selection?.removeAllRanges();
-        selection?.addRange(newRange);
       } else {
-        contentRef.current.appendChild(img);
-        const p = document.createElement('p');
-        p.innerHTML = '<br>';
+        contentRef.current.appendChild(imgWrapper);
         contentRef.current.appendChild(p);
       }
+
+      // Move caret to the empty paragraph after the image
+      const newRange = document.createRange();
+      newRange.setStart(p, 0);
+      newRange.collapse(true);
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(newRange);
+      savedRangeRef.current = newRange.cloneRange();
 
       // Trigger content change to save
       contentRef.current.dispatchEvent(new Event('input', { bubbles: true }));
