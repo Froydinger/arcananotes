@@ -113,6 +113,8 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
   // DOM refs
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const savedRangeRef = useRef<Range | null>(null);
+  const draggingWrapperRef = useRef<HTMLElement | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // UI state
