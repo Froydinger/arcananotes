@@ -904,6 +904,9 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     const selection = window.getSelection();
     const selectedText = selection?.toString()?.trim();
 
+    // Remember where the cursor is so we can insert the image there after the modal closes
+    saveSelectionRange();
+
     // Always open the modal — pre-fill with selected text if any
     setImageGenInitialPrompt(selectedText || "");
     setShowImageGenModal(true);
