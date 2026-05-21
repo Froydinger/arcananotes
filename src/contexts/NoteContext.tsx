@@ -790,10 +790,30 @@ export const NoteProvider: React.FC<{ children: React.ReactNode }> = ({ children
             .filter((e): e is string => !!e);
         } catch (e) { console.error(e); }
 
+        // Collect storage paths referenced in this note so we can purge them
+        const imagePaths: string[] = [];
+        try {
+          const haystack = `${noteToDelete.content || ''} ${noteToDelete.featured_image || ''}`;
+          const re = /note-images\/([^"'\s?)]+)/g;
+          let m: RegExpExecArray | null;
+          while ((m = re.exec(haystack)) !== null) {
+            const p = decodeURIComponent(m[1]).split('?')[0];
+            if (p && !imagePaths.includes(p)) imagePaths.push(p);
+          }
+        } catch (e) { console.error('image path scan failed', e); }
+
         // Permanently delete owned notes
         const { data, error } = await supabase.rpc('permanently_delete_note', {
           note_id_param: id
         });
+
+        // Purge images from storage (best-effort, after DB delete succeeds)
+        if (!error && imagePaths.length > 0) {
+          try {
+            await supabase.storage.from('note-images').remove(imagePaths);
+          } catch (e) { console.error('image purge failed', e); }
+        }
+
 
         if (error) {
           console.error('Error deleting note:', error);
