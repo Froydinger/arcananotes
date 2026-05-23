@@ -19,11 +19,14 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
   const bodyFont = useBodyFont();
   const { updateNote } = useNotes();
   const [title, setTitle] = useState(note.title);
+  const [description, setDescription] = useState(note.content || '');
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const titleRef = useRef<HTMLTextAreaElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const newItemInputRef = useRef<HTMLInputElement>(null);
   const titleSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const descriptionSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const isReadOnly = note.isSharedWithUser && note.userPermission === 'read';
 
@@ -38,7 +41,16 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
   // Update title when note changes
   useEffect(() => {
     setTitle(note.title);
-  }, [note.id, note.title]);
+    setDescription(note.content || '');
+  }, [note.id, note.title, note.content]);
+
+  // Auto-resize description textarea
+  useEffect(() => {
+    if (descriptionRef.current) {
+      descriptionRef.current.style.height = 'auto';
+      descriptionRef.current.style.height = descriptionRef.current.scrollHeight + 'px';
+    }
+  }, [description]);
 
   // Load checklist items
   useEffect(() => {
@@ -100,6 +112,19 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
     
     titleSaveTimeoutRef.current = setTimeout(() => {
       updateNote(note.id, { title: newTitle }, true);
+    }, 500);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newDescription = e.target.value;
+    setDescription(newDescription);
+
+    if (descriptionSaveTimeoutRef.current) {
+      clearTimeout(descriptionSaveTimeoutRef.current);
+    }
+
+    descriptionSaveTimeoutRef.current = setTimeout(() => {
+      updateNote(note.id, { content: newDescription }, true);
     }, 500);
   };
 
@@ -210,6 +235,23 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
           onDelete={() => updateNote(note.id, { featured_image: null }, true)}
         />
       )}
+
+      {/* Description / notes */}
+      <textarea
+        ref={descriptionRef}
+        value={description}
+        onChange={handleDescriptionChange}
+        placeholder="Add a note..."
+        disabled={isReadOnly}
+        rows={1}
+        className={cn(
+          "w-full mt-3 bg-transparent border-none outline-none resize-none overflow-hidden",
+          "placeholder:text-muted-foreground/40 text-muted-foreground",
+          "disabled:cursor-not-allowed disabled:opacity-60",
+          "dynamic-body-font leading-relaxed text-base"
+        )}
+      />
+
 
       {/* Progress indicator */}
       {items.length > 0 && (
