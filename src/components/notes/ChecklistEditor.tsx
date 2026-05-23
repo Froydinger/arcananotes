@@ -236,6 +236,23 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
         />
       )}
 
+      {/* Description / notes */}
+      <textarea
+        ref={descriptionRef}
+        value={description}
+        onChange={handleDescriptionChange}
+        placeholder="Add a note..."
+        disabled={isReadOnly}
+        rows={1}
+        className={cn(
+          "w-full mt-3 bg-transparent border-none outline-none resize-none overflow-hidden",
+          "placeholder:text-muted-foreground/40 text-muted-foreground",
+          "disabled:cursor-not-allowed disabled:opacity-60",
+          "dynamic-body-font leading-relaxed text-base"
+        )}
+      />
+
+
       {/* Progress indicator */}
       {items.length > 0 && (
         <div className="mt-4 mb-6">
