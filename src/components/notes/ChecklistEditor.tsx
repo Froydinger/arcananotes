@@ -26,6 +26,7 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const newItemInputRef = useRef<HTMLInputElement>(null);
   const titleSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const descriptionSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const isReadOnly = note.isSharedWithUser && note.userPermission === 'read';
 
