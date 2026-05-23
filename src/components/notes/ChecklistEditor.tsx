@@ -115,6 +115,19 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
     }, 500);
   };
 
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newDescription = e.target.value;
+    setDescription(newDescription);
+
+    if (descriptionSaveTimeoutRef.current) {
+      clearTimeout(descriptionSaveTimeoutRef.current);
+    }
+
+    descriptionSaveTimeoutRef.current = setTimeout(() => {
+      updateNote(note.id, { content: newDescription }, true);
+    }, 500);
+  };
+
   const addItem = async (content: string = '') => {
     if (isReadOnly) return;
     
