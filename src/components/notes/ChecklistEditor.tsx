@@ -19,9 +19,11 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
   const bodyFont = useBodyFont();
   const { updateNote } = useNotes();
   const [title, setTitle] = useState(note.title);
+  const [description, setDescription] = useState(note.content || '');
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const titleRef = useRef<HTMLTextAreaElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const newItemInputRef = useRef<HTMLInputElement>(null);
   const titleSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
