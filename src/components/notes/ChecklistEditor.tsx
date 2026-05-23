@@ -41,7 +41,16 @@ export default function ChecklistEditor({ note }: ChecklistEditorProps) {
   // Update title when note changes
   useEffect(() => {
     setTitle(note.title);
-  }, [note.id, note.title]);
+    setDescription(note.content || '');
+  }, [note.id, note.title, note.content]);
+
+  // Auto-resize description textarea
+  useEffect(() => {
+    if (descriptionRef.current) {
+      descriptionRef.current.style.height = 'auto';
+      descriptionRef.current.style.height = descriptionRef.current.scrollHeight + 'px';
+    }
+  }, [description]);
 
   // Load checklist items
   useEffect(() => {
