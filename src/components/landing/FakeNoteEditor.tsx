@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Type, Heading1, Bold, Italic, TextQuote, Sparkles } from 'lucide-react';
+import { Type, Heading1, Bold, Italic, TextQuote } from 'lucide-react';
 import arcAiLogo from '@/assets/arc-logo.png';
 
 const ORIGINAL_LINES = [
@@ -108,8 +108,8 @@ const FakeNoteEditor = () => {
             }`}
           >
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
-                <Sparkles className="w-3.5 h-3.5 text-accent" />
+              <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                <img src={arcAiLogo} alt="Arc AI" className="w-4 h-4 object-contain" />
               </div>
               <span className="text-xs font-medium text-accent">Arc AI Rewrite</span>
               {isTyping && (
@@ -134,11 +134,13 @@ const FakeNoteEditor = () => {
 
           {/* Arc AI badge */}
           <div
-            className={`absolute top-4 right-4 md:top-5 md:right-5 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-xl border border-accent/20 text-accent text-xs font-medium ${
+            className={`absolute top-4 right-4 md:top-5 md:right-5 flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-xl border border-border text-foreground text-sm font-medium ${
               !showAI ? 'animate-gentle-bounce' : ''
             }`}
           >
-            <img src={arcAiLogo} alt="Arc AI" className="w-3.5 h-3.5 rounded-full object-contain" />
+            <span className="w-6 h-6 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+              <img src={arcAiLogo} alt="Arc AI" className="w-4 h-4 object-contain" />
+            </span>
             <span className="hidden sm:inline">Arc AI</span>
           </div>
           {/* Bottom fade */}
