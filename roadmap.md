@@ -1,0 +1,1 @@
+- [ ] Replace generated thick logo with original thin Arc mark plus a thin pencil overlay
