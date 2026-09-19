@@ -702,23 +702,68 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                           }`}
                         >
                           {msg.role === 'assistant' ? (
-                            <>
-                              <ReactMarkdown
-                                components={mdComponents}
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                              >
-                                {msg.content}
-                              </ReactMarkdown>
-                              {!isLoading && msg.content && i === messages.length - 1 && (
-                                <button
-                                  onClick={() => applyToNote(msg.content)}
-                                  className="mt-2 px-3 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 bg-accent/15 border border-accent/25 text-accent"
-                                >
-                                  {getApplyLabel(msg.content)}
-                                </button>
-                              )}
-                            </>
+                            (() => {
+                              const { edits, cleaned } = parseArcEdits(msg.content);
+                              const hasEdits = edits.length > 0 && !!onContentReplace;
+                              return (
+                                <>
+                                  <ReactMarkdown
+                                    components={mdComponents}
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                                  >
+                                    {hasEdits ? cleaned : msg.content}
+                                  </ReactMarkdown>
+
+                                  {hasEdits && !isLoading && (
+                                    <div className="mt-2.5 space-y-1.5">
+                                      {edits.map((edit) => {
+                                        const done = appliedEdits.has(edit.id);
+                                        return (
+                                          <div
+                                            key={edit.id}
+                                            className={`rounded-xl border p-2.5 transition-opacity ${done ? 'opacity-50 border-border/30' : 'border-accent/25 bg-accent/5'}`}
+                                          >
+                                            {edit.reason && (
+                                              <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1.5">{edit.reason}</div>
+                                            )}
+                                            <div className="text-[12px] leading-snug line-through opacity-60">{edit.find}</div>
+                                            <div
+                                              className="text-[12px] leading-snug mt-1 text-foreground"
+                                              dangerouslySetInnerHTML={{ __html: edit.replace || '<em>(removed)</em>' }}
+                                            />
+                                            <button
+                                              onClick={() => applyOneEdit(edit)}
+                                              disabled={done}
+                                              className="mt-2 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 disabled:hover:scale-100 bg-accent/15 border border-accent/25 text-accent disabled:opacity-60"
+                                            >
+                                              {done ? 'Applied' : 'Apply this'}
+                                            </button>
+                                          </div>
+                                        );
+                                      })}
+                                      {edits.length > 1 && (
+                                        <button
+                                          onClick={() => applyAllEdits(edits)}
+                                          className="px-3 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 bg-accent text-accent-foreground"
+                                        >
+                                          Apply all {edits.length}
+                                        </button>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {!hasEdits && !isLoading && msg.content && i === messages.length - 1 && (
+                                    <button
+                                      onClick={() => applyToNote(msg.content)}
+                                      className="mt-2 px-3 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 bg-accent/15 border border-accent/25 text-accent"
+                                    >
+                                      {getApplyLabel(msg.content)}
+                                    </button>
+                                  )}
+                                </>
+                              );
+                            })()
                           ) : (
                             msg.content
                           )}
