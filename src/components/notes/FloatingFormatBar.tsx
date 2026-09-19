@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic, Sparkles } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, Quote, Paintbrush } from 'lucide-react';
 
-export type FormatType = 'p' | 'h1' | 'bold' | 'italic';
+export type FormatType = 'p' | 'h1' | 'bold' | 'italic' | 'quote';
 
 interface FloatingFormatBarProps {
   visible: boolean;
