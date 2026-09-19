@@ -4,5 +4,5 @@
 - [x] Replace every Arc AI mark with the supplied white concentric Arc logo
 - [x] Use the supplied white pencil logo for the app header, favicon, and PWA icons
 - [x] Remove all legacy blue and A-shaped logos from the interface
-- [ ] App logo everywhere = transparent white pencil mark (translogo.png), not black-backed square
-- [ ] OG/share preview image for arcnotes.pro (public/og-image.png + index.html meta)
+- [x] App logo everywhere = transparent white pencil mark (translogo.png)
+- [x] OG/share preview image for arcnotes.pro
