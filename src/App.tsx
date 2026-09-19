@@ -16,6 +16,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import RefundsPage from "./pages/RefundsPage";
+import SupportPage from "./pages/SupportPage";
 import NotFound from "./pages/NotFound";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import LanderPage from "./pages/LanderPage";
@@ -106,6 +107,7 @@ const App = () => {
               <Route path="/privacy" element={<ForceDarkTheme><PrivacyPage /></ForceDarkTheme>} />
               <Route path="/terms" element={<ForceDarkTheme><TermsPage /></ForceDarkTheme>} />
               <Route path="/refunds" element={<ForceDarkTheme><RefundsPage /></ForceDarkTheme>} />
+              <Route path="/support" element={<SupportPage />} />
 
               <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/note/:id" element={<ProtectedRoute><NotePage /></ProtectedRoute>} />
