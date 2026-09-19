@@ -23,7 +23,6 @@ import { PreferencesProvider } from "./contexts/PreferencesContext";
 import { NotificationToastListener } from "./components/notifications/NotificationToastListener";
 import { useAuth } from "./contexts/AuthContext";
 import { LoadingSpinner } from "./components/ui/loading-spinner";
-import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
 const queryClient = new QueryClient();
 
 function ScrollToTop() {
@@ -98,7 +97,6 @@ const App = () => {
         <BrowserRouter>
           <ScrollToTop />
           <AuthProvider>
-            <PaymentTestModeBanner />
             <Sonner />
             <Routes>
               <Route path="/" element={<RootRoute />} />
