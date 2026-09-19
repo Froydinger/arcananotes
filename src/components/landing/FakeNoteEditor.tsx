@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Type, Heading1, Bold, Italic, TextQuote } from 'lucide-react';
-import arcAiLogo from '@/assets/arc-logo.png';
+import arcAiLogo from '@/assets/arcana-logo.png';
 
 const ORIGINAL_LINES = [
   "I started writing because I needed somewhere to put the noise in my head.",
