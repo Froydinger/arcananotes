@@ -198,7 +198,20 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       <Italic className="h-4 w-4" />
       </Button>
 
-      {onGenerateImage && isSubscribed && (
+      <Button
+        variant={currentFormats.has('quote') ? 'default' : 'ghost'}
+        size="sm"
+        className="h-9 w-9 p-0 rounded-full"
+        onMouseDown={(e) => {
+          e.preventDefault(); // Prevent focus loss
+          onFormat('quote');
+        }}
+        title="Pull quote"
+      >
+        <Quote className="h-4 w-4" />
+      </Button>
+
+      {onGenerateImage && (
         <>
           <div className="w-px h-6 bg-border/50 mx-0.5" />
           <Button
@@ -209,9 +222,9 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
               e.preventDefault();
               onGenerateImage();
             }}
-            title="Generate image from selected text (Pro)"
+            title="Generate image from selected text"
           >
-            <Sparkles className="h-4 w-4" />
+            <Paintbrush className="h-4 w-4" />
           </Button>
         </>
       )}
