@@ -44,7 +44,7 @@ export default function LanderPage() {
   ];
 
   return (
-    <div className="relative min-h-screen w-full bg-background">
+    <div className="arc-brand relative min-h-screen w-full bg-background">
       {/* Sticky Header */}
       <nav
         className={`fixed left-0 right-0 z-50 border-b border-border/40 backdrop-blur-xl bg-background/80 transition-all duration-300 ${
