@@ -662,6 +662,14 @@
     opacity: 0.6;
   }
 
+  /* Pull quotes */
+  .note-editor blockquote {
+    @apply my-6 pl-5 pr-2 py-1 text-xl italic text-foreground/85;
+    border-left: 3px solid hsl(var(--accent) / 0.6);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    line-height: 1.5;
+  }
+
   /* Extra bold for note editor - make bold more noticeable */
   .note-editor b,
   .note-editor strong {

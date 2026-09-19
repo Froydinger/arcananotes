@@ -919,6 +919,14 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
           // execCommand automatically toggles italic on/off
           document.execCommand('italic', false, undefined);
           break;
+        case 'quote': {
+          // Toggle a pull quote block on the current selection
+          let node: Node | null = savedRange.commonAncestorContainer;
+          if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+          const inQuote = (node as Element | null)?.closest('blockquote');
+          document.execCommand('formatBlock', false, inQuote ? 'p' : 'blockquote');
+          break;
+        }
       }
 
       // Small delay before triggering save to let DOM update
@@ -1175,8 +1183,9 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                     {[
                       { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
                       { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
+                      { key: 'quote', label: 'Pull quote', icon: '"', desc: 'Standout quote block' },
                       { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
-                      ...(isSubscribed ? [{ key: 'generate', label: 'Generate Image', icon: '✨', desc: 'AI image from text (Pro)' }] : []),
+                      { key: 'generate', label: 'Generate Image', icon: '🖌', desc: 'AI image from text' },
                     ].map((item, i) => (
                       <button
                         key={item.key}

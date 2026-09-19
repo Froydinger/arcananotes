@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic, Sparkles } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, Quote, Paintbrush } from 'lucide-react';
 
-export type FormatType = 'p' | 'h1' | 'bold' | 'italic';
+export type FormatType = 'p' | 'h1' | 'bold' | 'italic' | 'quote';
 
 interface FloatingFormatBarProps {
   visible: boolean;
@@ -102,7 +102,10 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       }
 
       const h1 = (element as Element).closest('h1');
-      if (h1) {
+      const quote = (element as Element).closest('blockquote');
+      if (quote) {
+        formats.add('quote');
+      } else if (h1) {
         formats.add('h1');
       } else {
         formats.add('p');
@@ -198,7 +201,20 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       <Italic className="h-4 w-4" />
       </Button>
 
-      {onGenerateImage && isSubscribed && (
+      <Button
+        variant={currentFormats.has('quote') ? 'default' : 'ghost'}
+        size="sm"
+        className="h-9 w-9 p-0 rounded-full"
+        onMouseDown={(e) => {
+          e.preventDefault(); // Prevent focus loss
+          onFormat('quote');
+        }}
+        title="Pull quote"
+      >
+        <Quote className="h-4 w-4" />
+      </Button>
+
+      {onGenerateImage && (
         <>
           <div className="w-px h-6 bg-border/50 mx-0.5" />
           <Button
@@ -209,9 +225,9 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
               e.preventDefault();
               onGenerateImage();
             }}
-            title="Generate image from selected text (Pro)"
+            title="Generate image from selected text"
           >
-            <Sparkles className="h-4 w-4" />
+            <Paintbrush className="h-4 w-4" />
           </Button>
         </>
       )}
