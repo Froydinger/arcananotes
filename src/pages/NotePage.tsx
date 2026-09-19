@@ -415,8 +415,17 @@ const NotePage = () => {
         noteId={note.id}
         noteContent={note.content}
         noteTitle={note.title}
-        onContentReplace={(content) => updateNote(note.id, { content })}
-        onTitleReplace={(title) => updateNote(note.id, { title })}
+        onContentReplace={(content) => {
+          // Record the pre-AI state, then the applied state, so undo steps back to it
+          pushSnapshot(note.title, note.content);
+          updateNote(note.id, { content });
+          pushSnapshot(note.title, content);
+        }}
+        onTitleReplace={(title) => {
+          pushSnapshot(note.title, note.content);
+          updateNote(note.id, { title });
+          pushSnapshot(title, note.content);
+        }}
         onCreateChecklist={async (title, items) => {
           const newNote = await addNote("checklist");
           if (newNote) {
