@@ -101,6 +101,7 @@ const NotePage = () => {
   // Always start at top when opening a note + play enter transition (no autofocus)
   useEffect(() => {
     setEntered(false);
+    seededIdRef.current = null;
     clearHistory();
     if (document.activeElement && document.activeElement !== document.body) {
       (document.activeElement as HTMLElement).blur();
@@ -110,6 +111,13 @@ const NotePage = () => {
     const timer = setTimeout(() => setEntered(true), 50);
     return () => clearTimeout(timer);
   }, [id]);
+
+  // Seed the history with the note's loaded state so the first undo can return to it
+  useEffect(() => {
+    if (!note || seededIdRef.current === note.id) return;
+    seededIdRef.current = note.id;
+    clearHistory(note.title || "", note.content || "");
+  }, [note, clearHistory]);
 
   const handleDelete = () => {
     if (id) {
