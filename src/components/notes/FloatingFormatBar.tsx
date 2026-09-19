@@ -63,16 +63,16 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   const onDragMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragState.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
-    const panelWidth = barRef.current?.offsetWidth ?? 320;
-    const panelHeight = barRef.current?.offsetHeight ?? 320;
     const nextX = drag.baseX + (event.clientX - drag.startX);
     const nextY = drag.baseY + (event.clientY - drag.startY);
     // Keep the panel reachable on screen
     const maxX = window.innerWidth / 2 - 24;
-    const maxY = window.innerHeight - panelHeight - 8;
+    const editorTop = editorRef.current?.getBoundingClientRect().top ?? 0;
+    const absTop = editorTop + position.top + nextY;
+    const clampedY = Math.min(Math.max(absTop, 8), window.innerHeight - 48);
     setDragOffset({
-      x: Math.max(-maxX + panelWidth / 2 - panelWidth / 2 - maxX + maxX - (panelWidth / 2 - 24) + (panelWidth / 2 - 24), Math.min(maxX, nextX)),
-      y: Math.max(-position.top - editorRef.current!.getBoundingClientRect().top + 8, Math.min(maxY - position.top - editorRef.current!.getBoundingClientRect().top, nextY)),
+      x: Math.max(-maxX, Math.min(maxX, nextX)),
+      y: clampedY - editorTop - position.top,
     });
   };
 
