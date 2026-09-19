@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
+import { parseArcEdits, applySurgicalEdit, applySurgicalEdits, type ArcEdit } from '@/lib/surgicalEdit';
 
 interface ArcPanelProps {
   noteId?: string;
