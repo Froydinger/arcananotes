@@ -246,17 +246,30 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
-        transform: 'translateX(-50%)',
+        transform: `translateX(-50%) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
       }}
     >
       {arcSelection && onReplaceArc && onCloseArc ? (
-        <ArcInlineEditor
-          selectedText={arcSelection.text}
-          noteTitle={arcSelection.noteTitle}
-          noteContext={arcSelection.noteContext}
-          onReplace={onReplaceArc}
-          onClose={onCloseArc}
-        />
+        <div>
+          <div
+            onPointerDown={startDrag}
+            onPointerMove={onDragMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            className="flex h-5 cursor-grab touch-none select-none items-center justify-center rounded-t-lg text-muted-foreground/60 transition-colors hover:text-muted-foreground active:cursor-grabbing"
+            title="Drag to move"
+            aria-label="Drag to move Arc panel"
+          >
+            <GripHorizontal className="h-3.5 w-3.5" />
+          </div>
+          <ArcInlineEditor
+            selectedText={arcSelection.text}
+            noteTitle={arcSelection.noteTitle}
+            noteContext={arcSelection.noteContext}
+            onReplace={onReplaceArc}
+            onClose={onCloseArc}
+          />
+        </div>
       ) : <div className="flex items-center gap-1 p-1.5">
       <Button
         variant={currentFormats.has('p') ? 'default' : 'ghost'}
