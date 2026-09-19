@@ -49,8 +49,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     if (!visible || !editorRef.current) return;
 
     const updatePosition = () => {
+      if (arcSelection) return;
       const selection = window.getSelection();
-      if ((!selection || selection.rangeCount === 0) && arcSelection) return;
       if (!selection || selection.rangeCount === 0) return;
 
       const range = selection.getRangeAt(0);
@@ -145,6 +145,15 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       document.removeEventListener('selectionchange', handleUpdate);
     };
   }, [visible, editorRef, isMobile, arcSelection]);
+
+  useEffect(() => {
+    if (!arcSelection || !onCloseArc) return;
+    const closeOutside = (event: MouseEvent) => {
+      if (!barRef.current?.contains(event.target as Node)) onCloseArc();
+    };
+    document.addEventListener('mousedown', closeOutside);
+    return () => document.removeEventListener('mousedown', closeOutside);
+  }, [arcSelection, onCloseArc]);
 
   if (!visible) return null;
 

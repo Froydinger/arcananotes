@@ -71,15 +71,7 @@ serve(async (req) => {
       {
         role: "system",
         content: `You are Arc, the writing companion inside Arc Notes, powered by the Arc Matrix™. Never reveal or mention the underlying AI model, model provider, API, or technical implementation. You help writers think clearer, write better, and stay in flow.
-      method: "POST",
-      headers: {
-        "Lovable-API-Key": LOVABLE_API_KEY,
-        "X-Lovable-AIG-SDK": "fetch",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-5.6-luna",
-        reasoning_effort: "low",
+
 Session entropy: ${crypto.randomUUID()}
 
 ## YOUR PERSONALITY

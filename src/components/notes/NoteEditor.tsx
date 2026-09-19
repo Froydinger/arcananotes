@@ -86,9 +86,12 @@ interface NoteEditorProps {
   note: Note;
   onNoteSaved?: (title: string, content: string) => void;
   onAIContentReplace?: (replacementFunction: (newContent: string, isSelectionReplacement: boolean) => void) => void;
+  aiEnabled?: boolean;
 }
 
-export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: NoteEditorProps) {
+type ArcSelection = { text: string; noteTitle: string; noteContext: string };
+
+export default function NoteEditor({ note, onNoteSaved, onAIContentReplace, aiEnabled = true }: NoteEditorProps) {
   const titleFont = useTitleFont();
   const bodyFont = useBodyFont();
   const { isSubscribed } = useSubscription();
@@ -119,6 +122,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
 
   // UI state
   const [showFloatingBar, setShowFloatingBar] = useState(false);
+  const [arcSelection, setArcSelection] = useState<ArcSelection | null>(null);
   const [showSlashMenu, setShowSlashMenu] = useState(false);
   const slashMenuRef = useRef<HTMLDivElement>(null);
   const [slashMenuIndex, setSlashMenuIndex] = useState(0);
@@ -871,7 +875,7 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
       const isInEditor = contentRef.current?.contains(range.commonAncestorContainer);
       const hasSelection = selectedText.length > 0 && !range.collapsed;
 
-      setShowFloatingBar(isInEditor && hasSelection);
+      if (!arcSelection) setShowFloatingBar(isInEditor && hasSelection);
 
       // Close slash menu if selection changes (user clicked elsewhere)
       if (showSlashMenu && (!isInEditor || hasSelection)) {
@@ -884,7 +888,63 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     return () => {
       document.removeEventListener('selectionchange', handleSelectionChange);
     };
-  }, [isReadOnly, showSlashMenu]);
+  }, [isReadOnly, showSlashMenu, arcSelection]);
+
+  const openArcInlineEditor = useCallback(() => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || !contentRef.current) return;
+    const range = selection.getRangeAt(0);
+    const text = range.toString().trim();
+    if (!text || !contentRef.current.contains(range.commonAncestorContainer)) return;
+    savedRangeRef.current = range.cloneRange();
+    setArcSelection({
+      text,
+      noteTitle: title,
+      noteContext: contentRef.current.innerText,
+    });
+    setShowFloatingBar(true);
+  }, [title]);
+
+  const closeArcInlineEditor = useCallback(() => {
+    setArcSelection(null);
+    setShowFloatingBar(false);
+  }, []);
+
+  const replaceArcSelection = useCallback((replacement: string): boolean => {
+    const editor = contentRef.current;
+    const range = savedRangeRef.current;
+    if (!editor || !range || !arcSelection || !editor.contains(range.commonAncestorContainer)) return false;
+    if (range.toString().trim() !== arcSelection.text) return false;
+
+    const before = getEditorContent(editor);
+    onNoteSaved?.(title, sanitizeContent(before));
+
+    const sanitized = sanitizeContent(replacement);
+    const holder = document.createElement('div');
+    holder.innerHTML = sanitized;
+    const fragment = document.createDocumentFragment();
+    let lastNode: ChildNode | null = null;
+    while (holder.firstChild) {
+      lastNode = holder.firstChild;
+      fragment.appendChild(holder.firstChild);
+    }
+
+    range.deleteContents();
+    range.insertNode(fragment);
+    if (lastNode) range.setStartAfter(lastNode);
+    range.collapse(true);
+
+    editor.focus();
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    savedRangeRef.current = range.cloneRange();
+
+    const event = new Event('input', { bubbles: true }) as Event & { isAIUpdate?: boolean };
+    event.isAIUpdate = true;
+    editor.dispatchEvent(event);
+    return true;
+  }, [arcSelection, onNoteSaved, title]);
 
   // Handle formatting from floating bar
   const handleFormat = useCallback((type: FormatType) => {
@@ -1157,11 +1217,15 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
           {!isReadOnly && (
             <>
               <FloatingFormatBar
-                visible={showFloatingBar}
+                visible={showFloatingBar || !!arcSelection}
                 onFormat={handleFormat}
                 editorRef={contentRef}
                 onGenerateImage={handleGenerateImage}
                 isSubscribed={isSubscribed}
+                arcSelection={arcSelection}
+                onOpenArc={aiEnabled ? openArcInlineEditor : undefined}
+                onReplaceArc={replaceArcSelection}
+                onCloseArc={closeArcInlineEditor}
               />
 
               {/* Slash command menu - centered modal */}
