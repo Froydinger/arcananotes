@@ -6,6 +6,33 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const IMAGE_MODEL = "openai/gpt-image-2.5-flare";
+const GATEWAY = "https://ai.gateway.lovable.dev/v1";
+
+// Aspect ratio -> OpenAI size (multiples of 16, within ratio/pixel constraints)
+const SIZE_BY_RATIO: Record<string, string> = {
+  "1:1": "1024x1024",
+  "16:9": "1536x864",
+  "9:16": "864x1536",
+  "4:3": "1216x912",
+  "3:4": "912x1216",
+  "3:2": "1296x864",
+  "2:3": "864x1296",
+  "21:9": "2016x864",
+};
+
+async function urlToBlob(url: string): Promise<Blob> {
+  if (url.startsWith("data:")) {
+    const [meta, base64] = url.split(",", 2);
+    const mime = /data:(.*?);/.exec(meta)?.[1] || "image/png";
+    const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    return new Blob([bytes], { type: mime });
+  }
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Could not fetch source image (${res.status})`);
+  return await res.blob();
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -37,7 +64,6 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-
     const { prompt, edit_instruction, source_image_url, aspect_ratio } = await req.json();
     if (!prompt || typeof prompt !== "string") {
       return new Response(JSON.stringify({ error: "Prompt is required" }), {
@@ -48,41 +74,37 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const allowedRatios = ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "21:9"];
-    const ratio = allowedRatios.includes(aspect_ratio) ? aspect_ratio : "1:1";
-    const ratioSuffix = ` Output the image in a ${ratio} aspect ratio.`;
+    const size = SIZE_BY_RATIO[aspect_ratio] ?? "1024x1024";
+    const isEdit = !!(edit_instruction && source_image_url);
 
-    // Build messages depending on generate vs edit mode
-    const isEdit = edit_instruction && source_image_url;
-    const messages = isEdit
-      ? [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: `Edit this image: ${edit_instruction}.${ratioSuffix}` },
-              { type: "image_url", image_url: { url: source_image_url } },
-            ],
-          },
-        ]
-      : [
-          {
-            role: "user",
-            content: `Generate a beautiful, high-quality image based on this description: ${prompt}.${ratioSuffix}`,
-          },
-        ];
+    let response: Response;
+    if (isEdit) {
+      const imageBlob = await urlToBlob(source_image_url);
+      const form = new FormData();
+      form.append("model", IMAGE_MODEL);
+      form.append("prompt", edit_instruction);
+      form.append("size", size);
+      form.append("image", new File([imageBlob], "source.png", { type: imageBlob.type || "image/png" }));
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3.1-flash-image-preview",
-        messages,
-        modalities: ["image", "text"],
-      }),
-    });
+      response = await fetch(`${GATEWAY}/images/edits`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}` },
+        body: form,
+      });
+    } else {
+      response = await fetch(`${GATEWAY}/images/generations`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: IMAGE_MODEL,
+          prompt: `Generate a beautiful, high-quality image based on this description: ${prompt}`,
+          size,
+        }),
+      });
+    }
 
     if (!response.ok) {
       const errText = await response.text().catch(() => "");
@@ -103,19 +125,26 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const imageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+    const b64 = data.data?.[0]?.b64_json;
+    const remoteUrl = data.data?.[0]?.url;
+    const imageUrl = b64 ? `data:image/png;base64,${b64}` : remoteUrl;
 
     if (!imageUrl) {
-      const textOut = data.choices?.[0]?.message?.content;
       console.error("No image in response:", JSON.stringify(data).slice(0, 500));
-      return new Response(JSON.stringify({ error: textOut ? `Model returned text instead of an image: ${String(textOut).slice(0,160)}` : "No image was generated. Try a different prompt." }), {
+      return new Response(JSON.stringify({ error: "No image was generated. Try a different prompt." }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Upload the base64 image to storage
-    const base64Data = imageUrl.replace(/^data:image\/\w+;base64,/, "");
-    const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+    // Upload the image to storage
+    let binaryData: Uint8Array;
+    if (b64) {
+      binaryData = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    } else {
+      const imgRes = await fetch(remoteUrl);
+      if (!imgRes.ok) throw new Error(`Could not download generated image (${imgRes.status})`);
+      binaryData = new Uint8Array(await imgRes.arrayBuffer());
+    }
 
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
     const filePath = `${user.id}/${fileName}`;
@@ -126,7 +155,7 @@ serve(async (req) => {
 
     if (uploadError) {
       console.error("Upload error:", uploadError);
-      // Return base64 as fallback
+      // Return the generated image as fallback
       return new Response(JSON.stringify({ image_url: imageUrl }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
