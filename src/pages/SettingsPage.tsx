@@ -395,15 +395,14 @@ const SettingsPage = () => {
                   Enjoying Arc Notes? Consider supporting development to help keep the app running and add new
                   features.
                 </p>
-                <a
-                  href="https://buymeacoffee.com/froydinger"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => navigate("/support")}
                   className="inline-flex items-center gap-2 text-sm btn-accessible py-2 px-3 rounded-md border border-border hover:bg-accent transition-colors"
                 >
                   <Heart className="h-4 w-4 text-pink-500" fill="#e91e63" />
-                  <span>Buy me a coffee</span>
-                </a>
+                  <span>Support the developer</span>
+                </button>
               </div>
             </div>
 
