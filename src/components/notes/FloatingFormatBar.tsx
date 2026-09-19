@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Heading1, Type, Bold, Italic, Quote, Paintbrush } from 'lucide-react';
+import { Heading1, Type, Bold, Italic, Quote, Paintbrush, GripHorizontal } from 'lucide-react';
 import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
 import { ArcInlineEditor } from './ArcInlineEditor';
 
@@ -38,6 +38,50 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   const [currentFormats, setCurrentFormats] = useState<Set<FormatType>>(new Set());
   const [isMobile, setIsMobile] = useState(isMobileDevice());
   const barRef = useRef<HTMLDivElement>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const dragState = useRef<{ pointerId: number; startX: number; startY: number; baseX: number; baseY: number } | null>(null);
+
+  // Reset manual drag position whenever a new Arc session opens
+  useEffect(() => {
+    setDragOffset({ x: 0, y: 0 });
+    dragState.current = null;
+  }, [arcSelection]);
+
+  const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!arcSelection) return;
+    event.preventDefault();
+    dragState.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      baseX: dragOffset.x,
+      baseY: dragOffset.y,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const onDragMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragState.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    const panelWidth = barRef.current?.offsetWidth ?? 320;
+    const panelHeight = barRef.current?.offsetHeight ?? 320;
+    const nextX = drag.baseX + (event.clientX - drag.startX);
+    const nextY = drag.baseY + (event.clientY - drag.startY);
+    // Keep the panel reachable on screen
+    const maxX = window.innerWidth / 2 - 24;
+    const maxY = window.innerHeight - panelHeight - 8;
+    setDragOffset({
+      x: Math.max(-maxX + panelWidth / 2 - panelWidth / 2 - maxX + maxX - (panelWidth / 2 - 24) + (panelWidth / 2 - 24), Math.min(maxX, nextX)),
+      y: Math.max(-position.top - editorRef.current!.getBoundingClientRect().top + 8, Math.min(maxY - position.top - editorRef.current!.getBoundingClientRect().top, nextY)),
+    });
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragState.current?.pointerId === event.pointerId) {
+      dragState.current = null;
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => setIsMobile(isMobileDevice());
