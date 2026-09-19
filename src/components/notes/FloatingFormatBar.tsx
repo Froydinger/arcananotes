@@ -109,6 +109,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
 
       // Arc panel: centered horizontally, one line below the selection
       if (arcSelection) {
+        // Ignore selection changes happening inside the panel itself
+        if (!editorRef.current.contains(range.commonAncestorContainer)) return;
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         const panelWidth = Math.min(368, viewportWidth - 32);
