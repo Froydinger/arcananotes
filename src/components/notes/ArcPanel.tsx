@@ -662,7 +662,13 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                         >
                           {msg.role === 'assistant' ? (
                             <>
-                              <ReactMarkdown components={mdComponents}>{msg.content}</ReactMarkdown>
+                              <ReactMarkdown
+                                components={mdComponents}
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                              >
+                                {msg.content}
+                              </ReactMarkdown>
                               {!isLoading && msg.content && i === messages.length - 1 && (
                                 <button
                                   onClick={() => applyToNote(msg.content)}
