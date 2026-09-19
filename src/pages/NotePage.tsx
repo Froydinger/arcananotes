@@ -54,6 +54,7 @@ const NotePage = () => {
     ((newContent: string, isSelectionReplacement: boolean) => void) | null
   >(null);
   const headerRef = useRef<HTMLElement>(null);
+  const seededIdRef = useRef<string | null>(null);
 
   const note = getNote(id || "");
 
