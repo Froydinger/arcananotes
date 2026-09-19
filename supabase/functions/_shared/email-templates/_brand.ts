@@ -1,10 +1,10 @@
-// Shared brand tokens for Arcana auth emails.
+// Shared brand tokens for Arc Notes auth emails.
 // Body background MUST stay white (#ffffff) even though the app is dark-themed.
 
 export const LOGO_URL =
-  'https://cleqowfvjqnuybfdwrqc.supabase.co/storage/v1/object/public/email-assets/arcana-logo-2026.png'
+  'https://arcananotes.com/__l5e/assets-v1/f14449f0-c17c-4620-8bf8-a09c7cf0e8a2/arc-notes-logo-on-black.png'
 
-export const BRAND_NAME = 'Arcana'
+export const BRAND_NAME = 'Arc Notes'
 export const PRIMARY = '#0EA5E9' // hsl(199 89% 48%)
 export const PRIMARY_FG = '#ffffff'
 export const FG = '#18181b'

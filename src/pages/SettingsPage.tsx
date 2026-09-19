@@ -22,7 +22,7 @@ import { usePreferences } from "@/contexts/PreferencesContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import arcanaLogo from "@/assets/arcana-logo.png";
+import arcNotesLogo from "@/assets/arc-notes-logo.png.asset.json";
 import {
   LogOut,
   User,
@@ -107,7 +107,7 @@ const SettingsPage = () => {
     },
     {
       question: "Can I access my notes offline?",
-      answer: "Yes, Arcana Notes works offline. Your notes are stored locally and will sync when you're back online.",
+      answer: "Yes, Arc Notes works offline. Your notes are stored locally and will sync when you're back online.",
     },
     {
       question: "How do I format text in my notes?",
@@ -139,7 +139,7 @@ const SettingsPage = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `arcana-notes-export-${new Date().toISOString().split("T")[0]}.txt`;
+    link.download = `arc-notes-export-${new Date().toISOString().split("T")[0]}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -206,7 +206,7 @@ const SettingsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <img src={arcanaLogo} alt="Arcana" className="h-5 w-5" />
+              <img src={arcNotesLogo.url} alt="Arc Notes" className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -218,7 +218,7 @@ const SettingsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <img src={arcanaLogo} alt="Arcana" className="h-5 w-5" />
+              <img src={arcNotesLogo.url} alt="Arc Notes" className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -279,7 +279,7 @@ const SettingsPage = () => {
               <div className="bg-card rounded-lg p-4 border border-accent/20">
                 <h2 className="text-lg font-medium mb-3 font-serif flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-accent" />
-                  Arcana Notes
+                  Arc Notes
                 </h2>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -375,10 +375,10 @@ const SettingsPage = () => {
             </div>
 
             <div className="bg-card rounded-lg p-4 border">
-              <h2 className="text-lg font-medium mb-3 font-serif">About Arcana Notes</h2>
+              <h2 className="text-lg font-medium mb-3 font-serif">About Arc Notes</h2>
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  Arcana Notes - "Write What You Love" is a minimalist notes app focused on creative expression and
+                  Arc Notes - "Write What You Love" is a minimalist notes app focused on creative expression and
                   passionate writing.
                 </p>
                 <p className="text-xs text-muted-foreground">Version 4.0.1</p>
@@ -388,11 +388,11 @@ const SettingsPage = () => {
             <div className="bg-card rounded-lg p-4 border">
               <h2 className="text-lg font-medium mb-3 font-serif flex items-center gap-2">
                 <Heart className="h-5 w-5 text-pink-500" fill="#e91e63" />
-                Support Arcana Notes
+                Support Arc Notes
               </h2>
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Enjoying Arcana Notes? Consider supporting development to help keep the app running and add new
+                  Enjoying Arc Notes? Consider supporting development to help keep the app running and add new
                   features.
                 </p>
                 <a
@@ -465,10 +465,10 @@ const SettingsPage = () => {
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2 justify-center">
                 <Heart className="h-5 w-5 text-accent" fill="currentColor" />
-                Support Arcana Notes!
+                Support Arc Notes!
               </AlertDialogTitle>
               <AlertDialogDescription className="text-center">
-                Arcana Notes is made with love by Win The Night. If you enjoy using Arcana Notes, consider supporting
+                Arc Notes is made with love by Win The Night. If you enjoy using Arc Notes, consider supporting
                 our work!
               </AlertDialogDescription>
             </AlertDialogHeader>

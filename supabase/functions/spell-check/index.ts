@@ -100,7 +100,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'openai/gpt-5.6-luna',
-        reasoning_effort: 'none',
+        reasoning_effort: 'low',
         messages: [
           {
             role: 'system',

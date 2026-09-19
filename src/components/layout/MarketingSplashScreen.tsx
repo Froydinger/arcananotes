@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PenTool, Shield, Users, Smartphone, Cloud, X } from 'lucide-react';
-import arcanaLogo from '@/assets/arcana-logo.png';
+import arcNotesLogo from '@/assets/arc-notes-logo.png.asset.json';
 import { LoginDialog } from '@/components/auth/LoginDialog';
 
 export function MarketingSplashScreen() {
@@ -46,7 +46,7 @@ export function MarketingSplashScreen() {
               <div className="flex justify-between items-start mb-6 sm:mb-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-serif mb-2 flex items-center justify-start">
-                    Why Choose Arcana Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1">™</span>?
+                    Why Choose Arc Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1">™</span>?
                   </h2>
                   <p className="text-muted-foreground text-sm sm:text-base">The note-taking app designed for passionate writers</p>
                 </div>
@@ -88,7 +88,7 @@ export function MarketingSplashScreen() {
 
               {/* SEO-friendly content for search engines */}
               <div className="sr-only">
-                <h3>Arcana Notes Features for Search Engines</h3>
+                <h3>Arc Notes Features for Search Engines</h3>
                 <ul>
                   <li>Beautiful Writing Experience: Distraction-free editor with rich formatting and beautiful themes</li>
                   <li>Sync Across Devices: Your notes are always up-to-date on all your devices</li>
@@ -115,7 +115,7 @@ export function MarketingSplashScreen() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "Arcana Notes",
+            "name": "Arc Notes",
             "description": "A simple notes app focused on creative expression and passionate writing. Beautiful, secure, and designed for writers who love their craft.",
             "applicationCategory": "Productivity",
             "operatingSystem": "Web Browser",
@@ -141,10 +141,10 @@ export function MarketingSplashScreen() {
 
         <div className="space-y-4">
           <div className="flex justify-center">
-            <img src={arcanaLogo} alt="Arcana" className="h-20 w-20 animate-heartbeat" />
+            <img src={arcNotesLogo.url} alt="Arc Notes" className="h-20 w-20 animate-heartbeat" />
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif text-foreground flex items-center justify-center">
-            Arcana Notes<span className="text-xs sm:text-sm md:text-base text-muted-foreground ml-1 -mt-2">™</span>
+            Arc Notes<span className="text-xs sm:text-sm md:text-base text-muted-foreground ml-1 -mt-2">™</span>
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground font-light">
             Write What You Love
