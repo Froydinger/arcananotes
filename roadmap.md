@@ -1,3 +1,6 @@
 - [x] Replace the app logo and icons with the supplied Arc Notes transparent and black assets
 - [x] Switch all text AI tools to GPT-5.6 Luna with low reasoning
 - [x] Keep the supplied pencil logo as the app logo and restore the original ArcAI logo in every AI surface
+- [x] Replace every Arc AI mark with the supplied white concentric Arc logo
+- [x] Use the supplied white pencil logo for the app header, favicon, and PWA icons
+- [x] Remove all legacy blue and A-shaped logos from the interface
