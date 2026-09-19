@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback, CSSProperties } from 'react';
 import { X, ArrowRight, Plus, Trash2, MessageSquare, ChevronLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import { toast } from '@/components/ui/sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
