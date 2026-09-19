@@ -212,6 +212,12 @@
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
 
+  /* Light theme: flip the white-on-transparent Arc Notes mark to true black */
+  html.light img[src*="arc-notes-logo"] {
+    filter: invert(1);
+  }
+
+
   /* PWA standalone mode: apply safe areas and proper height handling for ALL platforms */
   @media (display-mode: standalone) {
     :root {
