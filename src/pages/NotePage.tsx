@@ -287,7 +287,7 @@ const NotePage = () => {
                       <ul className="space-y-2 mt-1">
                         <li><strong>Header image</strong> — Tap the image icon in the top toolbar to set a featured cover image for your note.</li>
                         <li><strong>Inline upload</strong> — Type <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">/</kbd> → Image to upload a photo into your note body.</li>
-                        <li><strong>AI generation</strong> <span className="text-xs text-primary">(Pro)</span> — Highlight text, then tap ✨ in the format bar to generate an image. Also via <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">/</kbd> → Generate Image.</li>
+                        <li><strong>AI generation</strong> — Highlight text, then tap the paintbrush in the format bar to generate an image. Also available through <kbd className="px-1.5 py-0.5 rounded bg-muted text-foreground text-xs font-mono">/</kbd> → Generate Image.</li>
                       </ul>
                     </div>
                     <div>
@@ -300,7 +300,7 @@ const NotePage = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">🤖 Arc AI</h3>
-                      <p>Tap the Arc button in the bottom-right to chat with AI — rewrite, summarize, brainstorm, and more.</p>
+                      <p>Tap the Arc button in the bottom-right to chat, or highlight text and tap the Arc mark for focused edits.</p>
                     </div>
                   </div>
                 </DialogContent>
@@ -408,6 +408,7 @@ const NotePage = () => {
             note={note}
             onNoteSaved={handleNoteSaved}
             onAIContentReplace={(replacementFn) => setAiReplacementFunction(() => replacementFn)}
+            aiEnabled={preferences.aiEnabled}
           />
         )}
       </div>

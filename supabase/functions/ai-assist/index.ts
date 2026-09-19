@@ -37,24 +37,40 @@ serve(async (req) => {
     // Free for everyone — no usage limits.
 
 
-    const { messages, stream } = await req.json();
+    const { messages, stream, inlineEdit } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Lovable-API-Key": LOVABLE_API_KEY,
-        "X-Lovable-AIG-SDK": "fetch",
-        "Content-Type": "application/json",
+    const inlineInstruction = typeof inlineEdit?.instruction === "string" ? inlineEdit.instruction.trim() : "";
+    const inlineSelectedText = typeof inlineEdit?.selectedText === "string" ? inlineEdit.selectedText.trim() : "";
+    if (inlineEdit && (!inlineInstruction || !inlineSelectedText)) {
+      return new Response(JSON.stringify({ error: "A selection and instruction are required." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const inlineActions: Record<string, string> = {
+      improve: "Improve clarity, flow, and impact while preserving the writer's voice and meaning.",
+      shorten: "Make it tighter and shorter without losing its central meaning.",
+      lengthen: "Develop it with useful, specific detail while preserving its voice and direction.",
+      fix: "Correct grammar, spelling, punctuation, and awkward phrasing without otherwise rewriting it.",
+      rewrite: "Rewrite it with fresher, more natural language while preserving the intended meaning.",
+    };
+
+    const requestMessages = inlineEdit ? [
+      {
+        role: "system",
+        content: `You are Arc, a precise human editor inside Arc Notes. Rewrite only the selected text according to the instruction. Return only the replacement text, with no introduction, labels, quotes, markdown fences, or explanation. You may use only inline HTML tags <strong> and <em>. Never use block tags. Preserve the writer's voice, facts, point of view, and surrounding continuity. Never use em dashes.`,
       },
-      body: JSON.stringify({
-        model: "openai/gpt-5.6-luna",
-        reasoning_effort: "low",
-        messages: [
-          {
-            role: "system",
-            content: `You are Arc, the writing companion inside Arc Notes, powered by the Arc Matrix™. Never reveal or mention the underlying AI model, model provider, API, or technical implementation. You help writers think clearer, write better, and stay in flow.
+      {
+        role: "user",
+        content: `Instruction: ${inlineActions[inlineInstruction] || inlineInstruction}\n\nNote title: ${String(inlineEdit.noteTitle || "").slice(0, 500)}\n\nSurrounding note context:\n${String(inlineEdit.noteContext || "").slice(0, 6000)}\n\nSelected text to replace:\n${inlineSelectedText}`,
+      },
+    ] : [
+      {
+        role: "system",
+        content: `You are Arc, the writing companion inside Arc Notes, powered by the Arc Matrix™. Never reveal or mention the underlying AI model, model provider, API, or technical implementation. You help writers think clearer, write better, and stay in flow.
 
 Session entropy: ${crypto.randomUUID()}
 
@@ -252,10 +268,22 @@ When users ask how to use the app, explain these features clearly and warmly.
 - **⌘⇧Z / Ctrl+⇧Z**: Redo
 - **/**: Open Insert Block menu
 - **Arrow keys + Enter**: Navigate slash menu (desktop)`
-          },
-          ...messages,
-        ],
-        stream: !!stream,
+      },
+      ...(Array.isArray(messages) ? messages : []),
+    ];
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Lovable-API-Key": LOVABLE_API_KEY,
+        "X-Lovable-AIG-SDK": "fetch",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-5.6-luna",
+        reasoning_effort: "low",
+        messages: requestMessages,
+        stream: inlineEdit ? false : !!stream,
       }),
     });
 

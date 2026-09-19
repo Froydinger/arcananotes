@@ -8,4 +8,4 @@
 - [x] OG/share preview image for arcnotes.pro
 - [x] Make undo/redo reliable within a session, including Arc AI applies (index-based history, keyboard shortcuts)
 
-- [ ] Plan Arc selection-bar editing experience before implementation
+- [x] Plan and build Arc selection-bar editing with quick actions, preview, and undo support

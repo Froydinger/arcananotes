@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Heading1, Type, Bold, Italic, Quote, Paintbrush } from 'lucide-react';
+import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
+import { ArcInlineEditor } from './ArcInlineEditor';
 
 export type FormatType = 'p' | 'h1' | 'bold' | 'italic' | 'quote';
 
@@ -10,6 +12,10 @@ interface FloatingFormatBarProps {
   editorRef: React.RefObject<HTMLDivElement>;
   onGenerateImage?: () => void;
   isSubscribed?: boolean;
+  arcSelection?: { text: string; noteTitle: string; noteContext: string } | null;
+  onOpenArc?: () => void;
+  onReplaceArc?: (replacement: string) => boolean;
+  onCloseArc?: () => void;
 }
 
 // Check if device is mobile/tablet
@@ -22,7 +28,11 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   onFormat,
   editorRef,
   onGenerateImage,
-  isSubscribed
+  isSubscribed,
+  arcSelection,
+  onOpenArc,
+  onReplaceArc,
+  onCloseArc,
 }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [currentFormats, setCurrentFormats] = useState<Set<FormatType>>(new Set());
@@ -39,6 +49,7 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     if (!visible || !editorRef.current) return;
 
     const updatePosition = () => {
+      if (arcSelection) return;
       const selection = window.getSelection();
       if (!selection || selection.rangeCount === 0) return;
 
@@ -54,8 +65,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       if (!editorRect) return;
 
       // Calculate bar dimensions (approx 200px wide with 4 buttons + divider, 40px tall)
-      const barWidth = 200;
-      const barHeight = 48;
+      const barWidth = arcSelection ? 368 : 288;
+      const barHeight = arcSelection ? 300 : 48;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
@@ -133,20 +144,38 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       window.removeEventListener('resize', handleUpdate);
       document.removeEventListener('selectionchange', handleUpdate);
     };
-  }, [visible, editorRef, isMobile]);
+  }, [visible, editorRef, isMobile, arcSelection]);
+
+  useEffect(() => {
+    if (!arcSelection || !onCloseArc) return;
+    const closeOutside = (event: MouseEvent) => {
+      if (!barRef.current?.contains(event.target as Node)) onCloseArc();
+    };
+    document.addEventListener('mousedown', closeOutside);
+    return () => document.removeEventListener('mousedown', closeOutside);
+  }, [arcSelection, onCloseArc]);
 
   if (!visible) return null;
 
   return (
     <div
       ref={barRef}
-      className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-elevated p-1.5 flex gap-1 animate-in fade-in slide-in-from-bottom-2 duration-200"
+      className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-lg shadow-elevated flex gap-1 animate-in fade-in slide-in-from-bottom-2 duration-200"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
         transform: 'translateX(-50%)',
       }}
     >
+      {arcSelection && onReplaceArc && onCloseArc ? (
+        <ArcInlineEditor
+          selectedText={arcSelection.text}
+          noteTitle={arcSelection.noteTitle}
+          noteContext={arcSelection.noteContext}
+          onReplace={onReplaceArc}
+          onClose={onCloseArc}
+        />
+      ) : <div className="flex items-center gap-1 p-1.5">
       <Button
         variant={currentFormats.has('p') ? 'default' : 'ghost'}
         size="sm"
@@ -172,6 +201,15 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       >
         <Heading1 className="h-4 w-4" />
       </Button>
+
+      {onOpenArc && (
+        <>
+          <div className="w-px h-6 bg-border/50 mx-0.5" />
+          <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-full" onMouseDown={(e) => { e.preventDefault(); onOpenArc(); }} title="Edit with Arc">
+            <img src={arcAiLogo.url} alt="Arc AI" className="h-5 w-5 rounded-full object-contain" />
+          </Button>
+        </>
+      )}
 
       <div className="w-px h-6 bg-border/50 mx-0.5" />
 
@@ -231,6 +269,7 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
           </Button>
         </>
       )}
+      </div>}
     </div>
   );
 };
