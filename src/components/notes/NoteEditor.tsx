@@ -1183,8 +1183,9 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
                     {[
                       { key: 'h1', label: 'Heading', icon: 'H', desc: 'Large section heading' },
                       { key: 'p', label: 'Paragraph', icon: '¶', desc: 'Plain text block' },
+                      { key: 'quote', label: 'Pull quote', icon: '"', desc: 'Standout quote block' },
                       { key: 'image', label: 'Image', icon: '🖼', desc: 'Upload an image' },
-                      ...(isSubscribed ? [{ key: 'generate', label: 'Generate Image', icon: '✨', desc: 'AI image from text (Pro)' }] : []),
+                      { key: 'generate', label: 'Generate Image', icon: '🖌', desc: 'AI image from text' },
                     ].map((item, i) => (
                       <button
                         key={item.key}
