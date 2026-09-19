@@ -149,10 +149,16 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   useEffect(() => {
     if (!arcSelection || !onCloseArc) return;
     const closeOutside = (event: MouseEvent) => {
-      if (!barRef.current?.contains(event.target as Node)) onCloseArc();
+      const target = event.target as Node | null;
+      // Ignore clicks on nodes that were removed while the panel opened
+      if (!target || !target.isConnected) return;
+      if (!barRef.current?.contains(target)) onCloseArc();
     };
-    document.addEventListener('mousedown', closeOutside);
-    return () => document.removeEventListener('mousedown', closeOutside);
+    const timer = window.setTimeout(() => document.addEventListener('mousedown', closeOutside), 0);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener('mousedown', closeOutside);
+    };
   }, [arcSelection, onCloseArc]);
 
   if (!visible) return null;
