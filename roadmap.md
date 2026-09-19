@@ -1,2 +1,3 @@
 - [x] Replace the app logo and icons with the supplied Arc Notes transparent and black assets
 - [x] Switch all text AI tools to GPT-5.6 Luna with low reasoning
+- [ ] Keep the supplied pencil logo as the app logo and restore the original ArcAI logo in every AI surface
