@@ -46,7 +46,8 @@ const QUICK_PROMPTS = [
   { label: 'Suggest a Note', prompt: '' as string, dynamic: true },
   { label: 'Improve Writing', prompt: 'Improve this note to be more engaging and well-structured. Keep the original voice.', requiresContent: true },
   { label: 'Make it Shorter', prompt: 'Make this note more concise while keeping its core message.', requiresContent: true },
-  { label: 'Fix Grammar', prompt: 'Fix any grammar, spelling, or punctuation errors in this text.', requiresContent: true },
+  { label: 'Fix Grammar', prompt: 'Fix any grammar, spelling, or punctuation errors in this text. Return surgical edits only.', requiresContent: true },
+  { label: 'Line Edits', prompt: 'Go through this note line by line and propose surgical edits for the weakest sentences. Keep my voice. Return them as targeted edits, not a rewrite.', requiresContent: true },
 ];
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assist`;
