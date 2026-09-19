@@ -83,13 +83,25 @@ const NotePage = () => {
     }
   }, [redo, note, updateNote]);
 
-  // Keyboard handling - let native browser undo/redo work naturally
+  // Keyboard handling
   useEffect(() => {
     const cleanup = handleNoteKeyboard();
     return () => {
       cleanup();
     };
   }, []);
+
+  // Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z drive the same history as the header buttons
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "z") return;
+      e.preventDefault();
+      if (e.shiftKey) handleRedo();
+      else handleUndo();
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [handleUndo, handleRedo]);
 
   useEffect(() => {
     if (note) {
