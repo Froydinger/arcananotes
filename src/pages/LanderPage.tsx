@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { PenLine, CheckSquare, Brain, Shield, Smartphone, ArrowRight, Check, Menu, X } from "lucide-react";
-import arcanaLogo from "@/assets/arcana-logo.png";
+import arcNotesLogo from "@/assets/arc-notes-logo.png";
 import { Button } from "@/components/ui/button";
 import { LoginDialog } from "@/components/auth/LoginDialog";
 import FakeNoteEditor from "@/components/landing/FakeNoteEditor";
@@ -29,7 +29,7 @@ export default function LanderPage() {
     },
     {
       icon: Brain,
-      title: "Arc AI Assistant",
+      title: "Arc Assistant",
       description: "Built-in AI that helps you brainstorm, improve your writing, and craft compelling content.",
     },
   ];
@@ -54,8 +54,8 @@ export default function LanderPage() {
       >
         <div className="flex items-center justify-between px-4 py-3 md:px-8 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
-            <img src={arcanaLogo} alt="Arcana" className="h-6 w-6" />
-            <span className="font-display text-lg text-foreground tracking-tight">Arcana Notes</span>
+            <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-6 w-6" />
+            <span className="font-display text-lg text-foreground tracking-tight">Arc Notes</span>
           </div>
           <div className="flex items-center gap-4">
             <a
@@ -68,7 +68,7 @@ export default function LanderPage() {
               href="#why"
               className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Why Arcana Notes
+              Why Arc Notes
             </a>
             <button
               onClick={() => setShowLoginDialog(true)}
@@ -83,9 +83,9 @@ export default function LanderPage() {
       {/* Top Navigation */}
       <nav className="relative z-50 flex items-center justify-between px-4 py-4 md:px-8 max-w-7xl mx-auto pwa-safe-top">
         <div className="flex items-center gap-2.5">
-          <img src={arcanaLogo} alt="Arcana" className="h-8 w-8" />
+          <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-8 w-8" />
           <span className="font-display text-xl text-foreground tracking-tight">
-            Arcana Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1 align-super">™</span>
+            Arc Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1 align-super">™</span>
           </span>
         </div>
         <div className="hidden md:flex items-center gap-6">
@@ -93,7 +93,7 @@ export default function LanderPage() {
             Features
           </a>
           <a href="#why" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Why Arcana Notes
+            Why Arc Notes
           </a>
           <button
             onClick={() => setShowLoginDialog(true)}
@@ -125,7 +125,7 @@ export default function LanderPage() {
             onClick={() => setShowMobileMenu(false)}
             className="block text-muted-foreground hover:text-foreground transition-colors"
           >
-            Why Arcana Notes
+            Why Arc Notes
           </a>
           <button
             onClick={() => {
@@ -145,8 +145,10 @@ export default function LanderPage() {
           <div className="mb-8 flex justify-center">
             <div className="relative">
               <img
-                src={arcanaLogo}
-                alt="Arcana"
+                src={arcNotesLogo}
+                alt="Arc Notes"
+                width={1024}
+                height={1024}
                 className="w-24 h-24 md:w-32 md:h-32 drop-shadow-lg"
                 style={{ filter: "drop-shadow(0 0 20px hsl(var(--accent) / 0.3))" }}
               />
@@ -166,7 +168,7 @@ export default function LanderPage() {
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-14 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-lg gap-3 transition-all hover:scale-105 shadow-glow-sm"
             >
-              <img src={arcanaLogo} alt="" className="h-5 w-5" />
+              <img src={arcNotesLogo} alt="" width={1024} height={1024} className="h-5 w-5" />
               Start Writing — It's Free
             </Button>
             <span className="text-xs text-muted-foreground/60">Free to use forever</span>
@@ -213,7 +215,7 @@ export default function LanderPage() {
         </div>
       </section>
 
-      {/* Why Arcana Notes */}
+      {/* Why Arc Notes */}
       <section className="relative z-10 py-20 px-6 max-w-4xl mx-auto text-center" id="why">
         <div className="space-y-6 flex flex-col items-center mb-10">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center shadow-glow-sm">
@@ -277,7 +279,7 @@ export default function LanderPage() {
               onClick={() => setShowLoginDialog(true)}
               className="w-full h-12 rounded-full bg-accent/15 border-2 border-accent text-accent hover:bg-accent/25 font-sans text-base gap-2 transition-all hover:scale-105 shadow-glow-sm"
             >
-              <img src={arcanaLogo} alt="" className="h-4 w-4" />
+              <img src={arcNotesLogo} alt="" width={1024} height={1024} className="h-4 w-4" />
               Get Started Free
             </Button>
           </div>
@@ -305,9 +307,9 @@ export default function LanderPage() {
       {/* Footer */}
       <footer className="relative z-10 py-12 px-6 border-t border-border/40 text-center space-y-4">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <img src={arcanaLogo} alt="Arcana" className="h-5 w-5 opacity-60" />
+          <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5 opacity-60" />
           <span className="font-display text-foreground/60">
-            Arcana Notes<span className="text-xs text-muted-foreground/40 ml-0.5 align-super">™</span>
+            Arc Notes<span className="text-xs text-muted-foreground/40 ml-0.5 align-super">™</span>
           </span>
         </div>
         <div className="space-y-1">

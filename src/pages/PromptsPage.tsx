@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { RefreshCw, Heart } from "lucide-react";
-import arcanaLogo from '@/assets/arcana-logo.png';
+import arcNotesLogo from '@/assets/arc-notes-logo.png';
 import { useTitleFont } from "@/hooks/useTitleFont";
 import { useBodyFont } from "@/hooks/useTitleFont";
 import {
@@ -69,7 +69,7 @@ const PromptsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <img src={arcanaLogo} alt="Arcana" className="h-5 w-5" />
+              <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -92,7 +92,7 @@ const PromptsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <img src={arcanaLogo} alt="Arcana" className="h-5 w-5" />
+              <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -112,10 +112,10 @@ const PromptsPage = () => {
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 justify-center">
               <Heart className="h-5 w-5 text-accent" fill="currentColor" />
-              Support Arcana Notes!
+              Support Arc Notes!
             </AlertDialogTitle>
             <AlertDialogDescription className="text-center">
-              Arcana Notes is made with love by Win The Night. If you enjoy using Arcana Notes, consider supporting our work!
+              Arc Notes is made with love by Win The Night. If you enjoy using Arc Notes, consider supporting our work!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col sm:flex-col gap-2">

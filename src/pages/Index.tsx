@@ -19,7 +19,7 @@ import PullToRefresh from "react-simple-pull-to-refresh";
 import { ShareManager } from "@/components/notes/ShareManager";
 import { toast } from "@/components/ui/sonner";
 import { useSubscription } from "@/hooks/useSubscription";
-import arcanaLogo from "@/assets/arcana-logo.png";
+import arcNotesLogo from "@/assets/arc-notes-logo.png";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -193,7 +193,7 @@ const Index = () => {
         className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
         title="Account"
       >
-        <img src={arcanaLogo} alt="Arcana" className="h-6 w-6 rounded-md" />
+        <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-6 w-6 rounded-md" />
       </button>
       {isSubscribed && (
         <span className="pointer-events-none absolute right-0 top-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-accent shadow-sm ring-2 ring-background">
@@ -402,7 +402,7 @@ const Index = () => {
         <AlertDialogContent className="max-w-sm rounded-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-3 justify-center">
-              <img src={arcanaLogo} alt="Arcana" className="h-8 w-8 rounded-lg" />
+              <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-8 w-8 rounded-lg" />
               <span>Your Account</span>
             </AlertDialogTitle>
             <AlertDialogDescription asChild>

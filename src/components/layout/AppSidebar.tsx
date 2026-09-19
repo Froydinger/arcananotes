@@ -15,7 +15,7 @@ import {
   ChevronDown,
   Clock,
 } from "lucide-react";
-import arcanaLogo from '@/assets/arcana-logo.png';
+import arcNotesLogo from '@/assets/arc-notes-logo.png';
 import {
   Sidebar,
   SidebarContent,
@@ -115,10 +115,10 @@ export function AppSidebar() {
     >
       <SidebarHeader className="flex flex-row items-center justify-between px-5 py-5 gap-0 apple-pwa-sidebar-header">
         <div className={`flex items-center space-x-3 flex-1 ${state === "collapsed" ? "justify-center" : ""}`}>
-          <img src={arcanaLogo} alt="Arcana" className="h-8 w-8 rounded-xl" />
+          <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-8 w-8 rounded-lg" />
           {state !== "collapsed" && (
             <div className="flex items-center">
-              <h1 className="text-xl font-display font-medium tracking-tight dynamic-title-font">Arcana Notes</h1>
+              <h1 className="text-xl font-display font-medium tracking-tight dynamic-title-font">Arc Notes</h1>
               <span className="text-[10px] text-muted-foreground ml-0.5 -mt-2 font-medium">TM</span>
             </div>
           )}

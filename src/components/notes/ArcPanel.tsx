@@ -6,7 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import arcLogo from '@/assets/arc-logo.png';
+import arcLogo from '@/assets/arc-notes-logo.png';
 
 interface ArcPanelProps {
   noteId?: string;
@@ -222,7 +222,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
       if (resp.status === 429) {
         const data = await resp.json().catch(() => null);
         if (data?.limit_reached) {
-          toast.error('Daily AI limit reached (20/day). Upgrade to Arcana Notes Pro for unlimited!', { duration: 5000 });
+          toast.error('Arc Matrix is busy. Try again in a moment.', { duration: 5000 });
         } else {
           toast.error('Rate limit reached. Try again in a moment.');
         }
@@ -518,7 +518,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
               boxShadow: '0 4px 24px hsla(var(--accent) / 0.15), 0 0 0 1px hsla(var(--accent) / 0.1)',
             }}
           >
-            <img src={arcLogo} alt="Arc" className="h-8 w-8 rounded-full object-cover" />
+            <img src={arcLogo} alt="Arc" width={1024} height={1024} className="h-8 w-8 rounded-full object-cover" />
             <div className="absolute inset-0 rounded-full animate-ping opacity-20 border border-accent" />
           </div>
         </button>
@@ -548,7 +548,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                 ) : (
                   <div className="relative">
                     <div className="w-7 h-7 rounded-full flex items-center justify-center bg-accent/10 border border-accent/20">
-                      <img src={arcLogo} alt="Arc" className="h-5 w-5 rounded-full object-cover" />
+                      <img src={arcLogo} alt="Arc" width={1024} height={1024} className="h-5 w-5 rounded-full object-cover" />
                     </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card bg-green-500" />
                   </div>
@@ -559,7 +559,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   </span>
                   {!showHistory && (
                     <span className="text-[10px] leading-none text-muted-foreground">
-                      Your writing assistant
+                      Powered by the Arc Matrix™
                     </span>
                   )}
                 </div>
@@ -619,7 +619,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   {messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center px-4 gap-4">
                       <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-accent/10 border border-accent/15">
-                        <img src={arcLogo} alt="Arc" className="h-10 w-10 rounded-full object-cover" />
+                        <img src={arcLogo} alt="Arc" width={1024} height={1024} className="h-10 w-10 rounded-full object-cover" />
                       </div>
                       <div>
                         <p className="text-sm font-medium mb-1 text-foreground">
@@ -647,7 +647,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                       <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                         {msg.role === 'assistant' && (
                           <div className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center bg-accent/10 border border-accent/20">
-                            <img src={arcLogo} alt="Arc" className="h-4 w-4 rounded-full object-cover" />
+                            <img src={arcLogo} alt="Arc" width={1024} height={1024} className="h-4 w-4 rounded-full object-cover" />
                           </div>
                         )}
                         <div
@@ -679,7 +679,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   {isLoading && messages[messages.length - 1]?.role === 'user' && (
                     <div className="flex justify-start">
                       <div className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center bg-accent/10 border border-accent/20">
-                        <img src={arcLogo} alt="Arc" className="h-4 w-4 rounded-full object-cover" />
+                        <img src={arcLogo} alt="Arc" width={1024} height={1024} className="h-4 w-4 rounded-full object-cover" />
                       </div>
                       <div className="px-3.5 py-2.5 rounded-[18px] rounded-bl-md bg-muted border border-border/30">
                         <div className="flex items-center gap-1.5">
