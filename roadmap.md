@@ -6,3 +6,4 @@
 - [x] Remove all legacy blue and A-shaped logos from the interface
 - [x] App logo everywhere = transparent white pencil mark (translogo.png)
 - [x] OG/share preview image for arcnotes.pro
+- [x] Make undo/redo reliable within a session, including Arc AI applies (index-based history, keyboard shortcuts)
