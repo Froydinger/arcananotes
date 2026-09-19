@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotifications } from "@/hooks/useNotifications";
 import { RefreshCw, Heart } from "lucide-react";
-import arcNotesLogo from '@/assets/arc-notes-logo.png';
+import arcNotesLogo from '@/assets/arc-notes-logo.png.asset.json';
 import { useTitleFont } from "@/hooks/useTitleFont";
 import { useBodyFont } from "@/hooks/useTitleFont";
 import {
@@ -69,7 +69,7 @@ const PromptsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5" />
+              <img src={arcNotesLogo.url} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -92,7 +92,7 @@ const PromptsPage = () => {
               onClick={() => setShowSupportDialog(true)}
               className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
             >
-              <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5" />
+              <img src={arcNotesLogo.url} alt="Arc Notes" width={1024} height={1024} className="h-5 w-5" />
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 
 import { Plus } from 'lucide-react';
 import { EmptyState } from '@/components/ui/empty-state';
-import arcNotesLogo from '@/assets/arc-notes-logo.png';
+import arcNotesLogo from '@/assets/arc-notes-logo.png.asset.json';
 import { useNotes } from '@/contexts/NoteContext';
 import { useNavigate } from 'react-router-dom';
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
@@ -32,7 +32,7 @@ export default function EmptyNotesPlaceholder() {
           </div>
         )}
         <EmptyState
-          icon={() => <img src={arcNotesLogo} alt="Arc Notes" width={1024} height={1024} className="h-12 w-12" />}
+          icon={() => <img src={arcNotesLogo.url} alt="Arc Notes" width={1024} height={1024} className="h-12 w-12" />}
           title={
             <div className="flex items-center justify-center">
               Welcome to Arc Notes<span className="text-xs text-muted-foreground ml-0.5 -mt-1">™</span>
