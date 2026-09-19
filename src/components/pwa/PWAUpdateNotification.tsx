@@ -109,7 +109,7 @@ export const PWAUpdateNotification = () => {
           </Button>
         </div>
         <CardDescription>
-          A new version of Arcana Notes is available. Click update, then close and reopen the app or refresh your browser to finish.
+          A new version of Arc Notes is available. Click update, then close and reopen the app or refresh your browser to finish.
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">

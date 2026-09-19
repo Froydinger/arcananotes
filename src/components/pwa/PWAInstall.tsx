@@ -81,7 +81,7 @@ export const PWAInstall = () => {
       <Card className="fixed z-50 w-80 animate-slide-up shadow-lg border-neon-blue/20 apple-pwa-floating">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-serif">Install Arcana Notes</CardTitle>
+            <CardTitle className="text-lg font-serif">Install Arc Notes</CardTitle>
             <Button 
               variant="ghost" 
               size="sm" 
@@ -92,7 +92,7 @@ export const PWAInstall = () => {
             </Button>
           </div>
           <CardDescription>
-            Install Arcana Notes on your device for quick access and offline usage.
+            Install Arc Notes on your device for quick access and offline usage.
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
@@ -125,7 +125,7 @@ export const PWAInstall = () => {
           </Button>
         </div>
         <CardDescription>
-          Add Arcana Notes to your home screen for faster access and a native app experience.
+          Add Arc Notes to your home screen for faster access and a native app experience.
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">

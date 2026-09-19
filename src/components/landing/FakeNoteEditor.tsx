@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Type, Heading1, Bold, Italic, TextQuote, Sparkles } from 'lucide-react';
-import arcLogo from '@/assets/arc-logo.png';
+import arcAiLogo from '@/assets/arc-logo.png';
 
 const ORIGINAL_LINES = [
   "I started writing because I needed somewhere to put the noise in my head.",
@@ -60,7 +60,7 @@ const FakeNoteEditor = () => {
             <div className="w-3 h-3 rounded-full bg-accent/25" />
           </div>
           <div className="flex-1 text-center text-xs text-muted-foreground font-medium">
-            Arcana Notes™
+            Arc Notes™
           </div>
           <div className="w-10" />
         </div>
@@ -138,7 +138,7 @@ const FakeNoteEditor = () => {
               !showAI ? 'animate-gentle-bounce' : ''
             }`}
           >
-            <img src={arcLogo} alt="Arc" className="w-3.5 h-3.5 rounded-full" />
+            <img src={arcAiLogo} alt="Arc AI" className="w-3.5 h-3.5 rounded-full object-contain" />
             <span className="hidden sm:inline">Arc AI</span>
           </div>
           {/* Bottom fade */}

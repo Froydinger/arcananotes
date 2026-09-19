@@ -245,7 +245,7 @@ const NotePage = () => {
                 </DialogTrigger>
                 <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle className="text-lg">How to use Arcana</DialogTitle>
+                    <DialogTitle className="text-lg">How to use Arc Notes</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 text-sm text-muted-foreground">
                     <div>
