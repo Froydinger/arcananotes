@@ -50,6 +50,15 @@ const QUICK_PROMPTS = [
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assist`;
 
+/** Readable plain text from note HTML, with block breaks preserved so Arc can quote lines exactly. */
+const htmlToPlainText = (html: string): string => {
+  const div = document.createElement('div');
+  div.innerHTML = html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|h[1-6]|li|blockquote)>/gi, '\n');
+  return (div.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+};
+
 export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentReplace, onTitleReplace, onCreateNote, onCreateChecklist }: ArcPanelProps) {
   const { user } = useAuth();
   const location = useLocation();
