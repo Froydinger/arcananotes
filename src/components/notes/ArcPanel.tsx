@@ -189,7 +189,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
 
     let contextMessage = userMessage;
     if (includeContext && noteContent.trim()) {
-      contextMessage = `${userMessage}\n\nCurrent note title: "${noteTitle}"\nCurrent note content: "${noteContent.replace(/<[^>]*>/g, '')}"`;
+      contextMessage = `${userMessage}\n\nCurrent note title: "${noteTitle}"\nCurrent note content (copy text exactly when proposing edits):\n"""\n${htmlToPlainText(noteContent)}\n"""`;
     }
 
     const newMessages = [...messages, userMsg];
