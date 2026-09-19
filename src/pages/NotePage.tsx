@@ -69,19 +69,24 @@ const NotePage = () => {
     pushSnapshot(title, content);
   }, [pushSnapshot]);
 
-  const handleUndo = useCallback(() => {
-    const state = undo();
-    if (state && note) {
+  // Blur first so the editor accepts the restored content instead of guarding it as "being typed in"
+  const applyHistoryState = useCallback(
+    (state: { title: string; content: string } | null) => {
+      if (!state || !note) return;
+      const active = document.activeElement as HTMLElement | null;
+      if (active && active !== document.body) active.blur();
       updateNote(note.id, { title: state.title, content: state.content }, true);
-    }
-  }, [undo, note, updateNote]);
+    },
+    [note, updateNote]
+  );
+
+  const handleUndo = useCallback(() => {
+    applyHistoryState(undo());
+  }, [undo, applyHistoryState]);
 
   const handleRedo = useCallback(() => {
-    const state = redo();
-    if (state && note) {
-      updateNote(note.id, { title: state.title, content: state.content }, true);
-    }
-  }, [redo, note, updateNote]);
+    applyHistoryState(redo());
+  }, [redo, applyHistoryState]);
 
   // Keyboard handling
   useEffect(() => {
