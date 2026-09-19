@@ -54,6 +54,7 @@ const NotePage = () => {
     ((newContent: string, isSelectionReplacement: boolean) => void) | null
   >(null);
   const headerRef = useRef<HTMLElement>(null);
+  const seededIdRef = useRef<string | null>(null);
 
   const note = getNote(id || "");
 
@@ -68,27 +69,44 @@ const NotePage = () => {
     pushSnapshot(title, content);
   }, [pushSnapshot]);
 
-  const handleUndo = useCallback(() => {
-    const state = undo();
-    if (state && note) {
+  // Blur first so the editor accepts the restored content instead of guarding it as "being typed in"
+  const applyHistoryState = useCallback(
+    (state: { title: string; content: string } | null) => {
+      if (!state || !note) return;
+      const active = document.activeElement as HTMLElement | null;
+      if (active && active !== document.body) active.blur();
       updateNote(note.id, { title: state.title, content: state.content }, true);
-    }
-  }, [undo, note, updateNote]);
+    },
+    [note, updateNote]
+  );
+
+  const handleUndo = useCallback(() => {
+    applyHistoryState(undo());
+  }, [undo, applyHistoryState]);
 
   const handleRedo = useCallback(() => {
-    const state = redo();
-    if (state && note) {
-      updateNote(note.id, { title: state.title, content: state.content }, true);
-    }
-  }, [redo, note, updateNote]);
+    applyHistoryState(redo());
+  }, [redo, applyHistoryState]);
 
-  // Keyboard handling - let native browser undo/redo work naturally
+  // Keyboard handling
   useEffect(() => {
     const cleanup = handleNoteKeyboard();
     return () => {
       cleanup();
     };
   }, []);
+
+  // Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z drive the same history as the header buttons
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== "z") return;
+      e.preventDefault();
+      if (e.shiftKey) handleRedo();
+      else handleUndo();
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [handleUndo, handleRedo]);
 
   useEffect(() => {
     if (note) {
@@ -101,6 +119,7 @@ const NotePage = () => {
   // Always start at top when opening a note + play enter transition (no autofocus)
   useEffect(() => {
     setEntered(false);
+    seededIdRef.current = null;
     clearHistory();
     if (document.activeElement && document.activeElement !== document.body) {
       (document.activeElement as HTMLElement).blur();
@@ -110,6 +129,13 @@ const NotePage = () => {
     const timer = setTimeout(() => setEntered(true), 50);
     return () => clearTimeout(timer);
   }, [id]);
+
+  // Seed the history with the note's loaded state so the first undo can return to it
+  useEffect(() => {
+    if (!note || seededIdRef.current === note.id) return;
+    seededIdRef.current = note.id;
+    clearHistory(note.title || "", note.content || "");
+  }, [note, clearHistory]);
 
   const handleDelete = () => {
     if (id) {
@@ -406,8 +432,17 @@ const NotePage = () => {
         noteId={note.id}
         noteContent={note.content}
         noteTitle={note.title}
-        onContentReplace={(content) => updateNote(note.id, { content })}
-        onTitleReplace={(title) => updateNote(note.id, { title })}
+        onContentReplace={(content) => {
+          // Record the pre-AI state, then the applied state, so undo steps back to it
+          pushSnapshot(note.title, note.content);
+          updateNote(note.id, { content });
+          pushSnapshot(note.title, content);
+        }}
+        onTitleReplace={(title) => {
+          pushSnapshot(note.title, note.content);
+          updateNote(note.id, { title });
+          pushSnapshot(title, note.content);
+        }}
         onCreateChecklist={async (title, items) => {
           const newNote = await addNote("checklist");
           if (newNote) {

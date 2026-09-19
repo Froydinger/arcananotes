@@ -161,13 +161,12 @@ export default function NoteEditor({ note, onNoteSaved, onAIContentReplace }: No
     const currentContent = getEditorContent(contentRef.current);
     const sanitizedContent = sanitizeForDisplay(note.content);
 
-    // Check if user is currently typing/editing in this element
-    const selection = window.getSelection();
-    const contentHasFocus = contentRef.current?.contains(document.activeElement) ||
-                           (selection && selection.rangeCount > 0 && contentRef.current?.contains(selection.anchorNode));
+    // Only skip the update while the user is actively typing in the editor.
+    // A lingering text selection must not block external updates (undo/redo, AI applies),
+    // otherwise those changes silently never reach the editor.
+    const isTyping = !!contentRef.current && document.activeElement === contentRef.current;
 
-    // Only update if content is different AND user is not focused in the editor
-    if (sanitizedContent !== currentContent && !contentHasFocus) {
+    if (sanitizedContent !== currentContent && !isTyping) {
       setEditorContent(contentRef.current, sanitizedContent);
       contentRef.current?.dispatchEvent(new Event('input', { bubbles: true }));
     }

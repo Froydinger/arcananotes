@@ -5,92 +5,75 @@ interface UndoRedoSnapshot {
   content: string;
 }
 
+const MAX_HISTORY = 100;
+
 /**
- * Simple undo/redo hook that tracks note state snapshots.
- * Call `pushSnapshot` each time the note auto-saves to capture a state.
- * Call `undo`/`redo` to navigate through the history.
+ * Index-based undo/redo history (single timeline + pointer), the standard model
+ * used by editors. Every meaningful state change — typing auto-saves, AI applies,
+ * image inserts — should call `pushSnapshot`. Undo/redo move the pointer along the
+ * timeline instead of juggling two separate stacks.
  */
 export function useUndoRedo(initialTitle: string, initialContent: string) {
-  // History stacks stored as refs to avoid re-render loops
-  const undoStackRef = useRef<UndoRedoSnapshot[]>([{ title: initialTitle, content: initialContent }]);
-  const redoStackRef = useRef<UndoRedoSnapshot[]>([]);
-  const currentIndexRef = useRef(0);
+  const stackRef = useRef<UndoRedoSnapshot[]>([{ title: initialTitle, content: initialContent }]);
+  const indexRef = useRef(0);
   const isRestoringRef = useRef(false);
+  const restoreTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [, forceUpdate] = useState(0);
 
   const pushSnapshot = useCallback((title: string, content: string) => {
-    // Don't push if we're currently restoring from undo/redo
+    // Ignore snapshots produced by applying an undo/redo result
     if (isRestoringRef.current) return;
 
-    const stack = undoStackRef.current;
-    const currentIdx = currentIndexRef.current;
+    const stack = stackRef.current;
+    const current = stack[indexRef.current];
+    if (current && current.title === title && current.content === content) return;
 
-    // Don't push duplicate states
-    if (stack.length > 0) {
-      const current = stack[currentIdx];
-      if (current && current.title === title && current.content === content) return;
-    }
+    // Drop any redo future once a new change lands
+    const trimmed = stack.slice(0, indexRef.current + 1);
+    trimmed.push({ title, content });
 
-    // If we're not at the end of the stack (user undid then typed), trim future
-    if (currentIdx < stack.length - 1) {
-      undoStackRef.current = stack.slice(0, currentIdx + 1);
-    }
+    // Cap history size, keeping the most recent states
+    const overflow = Math.max(0, trimmed.length - MAX_HISTORY);
+    stackRef.current = overflow ? trimmed.slice(overflow) : trimmed;
+    indexRef.current = stackRef.current.length - 1;
 
-    undoStackRef.current.push({ title, content });
-    currentIndexRef.current = undoStackRef.current.length - 1;
-    redoStackRef.current = [];
+    forceUpdate((n) => n + 1);
+  }, []);
 
-    // Keep stack reasonable size (max 50 snapshots)
-    if (undoStackRef.current.length > 50) {
-      undoStackRef.current = undoStackRef.current.slice(-50);
-      currentIndexRef.current = undoStackRef.current.length - 1;
-    }
-
-    forceUpdate(n => n + 1);
+  const beginRestore = useCallback(() => {
+    isRestoringRef.current = true;
+    if (restoreTimerRef.current) clearTimeout(restoreTimerRef.current);
+    restoreTimerRef.current = setTimeout(() => {
+      isRestoringRef.current = false;
+    }, 1200);
   }, []);
 
   const undo = useCallback((): UndoRedoSnapshot | null => {
-    const stack = undoStackRef.current;
-    const currentIdx = currentIndexRef.current;
-
-    if (currentIdx <= 0) return null;
-
-    // Move back one step
-    const previousState = stack[currentIdx - 1];
-    redoStackRef.current.push(stack[currentIdx]);
-    currentIndexRef.current = currentIdx - 1;
-    isRestoringRef.current = true;
-
-    // Reset restoring flag after a tick to allow the save to complete
-    setTimeout(() => { isRestoringRef.current = false; }, 1000);
-
-    forceUpdate(n => n + 1);
-    return previousState;
-  }, []);
+    if (indexRef.current <= 0) return null;
+    indexRef.current -= 1;
+    beginRestore();
+    forceUpdate((n) => n + 1);
+    return stackRef.current[indexRef.current];
+  }, [beginRestore]);
 
   const redo = useCallback((): UndoRedoSnapshot | null => {
-    const redoStack = redoStackRef.current;
+    if (indexRef.current >= stackRef.current.length - 1) return null;
+    indexRef.current += 1;
+    beginRestore();
+    forceUpdate((n) => n + 1);
+    return stackRef.current[indexRef.current];
+  }, [beginRestore]);
 
-    if (redoStack.length === 0) return null;
+  const canUndo = indexRef.current > 0;
+  const canRedo = indexRef.current < stackRef.current.length - 1;
 
-    const nextState = redoStack.pop()!;
-    currentIndexRef.current += 1;
-    isRestoringRef.current = true;
-
-    setTimeout(() => { isRestoringRef.current = false; }, 1000);
-
-    forceUpdate(n => n + 1);
-    return nextState;
-  }, []);
-
-  const canUndo = currentIndexRef.current > 0;
-  const canRedo = redoStackRef.current.length > 0;
-
-  const clearHistory = useCallback(() => {
-    undoStackRef.current = [];
-    redoStackRef.current = [];
-    currentIndexRef.current = 0;
-    forceUpdate(n => n + 1);
+  /** Reset the timeline, seeded with the state the note currently has. */
+  const clearHistory = useCallback((title = '', content = '') => {
+    stackRef.current = [{ title, content }];
+    indexRef.current = 0;
+    isRestoringRef.current = false;
+    if (restoreTimerRef.current) clearTimeout(restoreTimerRef.current);
+    forceUpdate((n) => n + 1);
   }, []);
 
   return {
