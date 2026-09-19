@@ -102,7 +102,10 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       }
 
       const h1 = (element as Element).closest('h1');
-      if (h1) {
+      const quote = (element as Element).closest('blockquote');
+      if (quote) {
+        formats.add('quote');
+      } else if (h1) {
         formats.add('h1');
       } else {
         formats.add('p');
