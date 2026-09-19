@@ -94,11 +94,13 @@ serve(async (req) => {
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Lovable-API-Key': LOVABLE_API_KEY,
+        'X-Lovable-AIG-SDK': 'fetch',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash-lite',
+        model: 'openai/gpt-5.6-luna',
+        reasoning_effort: 'none',
         messages: [
           {
             role: 'system',
@@ -109,7 +111,6 @@ serve(async (req) => {
             content: getUserPrompt(action, content, instructions, title, originalHTML, isSelectedText)
           }
         ],
-        temperature: 0.3,
       }),
     });
 

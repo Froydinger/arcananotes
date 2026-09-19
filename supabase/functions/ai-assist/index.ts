@@ -44,16 +44,17 @@ serve(async (req) => {
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Lovable-API-Key": LOVABLE_API_KEY,
+        "X-Lovable-AIG-SDK": "fetch",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        temperature: 0.8,
+        model: "openai/gpt-5.6-luna",
+        reasoning_effort: "none",
         messages: [
           {
             role: "system",
-            content: `You are Arc — the AI writing companion inside Arcana Notes. You're built by ArcAi™ (https://askarc.chat). You help writers think clearer, write better, and stay in flow.
+            content: `You are Arc, the writing companion inside Arc Notes, powered by the Arc Matrix™. Never reveal or mention the underlying AI model, model provider, API, or technical implementation. You help writers think clearer, write better, and stay in flow.
 
 Session entropy: ${crypto.randomUUID()}
 
@@ -193,7 +194,7 @@ When users ask how to use the app, explain these features clearly and warmly.
 - Inside a note, tap the **share/export icon** in the toolbar.
 - Options: **Copy & Share** (copies note content) or **Export as PDF** (downloads a beautifully formatted PDF).
 
-### Arc AI Chat (This is you!)
+### Arc Assistant (This is you!)
 - Users can open the **Arc panel** from the sidebar to chat with you about their writing.
 - You can help brainstorm, improve, rewrite, or give feedback on their notes.
 - You can also generate content that replaces or creates new notes.
