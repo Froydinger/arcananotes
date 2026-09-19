@@ -93,7 +93,6 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     if (!visible || !editorRef.current) return;
 
     const updatePosition = () => {
-      if (arcSelection) return;
       const selection = window.getSelection();
       if (!selection || selection.rangeCount === 0) return;
 
@@ -107,6 +106,37 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       const editorRect = editorRef.current?.getBoundingClientRect();
 
       if (!editorRect) return;
+
+      // Arc panel: centered horizontally, one line below the selection
+      if (arcSelection) {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const panelWidth = Math.min(368, viewportWidth - 32);
+        const panelHeight = 320;
+        const lastRect = rects[rects.length - 1];
+        const lineGap = 10;
+
+        let top = lastRect.bottom - editorRect.top + lineGap;
+        // If it would overflow the bottom of the screen, place it above the selection
+        if (editorRect.top + top + panelHeight > viewportHeight - 8) {
+          top = rect.top - editorRect.top - panelHeight - lineGap;
+        }
+        // Never above the top of the screen
+        if (editorRect.top + top < 8) {
+          top = 8 - editorRect.top;
+        }
+
+        let left = editorRect.width / 2;
+        const absCenter = editorRect.left + left;
+        const minCenter = panelWidth / 2 + 8;
+        const maxCenter = viewportWidth - panelWidth / 2 - 8;
+        if (absCenter < minCenter) left = minCenter - editorRect.left;
+        else if (absCenter > maxCenter) left = maxCenter - editorRect.left;
+
+        setPosition({ top, left });
+        return;
+      }
+
 
       // Calculate bar dimensions (approx 200px wide with 4 buttons + divider, 40px tall)
       const barWidth = arcSelection ? 368 : 288;
