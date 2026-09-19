@@ -496,6 +496,36 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
     return 'Create Note';
   };
 
+  const applyOneEdit = (edit: ArcEdit) => {
+    if (!onContentReplace) return;
+    const next = applySurgicalEdit(noteContent, edit.find, edit.replace);
+    if (!next) {
+      toast.error("Couldn't find that text in the note anymore.");
+      return;
+    }
+    onContentReplace(next);
+    setAppliedEdits(prev => new Set(prev).add(edit.id));
+    toast.success('Edit applied');
+  };
+
+  const applyAllEdits = (edits: ArcEdit[]) => {
+    if (!onContentReplace) return;
+    const pending = edits.filter(e => !appliedEdits.has(e.id));
+    const { html, applied, missed } = applySurgicalEdits(noteContent, pending);
+    if (!applied) {
+      toast.error("Couldn't find that text in the note anymore.");
+      return;
+    }
+    onContentReplace(html);
+    setAppliedEdits(prev => {
+      const next = new Set(prev);
+      pending.forEach(e => next.add(e.id));
+      return next;
+    });
+    toast.success(missed ? `${applied} edits applied, ${missed} skipped` : `${applied} edit${applied > 1 ? 's' : ''} applied`);
+  };
+
+
   const mdComponents = {
     p: ({ children }: any) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
     strong: ({ children }: any) => <strong className="font-semibold text-accent">{children}</strong>,
