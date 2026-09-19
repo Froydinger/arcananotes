@@ -9,3 +9,4 @@
 - [x] Make undo/redo reliable within a session, including Arc AI applies (index-based history, keyboard shortcuts)
 
 - [x] Plan and build Arc selection-bar editing with quick actions, preview, and undo support
+- [ ] Refine Arc inline panel: centered, one line below selection, draggable
