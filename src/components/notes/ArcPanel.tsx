@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
+import { parseArcEdits, applySurgicalEdit, applySurgicalEdits, type ArcEdit } from '@/lib/surgicalEdit';
 
 interface ArcPanelProps {
   noteId?: string;
@@ -45,10 +46,20 @@ const QUICK_PROMPTS = [
   { label: 'Suggest a Note', prompt: '' as string, dynamic: true },
   { label: 'Improve Writing', prompt: 'Improve this note to be more engaging and well-structured. Keep the original voice.', requiresContent: true },
   { label: 'Make it Shorter', prompt: 'Make this note more concise while keeping its core message.', requiresContent: true },
-  { label: 'Fix Grammar', prompt: 'Fix any grammar, spelling, or punctuation errors in this text.', requiresContent: true },
+  { label: 'Fix Grammar', prompt: 'Fix any grammar, spelling, or punctuation errors in this text. Return surgical edits only.', requiresContent: true },
+  { label: 'Line Edits', prompt: 'Go through this note line by line and propose surgical edits for the weakest sentences. Keep my voice. Return them as targeted edits, not a rewrite.', requiresContent: true },
 ];
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assist`;
+
+/** Readable plain text from note HTML, with block breaks preserved so Arc can quote lines exactly. */
+const htmlToPlainText = (html: string): string => {
+  const div = document.createElement('div');
+  div.innerHTML = html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|h[1-6]|li|blockquote)>/gi, '\n');
+  return (div.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+};
 
 export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentReplace, onTitleReplace, onCreateNote, onCreateChecklist }: ArcPanelProps) {
   const { user } = useAuth();
@@ -62,6 +73,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvoId, setActiveConvoId] = useState<string | null>(null);
   const [vpStyle, setVpStyle] = useState<CSSProperties>({});
+  const [appliedEdits, setAppliedEdits] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -189,7 +201,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
 
     let contextMessage = userMessage;
     if (includeContext && noteContent.trim()) {
-      contextMessage = `${userMessage}\n\nCurrent note title: "${noteTitle}"\nCurrent note content: "${noteContent.replace(/<[^>]*>/g, '')}"`;
+      contextMessage = `${userMessage}\n\nCurrent note title: "${noteTitle}"\nCurrent note content (copy text exactly when proposing edits):\n"""\n${htmlToPlainText(noteContent)}\n"""`;
     }
 
     const newMessages = [...messages, userMsg];
@@ -486,6 +498,36 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
     return 'Create Note';
   };
 
+  const applyOneEdit = (edit: ArcEdit) => {
+    if (!onContentReplace) return;
+    const next = applySurgicalEdit(noteContent, edit.find, edit.replace);
+    if (!next) {
+      toast.error("Couldn't find that text in the note anymore.");
+      return;
+    }
+    onContentReplace(next);
+    setAppliedEdits(prev => new Set(prev).add(edit.id));
+    toast.success('Edit applied');
+  };
+
+  const applyAllEdits = (edits: ArcEdit[]) => {
+    if (!onContentReplace) return;
+    const pending = edits.filter(e => !appliedEdits.has(e.id));
+    const { html, applied, missed } = applySurgicalEdits(noteContent, pending);
+    if (!applied) {
+      toast.error("Couldn't find that text in the note anymore.");
+      return;
+    }
+    onContentReplace(html);
+    setAppliedEdits(prev => {
+      const next = new Set(prev);
+      pending.forEach(e => next.add(e.id));
+      return next;
+    });
+    toast.success(missed ? `${applied} edits applied, ${missed} skipped` : `${applied} edit${applied > 1 ? 's' : ''} applied`);
+  };
+
+
   const mdComponents = {
     p: ({ children }: any) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
     strong: ({ children }: any) => <strong className="font-semibold text-accent">{children}</strong>,
@@ -661,23 +703,68 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                           }`}
                         >
                           {msg.role === 'assistant' ? (
-                            <>
-                              <ReactMarkdown
-                                components={mdComponents}
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                              >
-                                {msg.content}
-                              </ReactMarkdown>
-                              {!isLoading && msg.content && i === messages.length - 1 && (
-                                <button
-                                  onClick={() => applyToNote(msg.content)}
-                                  className="mt-2 px-3 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 bg-accent/15 border border-accent/25 text-accent"
-                                >
-                                  {getApplyLabel(msg.content)}
-                                </button>
-                              )}
-                            </>
+                            (() => {
+                              const { edits, cleaned } = parseArcEdits(msg.content);
+                              const hasEdits = edits.length > 0 && !!onContentReplace;
+                              return (
+                                <>
+                                  <ReactMarkdown
+                                    components={mdComponents}
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                                  >
+                                    {hasEdits ? cleaned : msg.content}
+                                  </ReactMarkdown>
+
+                                  {hasEdits && !isLoading && (
+                                    <div className="mt-2.5 space-y-1.5">
+                                      {edits.map((edit) => {
+                                        const done = appliedEdits.has(edit.id);
+                                        return (
+                                          <div
+                                            key={edit.id}
+                                            className={`rounded-xl border p-2.5 transition-opacity ${done ? 'opacity-50 border-border/30' : 'border-accent/25 bg-accent/5'}`}
+                                          >
+                                            {edit.reason && (
+                                              <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1.5">{edit.reason}</div>
+                                            )}
+                                            <div className="text-[12px] leading-snug line-through opacity-60">{edit.find}</div>
+                                            <div
+                                              className="text-[12px] leading-snug mt-1 text-foreground"
+                                              dangerouslySetInnerHTML={{ __html: edit.replace || '<em>(removed)</em>' }}
+                                            />
+                                            <button
+                                              onClick={() => applyOneEdit(edit)}
+                                              disabled={done}
+                                              className="mt-2 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 disabled:hover:scale-100 bg-accent/15 border border-accent/25 text-accent disabled:opacity-60"
+                                            >
+                                              {done ? 'Applied' : 'Apply this'}
+                                            </button>
+                                          </div>
+                                        );
+                                      })}
+                                      {edits.length > 1 && (
+                                        <button
+                                          onClick={() => applyAllEdits(edits)}
+                                          className="px-3 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 bg-accent text-accent-foreground"
+                                        >
+                                          Apply all {edits.length}
+                                        </button>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {!hasEdits && !isLoading && msg.content && i === messages.length - 1 && (
+                                    <button
+                                      onClick={() => applyToNote(msg.content)}
+                                      className="mt-2 px-3 py-1 rounded-full text-[10px] font-medium transition-all hover:scale-105 bg-accent/15 border border-accent/25 text-accent"
+                                    >
+                                      {getApplyLabel(msg.content)}
+                                    </button>
+                                  )}
+                                </>
+                              );
+                            })()
                           ) : (
                             msg.content
                           )}
