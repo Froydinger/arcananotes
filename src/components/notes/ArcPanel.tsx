@@ -72,6 +72,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvoId, setActiveConvoId] = useState<string | null>(null);
   const [vpStyle, setVpStyle] = useState<CSSProperties>({});
+  const [appliedEdits, setAppliedEdits] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
