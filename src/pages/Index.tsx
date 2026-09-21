@@ -10,7 +10,7 @@ import EmptyNotesPlaceholder from "@/components/notes/EmptyNotesPlaceholder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, ArrowUpDown, Filter, X, FileText, CheckSquare, RefreshCw, Crown, Sparkles } from "lucide-react";
+import { Search, ArrowUpDown, Filter, X, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -18,24 +18,7 @@ import { useNotifications } from "@/hooks/useNotifications";
 import PullToRefresh from "react-simple-pull-to-refresh";
 import { ShareManager } from "@/components/notes/ShareManager";
 import { toast } from "@/components/ui/sonner";
-import { useSubscription } from "@/hooks/useSubscription";
-import arcNotesLogo from "@/assets/arc-notes-logo.png.asset.json";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { CreateNoteMenu } from "@/components/notes/CreateNoteMenu";
 import { NoteType } from "@/types/sharing";
 
 const Index = () => {
@@ -65,8 +48,6 @@ const Index = () => {
   const [shareChanged, setShareChanged] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [openSelect, setOpenSelect] = useState<string | null>(null);
-  const [showAccountDialog, setShowAccountDialog] = useState(false);
-  const { isSubscribed } = useSubscription();
 
   const filteredAndSortedNotes = useMemo(() => {
     const filtered = notes.filter((note) => {
@@ -185,23 +166,6 @@ const Index = () => {
     return <EmptyNotesPlaceholder />;
   }
 
-  // Account status button
-  const accountButton = (
-    <div className="relative flex h-12 w-12 items-center justify-center shrink-0">
-      <button
-        onClick={() => setShowAccountDialog(true)}
-        className="h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 transition-all duration-200 shadow-sm glass-shimmer flex items-center justify-center"
-        title="Account"
-      >
-        <img src={arcNotesLogo.url} alt="Arc Notes" width={1024} height={1024} className="h-6 w-6 rounded-md" />
-      </button>
-      {isSubscribed && (
-        <span className="pointer-events-none absolute right-0 top-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-accent shadow-sm ring-2 ring-background">
-          <Crown className="h-2.5 w-2.5 text-accent-foreground" />
-        </span>
-      )}
-    </div>
-  );
 
   // Header component - stays outside PullToRefresh for sticky to work on mobile
   const header = (
@@ -243,7 +207,7 @@ const Index = () => {
             >
               <RefreshCw className="h-5 w-5" />
             </button>
-            {accountButton}
+            <CreateNoteMenu onCreate={handleCreateNote} />
           </div>
         </div>
       </div>
@@ -289,7 +253,7 @@ const Index = () => {
             >
               <RefreshCw className="h-5 w-5" />
             </button>
-            {accountButton}
+            <CreateNoteMenu onCreate={handleCreateNote} />
           </div>
         </div>
       </div>
@@ -398,45 +362,6 @@ const Index = () => {
         />
       )}
 
-      <AlertDialog open={showAccountDialog} onOpenChange={setShowAccountDialog}>
-        <AlertDialogContent className="max-w-sm rounded-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-3 justify-center">
-              <img src={arcNotesLogo.url} alt="Arc Notes" width={1024} height={1024} className="h-8 w-8 rounded-lg" />
-              <span>Your Account</span>
-            </AlertDialogTitle>
-            <AlertDialogDescription asChild>
-              <div className="space-y-4 pt-2">
-                {/* Plan status — all features free */}
-                <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/50 border border-border/30">
-                  <div className="flex items-center gap-2">
-                    <Crown className="h-4 w-4 text-accent" />
-                    <span className="text-sm font-medium text-foreground">All features unlocked</span>
-                  </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-accent/10 text-accent font-medium">Free</span>
-                </div>
-
-
-                {/* Email */}
-                <div className="text-center text-xs text-muted-foreground">
-                  {user?.email}
-                </div>
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="flex-col sm:flex-col gap-2 pt-2">
-
-
-            <AlertDialogAction
-              onClick={() => navigate("/settings")}
-              className="w-full bg-secondary hover:bg-secondary/80 text-foreground"
-            >
-              Settings
-            </AlertDialogAction>
-            <AlertDialogCancel className="w-full">Close</AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 
