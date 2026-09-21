@@ -59,15 +59,17 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
 
   return (
     <div className={cn("relative", phase !== "closed" && "z-[130]", className)}>
-      {phase !== "closed" && (
-        <div
-          className={cn(
-            "fixed inset-0 z-[120] bg-background/50 backdrop-blur-md pointer-events-auto",
-            closing ? "create-overlay-out" : "create-overlay-in"
-          )}
-          onClick={() => setPhase("closing")}
-        />
-      )}
+      {phase !== "closed" &&
+        createPortal(
+          <div
+            className={cn(
+              "fixed inset-0 z-[120] bg-background/50 backdrop-blur-md pointer-events-auto",
+              closing ? "create-overlay-out" : "create-overlay-in"
+            )}
+            onClick={() => setPhase("closing")}
+          />,
+          document.body
+        )}
       <button
         onClick={() => setPhase(open ? "closing" : "open")}
         aria-label="Create new note"
