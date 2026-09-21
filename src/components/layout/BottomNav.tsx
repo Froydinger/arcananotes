@@ -1,16 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { NotebookTabs, Plus, Lightbulb, Settings, FileText, CheckSquare } from 'lucide-react';
+import { NotebookTabs, Lightbulb, Settings } from 'lucide-react';
 import { useNotes } from '@/contexts/NoteContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSidebar } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { CreateNoteMenu } from '@/components/notes/CreateNoteMenu';
 import { NoteType } from "@/types/sharing";
 
 export function BottomNav() {
@@ -82,46 +77,8 @@ export function BottomNav() {
         (isKeyboardOpen || isNotePage) && "translate-y-full"
       )}>
         {/* Navigation Items - Left aligned */}
-        <div className="relative flex items-center justify-start px-6 gap-4 overflow-visible" style={{ paddingTop: '0.875rem', paddingBottom: '1.25rem' }}>
-        {/* Plus button - slightly larger */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="flex items-center justify-center w-14 h-14 flex-shrink-0 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer">
-              <Plus className="h-6 w-6 text-accent" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent 
-            align="center" 
-            side="top"
-            sideOffset={12}
-            className="w-[200px] glass-card border-border/30 rounded-2xl shadow-elevated-lg"
-          >
-            <DropdownMenuItem 
-              onClick={() => handleCreateNote('note')} 
-              className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-xl hover:bg-accent/20 hover:text-foreground focus:bg-accent/20 focus:text-foreground"
-            >
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent/10">
-                <FileText className="h-4 w-4 text-accent" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium">Note</span>
-                <span className="text-xs text-muted-foreground">Free-form writing</span>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={() => handleCreateNote('checklist')} 
-              className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-xl hover:bg-accent/20 hover:text-foreground focus:bg-accent/20 focus:text-foreground"
-            >
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent/10">
-                <CheckSquare className="h-4 w-4 text-accent" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium">Checklist</span>
-                <span className="text-xs text-muted-foreground">Task list with checkboxes</span>
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="relative flex items-center justify-around px-4 gap-4 overflow-visible" style={{ paddingTop: '0.875rem', paddingBottom: '1.25rem' }}>
+        {/* Navigation items */}
 
         {/* Other nav items */}
         {[...leftNavItems, ...rightNavItems].map((item) => (
@@ -145,45 +102,7 @@ export function BottomNav() {
 
       {/* Desktop Left Sidebar */}
       <nav className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 flex-col items-center gap-4 py-6 px-3 bg-background/60 backdrop-blur-md border-r border-border/30 pwa-sidebar-safe">
-        {/* Plus button */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="flex items-center justify-center w-12 h-12 flex-shrink-0 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 hover:border-border/50 transition-all duration-200 shadow-sm glass-shimmer">
-              <Plus className="h-6 w-6 text-accent" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="start"
-            side="right"
-            sideOffset={12}
-            className="w-[200px] glass-card border-border/30 rounded-2xl shadow-elevated-lg"
-          >
-            <DropdownMenuItem
-              onClick={() => handleCreateNote('note')}
-              className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-xl hover:bg-accent/20 hover:text-foreground focus:bg-accent/20 focus:text-foreground"
-            >
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent/10">
-                <FileText className="h-4 w-4 text-accent" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium">Note</span>
-                <span className="text-xs text-muted-foreground">Free-form writing</span>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleCreateNote('checklist')}
-              className="flex items-center gap-3 py-3 px-4 cursor-pointer rounded-xl hover:bg-accent/20 hover:text-foreground focus:bg-accent/20 focus:text-foreground"
-            >
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent/10">
-                <CheckSquare className="h-4 w-4 text-accent" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-medium">Checklist</span>
-                <span className="text-xs text-muted-foreground">Task list with checkboxes</span>
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <CreateNoteMenu direction="right" onCreate={handleCreateNote} className="ml-1" />
 
         <div className="w-full h-px bg-border/30 my-2" />
 
