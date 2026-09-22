@@ -56,6 +56,56 @@
   }
 
   .dark {
+    /* Dark theme - rich charcoal with subtle warmth */
+    --background: 240 10% 6%;
+    --foreground: 40 20% 96%;
+
+    --card: 240 10% 8%;
+    --card-foreground: 40 20% 96%;
+
+    --popover: 240 10% 8%;
+    --popover-foreground: 40 20% 96%;
+
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 4%;
+
+    --secondary: 240 8% 14%;
+    --secondary-foreground: 40 20% 96%;
+
+    --muted: 240 8% 14%;
+    --muted-foreground: 40 10% 60%;
+
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 8% 16%;
+    --input: 240 8% 16%;
+    --ring: 0 0% 78%;
+
+    --sidebar-background: 240 12% 5%;
+    --sidebar-foreground: 40 15% 80%;
+    --sidebar-primary: 0 0% 96%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 4%;
+    --sidebar-border: 240 8% 14%;
+    --sidebar-ring: 0 0% 78%;
+
+    /* Dark theme background - deep gradient (darkened) */
+    background: linear-gradient(
+      165deg,
+      hsl(0, 0%, 7%) 0%,
+      hsl(0, 0%, 4%) 38%,
+      hsl(0, 0%, 2%) 72%,
+      hsl(0, 0%, 0%) 100%
+    );
+    background-attachment: fixed;
+  }
+
+  /* Apply the Arc black gradient by default when no theme class exists */
 
   body {
     @apply text-foreground antialiased;
@@ -206,6 +256,18 @@
   h4,
   h5,
   h6 {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .dark .toggle-active {
+    box-shadow: 0 0 12px hsl(var(--accent) / 0.4);
+  }
+
+  .dark button:focus, .dark a:focus {
+    outline-color: hsl(var(--accent));
+  }
 
   /* Text selection highlight */
   :root ::selection {
@@ -213,6 +275,18 @@
     color: inherit;
   }
   :root ::-moz-selection {
+    background: hsl(199 89% 48% / 0.25);
+    color: inherit;
+  }
+
+  .dark ::selection {
+    background: hsl(var(--accent) / 0.35);
+    color: hsl(var(--foreground));
+  }
+  .dark ::-moz-selection {
+    background: hsl(var(--accent) / 0.35);
+    color: hsl(var(--foreground));
+  }
 
   /* Marked text highlight */
   :root mark {
@@ -701,6 +775,23 @@
   }
 
   .animate-slide-up {
+    animation: slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .dark .sidebar-menu-active {
+    @apply border text-foreground;
+    border-color: hsl(var(--accent) / 0.35);
+    background: hsl(var(--accent) / 0.1);
+    border-radius: 0.5rem !important;
+  }
+
+  /* Main navigation active states - fully rounded for all themes */
+  .dark .sidebar-nav-active {
+    @apply border text-foreground;
+    border-color: hsl(var(--accent) / 0.35);
+    background: hsl(var(--accent) / 0.1);
+    border-radius: 9999px !important;
+  }
 
   /* Button accessibility improvements */
   .btn-accessible {
@@ -718,6 +809,13 @@
 
   /* Light theme button styles */
   .btn-accessible {
+    @apply text-foreground hover:text-foreground hover:bg-accent/10 rounded-full;
+  }
+
+  /* Dark theme button styles */
+  .dark .btn-accessible {
+    @apply text-foreground hover:text-foreground hover:bg-accent/15 rounded-full;
+  }
 
   /* Sidebar toggle button specific styles */
   .sidebar-toggle {
@@ -726,6 +824,12 @@
   }
 
   .sidebar-toggle {
+    @apply text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-full;
+  }
+
+  .dark .sidebar-toggle {
+    @apply text-muted-foreground hover:text-foreground hover:bg-accent/15 rounded-full;
+  }
 
   /* General button contrast improvements */
   .btn-contrast {
@@ -734,6 +838,12 @@
   }
 
   .btn-contrast {
+    @apply text-foreground/80 hover:text-foreground hover:bg-accent/10 rounded-full;
+  }
+
+  .dark .btn-contrast {
+    @apply text-foreground/80 hover:text-foreground hover:bg-accent/15 rounded-full;
+  }
 
   /* Shimmer effect for Google button */
   .google-shimmer {
@@ -755,6 +865,16 @@
 
   /* Modern glass effect for cards */
   .glass-card {
+    background: hsl(var(--card) / 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .dark .glass-card {
+    background: hsl(var(--card) / 0.75);
+    border: 1px solid hsl(var(--border) / 0.3);
+  }
 
   /* Glass button with shimmer border effect */
   .glass-shimmer {
@@ -763,6 +883,40 @@
   }
 
   .glass-shimmer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--foreground) / 0.35) 0%,
+      hsl(var(--foreground) / 0.12) 25%,
+      transparent 50%,
+      hsl(var(--foreground) / 0.08) 75%,
+      hsl(var(--foreground) / 0.2) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .dark .glass-shimmer::before {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--foreground) / 0.3) 0%,
+      hsl(var(--foreground) / 0.1) 25%,
+      transparent 50%,
+      hsl(var(--foreground) / 0.06) 75%,
+      hsl(var(--foreground) / 0.15) 100%
+    );
+  }
 }
 
 /* Glow shadow utilities for accent-colored elements */
@@ -942,6 +1096,14 @@ html[data-title-font="mono"] .note-editor h6 {
 /* Firefox scrollbar hiding */
 * {
   scrollbar-width: none;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: transparent;
 }
 
 /* PWA mode - hide scrollbars only, no layout changes */
