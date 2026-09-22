@@ -71,7 +71,8 @@
           if (theme === 'system') {
             theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
-          const colors = { light: '#ffffff', dark: '#0a0a0a', navy: '#192028' };
+          if (theme !== 'light' && theme !== 'dark') theme = 'dark';
+          const colors = { light: '#ffffff', dark: '#0a0a0a' };
           const color = colors[theme] || fallbackColor;
           
           console.log('IMMEDIATE THEME SETUP:', theme, 'COLOR:', color, 'FROM LOCALSTORAGE:', localStorage.getItem('theme'));
@@ -115,10 +116,8 @@
           const waitForReact = () => {
             // Check if React app is loaded AND PreferencesContext has run
             const reactLoaded = document.querySelector('#root > *');
-            const themeApplied = document.documentElement.classList.contains('light') || 
-                               document.documentElement.classList.contains('dark') || 
-                               document.documentElement.classList.contains('navy') || 
-                               document.documentElement.classList.contains('sepia');
+            const themeApplied = document.documentElement.classList.contains('light') ||
+                               document.documentElement.classList.contains('dark');
             
             if (reactLoaded && themeApplied) {
               // React and theme are loaded, safe to remove forced styles
