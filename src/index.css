@@ -941,6 +941,8 @@ html[data-title-font="mono"] .note-editor h6 {
 
 /* Firefox scrollbar hiding */
 * {
+  scrollbar-width: none;
+}
 
 /* PWA mode - hide scrollbars only, no layout changes */
 @media (display-mode: standalone) {
