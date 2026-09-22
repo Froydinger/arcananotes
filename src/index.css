@@ -56,143 +56,6 @@
   }
 
   .dark {
-    /* Dark theme - rich charcoal with subtle warmth */
-    --background: 240 10% 6%;
-    --foreground: 40 20% 96%;
-
-    --card: 240 10% 8%;
-    --card-foreground: 40 20% 96%;
-
-    --popover: 240 10% 8%;
-    --popover-foreground: 40 20% 96%;
-
-    --primary: 0 0% 96%;
-    --primary-foreground: 0 0% 4%;
-
-    --secondary: 240 8% 14%;
-    --secondary-foreground: 40 20% 96%;
-
-    --muted: 240 8% 14%;
-    --muted-foreground: 40 10% 60%;
-
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 4%;
-
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 8% 16%;
-    --input: 240 8% 16%;
-    --ring: 0 0% 78%;
-
-    --sidebar-background: 240 12% 5%;
-    --sidebar-foreground: 40 15% 80%;
-    --sidebar-primary: 0 0% 96%;
-    --sidebar-primary-foreground: 0 0% 4%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 4%;
-    --sidebar-border: 240 8% 14%;
-    --sidebar-ring: 0 0% 78%;
-
-    /* Dark theme background - deep gradient (darkened) */
-    background: linear-gradient(
-      165deg,
-      hsl(0, 0%, 7%) 0%,
-      hsl(0, 0%, 4%) 38%,
-      hsl(0, 0%, 2%) 72%,
-      hsl(0, 0%, 0%) 100%
-    );
-    background-attachment: fixed;
-  }
-
-  .navy {
-    /* Navy theme - elegant blue */
-    --background: 220 40% 10%;
-    --foreground: 40 25% 95%;
-
-    --card: 220 35% 12%;
-    --card-foreground: 40 25% 95%;
-
-    --popover: 220 35% 12%;
-    --popover-foreground: 40 25% 95%;
-
-    --primary: 199 89% 58%;
-    --primary-foreground: 220 40% 10%;
-
-    --secondary: 220 30% 16%;
-    --secondary-foreground: 40 25% 95%;
-
-    --muted: 220 30% 16%;
-    --muted-foreground: 40 15% 65%;
-
-    --accent: 199 89% 58%;
-    --accent-foreground: 220 40% 10%;
-
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 40 25% 95%;
-
-    --border: 220 30% 20%;
-    --input: 220 30% 20%;
-    --ring: 199 89% 58%;
-
-    --sidebar-background: 222 45% 7%;
-    --sidebar-foreground: 40 20% 80%;
-    --sidebar-primary: 199 89% 58%;
-    --sidebar-primary-foreground: 222 45% 7%;
-    --sidebar-accent: 199 89% 58%;
-    --sidebar-accent-foreground: 222 45% 7%;
-    --sidebar-border: 220 30% 18%;
-    --sidebar-ring: 199 89% 58%;
-
-    /* Navy theme - rich blue gradient */
-    background: linear-gradient(
-      165deg,
-      hsl(222, 45%, 8%) 0%,
-      hsl(224, 42%, 7%) 35%,
-      hsl(226, 40%, 5%) 70%,
-      hsl(228, 45%, 4%) 100%
-    );
-    background-attachment: fixed;
-  }
-
-  /* Apply the Arc black gradient by default when no theme class exists */
-  html:not(.light):not(.dark):not(.navy) {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 96%;
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 96%;
-    --popover: 0 0% 7%;
-    --popover-foreground: 0 0% 96%;
-    --primary: 0 0% 96%;
-    --primary-foreground: 0 0% 4%;
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 96%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 63%;
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 4%;
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 40 25% 95%;
-    --border: 0 0% 17%;
-    --input: 0 0% 17%;
-    --ring: 0 0% 78%;
-    --sidebar-background: 0 0% 3%;
-    --sidebar-foreground: 0 0% 80%;
-    --sidebar-primary: 0 0% 96%;
-    --sidebar-primary-foreground: 0 0% 4%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 4%;
-    --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 0 0% 78%;
-    background: linear-gradient(
-      165deg,
-      hsl(0, 0%, 7%) 0%,
-      hsl(0, 0%, 4%) 38%,
-      hsl(0, 0%, 2%) 72%,
-      hsl(0, 0%, 0%) 100%
-    );
-    background-attachment: fixed;
-  }
 
   body {
     @apply text-foreground antialiased;
@@ -343,22 +206,6 @@
   h4,
   h5,
   h6 {
-    font-family: "Space Grotesk", system-ui, sans-serif;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-  }
-
-  .dark .toggle-active,
-  .navy .toggle-active {
-    box-shadow: 0 0 12px hsl(var(--accent) / 0.4);
-  }
-
-  .dark button:focus,
-  .dark a:focus,
-  .navy button:focus,
-  .navy a:focus {
-    outline-color: hsl(var(--accent));
-  }
 
   /* Text selection highlight */
   :root ::selection {
@@ -366,20 +213,6 @@
     color: inherit;
   }
   :root ::-moz-selection {
-    background: hsl(199 89% 48% / 0.25);
-    color: inherit;
-  }
-
-  .dark ::selection,
-  .navy ::selection {
-    background: hsl(var(--accent) / 0.35);
-    color: hsl(var(--foreground));
-  }
-  .dark ::-moz-selection,
-  .navy ::-moz-selection {
-    background: hsl(var(--accent) / 0.35);
-    color: hsl(var(--foreground));
-  }
 
   /* Marked text highlight */
   :root mark {
@@ -868,25 +701,6 @@
   }
 
   .animate-slide-up {
-    animation: slide-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .dark .sidebar-menu-active,
-  .navy .sidebar-menu-active {
-    @apply border text-foreground;
-    border-color: hsl(var(--accent) / 0.35);
-    background: hsl(var(--accent) / 0.1);
-    border-radius: 0.5rem !important;
-  }
-
-  /* Main navigation active states - fully rounded for all themes */
-  .dark .sidebar-nav-active,
-  .navy .sidebar-nav-active {
-    @apply border text-foreground;
-    border-color: hsl(var(--accent) / 0.35);
-    background: hsl(var(--accent) / 0.1);
-    border-radius: 9999px !important;
-  }
 
   /* Button accessibility improvements */
   .btn-accessible {
@@ -904,14 +718,6 @@
 
   /* Light theme button styles */
   .btn-accessible {
-    @apply text-foreground hover:text-foreground hover:bg-accent/10 rounded-full;
-  }
-
-  /* Dark theme button styles */
-  .dark .btn-accessible,
-  .navy .btn-accessible {
-    @apply text-foreground hover:text-foreground hover:bg-accent/15 rounded-full;
-  }
 
   /* Sidebar toggle button specific styles */
   .sidebar-toggle {
@@ -920,13 +726,6 @@
   }
 
   .sidebar-toggle {
-    @apply text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-full;
-  }
-
-  .dark .sidebar-toggle,
-  .navy .sidebar-toggle {
-    @apply text-muted-foreground hover:text-foreground hover:bg-accent/15 rounded-full;
-  }
 
   /* General button contrast improvements */
   .btn-contrast {
@@ -935,13 +734,6 @@
   }
 
   .btn-contrast {
-    @apply text-foreground/80 hover:text-foreground hover:bg-accent/10 rounded-full;
-  }
-
-  .dark .btn-contrast,
-  .navy .btn-contrast {
-    @apply text-foreground/80 hover:text-foreground hover:bg-accent/15 rounded-full;
-  }
 
   /* Shimmer effect for Google button */
   .google-shimmer {
@@ -963,17 +755,6 @@
 
   /* Modern glass effect for cards */
   .glass-card {
-    background: hsl(var(--card) / 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  .dark .glass-card,
-  .navy .glass-card {
-    background: hsl(var(--card) / 0.75);
-    border: 1px solid hsl(var(--border) / 0.3);
-  }
 
   /* Glass button with shimmer border effect */
   .glass-shimmer {
@@ -982,41 +763,6 @@
   }
 
   .glass-shimmer::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      135deg,
-      hsl(var(--foreground) / 0.35) 0%,
-      hsl(var(--foreground) / 0.12) 25%,
-      transparent 50%,
-      hsl(var(--foreground) / 0.08) 75%,
-      hsl(var(--foreground) / 0.2) 100%
-    );
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  .dark .glass-shimmer::before,
-  .navy .glass-shimmer::before {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--foreground) / 0.3) 0%,
-      hsl(var(--foreground) / 0.1) 25%,
-      transparent 50%,
-      hsl(var(--foreground) / 0.06) 75%,
-      hsl(var(--foreground) / 0.15) 100%
-    );
-  }
 }
 
 /* Glow shadow utilities for accent-colored elements */
@@ -1195,18 +941,6 @@ html[data-title-font="mono"] .note-editor h6 {
 
 /* Firefox scrollbar hiding */
 * {
-  scrollbar-width: none;
-}
-
-.dark ::-webkit-scrollbar-thumb,
-.navy ::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover,
-.navy ::-webkit-scrollbar-thumb:hover {
-  background: transparent;
-}
 
 /* PWA mode - hide scrollbars only, no layout changes */
 @media (display-mode: standalone) {
