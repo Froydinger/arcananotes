@@ -272,15 +272,23 @@ When users ask how to use the app, explain these features clearly and warmly.
       ...(Array.isArray(messages) ? messages : []),
     ];
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    const useOpenAI = !!OPENAI_API_KEY;
+    const endpoint = useOpenAI
+      ? "https://api.openai.com/v1/chat/completions"
+      : "https://ai.gateway.lovable.dev/v1/chat/completions";
+    const authHeaders = useOpenAI
+      ? { "Authorization": `Bearer ${OPENAI_API_KEY}` }
+      : { "Lovable-API-Key": LOVABLE_API_KEY, "X-Lovable-AIG-SDK": "fetch" };
+
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
-        "Lovable-API-Key": LOVABLE_API_KEY,
-        "X-Lovable-AIG-SDK": "fetch",
+        ...authHeaders,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-6-luna",
+        model: useOpenAI ? "gpt-6-luna" : "openai/gpt-5.6-luna",
         reasoning_effort: "low",
         messages: requestMessages,
         stream: inlineEdit ? false : !!stream,
