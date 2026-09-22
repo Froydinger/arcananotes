@@ -557,15 +557,14 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
           className="fixed right-5 bottom-5 z-[60] group"
           aria-label="Chat with Arc"
         >
-          <div
-            className="relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 bg-background/85 backdrop-blur-xl border border-accent/30"
-            style={{
-              boxShadow: '0 4px 24px hsla(var(--accent) / 0.15), 0 0 0 1px hsla(var(--accent) / 0.1)',
-            }}
-          >
-            <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-8 w-8 rounded-full object-contain" />
-            <div className="absolute inset-0 rounded-full animate-ping opacity-20 border border-accent" />
-          </div>
+          <img
+            src={arcAiLogo.url}
+            alt="Arc AI"
+            width={768}
+            height={768}
+            className="h-12 w-12 rounded-full object-contain transition-transform duration-300 group-hover:scale-110"
+            style={{ filter: 'drop-shadow(0 4px 16px hsla(var(--accent) / 0.25))' }}
+          />
         </button>
       )}
 

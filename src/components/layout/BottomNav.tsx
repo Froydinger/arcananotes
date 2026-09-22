@@ -77,7 +77,7 @@ export function BottomNav() {
         (isKeyboardOpen || isNotePage) && "translate-y-full"
       )}>
         {/* Navigation Items - Left aligned */}
-        <div className="relative flex items-center justify-around px-4 gap-4 overflow-visible" style={{ paddingTop: '0.875rem', paddingBottom: '1.25rem' }}>
+        <div className="relative flex items-center justify-start px-4 gap-5 overflow-visible" style={{ paddingTop: '0.875rem', paddingBottom: '1.25rem' }}>
         {/* Navigation items */}
 
         {/* Other nav items */}

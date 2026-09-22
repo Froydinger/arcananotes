@@ -1,12 +1,7 @@
-- [x] Replace the app logo and icons with the supplied Arc Notes transparent and black assets
-- [x] Switch all text AI tools to GPT-5.6 Luna with low reasoning
-- [x] Keep the supplied pencil logo as the app logo and restore the original ArcAI logo in every AI surface
-- [x] Replace every Arc AI mark with the supplied white concentric Arc logo
-- [x] Use the supplied white pencil logo for the app header, favicon, and PWA icons
-- [x] Remove all legacy blue and A-shaped logos from the interface
-- [x] App logo everywhere = transparent white pencil mark (translogo.png)
-- [x] OG/share preview image for arcnotes.pro
-- [x] Make undo/redo reliable within a session, including Arc AI applies (index-based history, keyboard shortcuts)
+# Roadmap
 
-- [x] Plan and build Arc selection-bar editing with quick actions, preview, and undo support
-- [x] Refine Arc inline panel: centered, one line below selection, draggable
+## Done
+- [x] Mobile create menu: + button and fan-out bubbles stay crisp above the blur overlay (portaled to body; `.glass-shimmer` forced position:relative and was overriding `.fixed` on the portal clone)
+- [x] Mobile bottom nav: items left-aligned again, clear of the Arc bubble
+- [x] Bubbles enlarged (56px) and spaced further out on mobile and desktop rail
+- [x] Verified Arc FAB outer-circle removal (code + build; headless asset load inconclusive)
