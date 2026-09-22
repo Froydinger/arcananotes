@@ -123,7 +123,7 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
             onClick={() => setPhase("closing")}
             aria-label="Create new note"
             aria-expanded={open}
-            className={cn(BUTTON_CLASSES, "fixed z-[140]")}
+            className={cn(CLONE_CLASSES)}
             style={{ left: `${anchor!.left}px`, top: `${anchor!.top}px` }}
           >
             <Plus className={cn("h-6 w-6 text-accent create-plus-icon", open && "create-plus-open")} />
