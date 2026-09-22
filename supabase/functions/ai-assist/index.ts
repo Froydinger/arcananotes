@@ -280,7 +280,7 @@ When users ask how to use the app, explain these features clearly and warmly.
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "openai/gpt-5.6-luna",
+        model: "openai/gpt-6-luna",
         reasoning_effort: "low",
         messages: requestMessages,
         stream: inlineEdit ? false : !!stream,

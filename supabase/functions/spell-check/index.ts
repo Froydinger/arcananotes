@@ -99,7 +99,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5.6-luna',
+        model: 'openai/gpt-6-luna',
         reasoning_effort: 'low',
         messages: [
           {
