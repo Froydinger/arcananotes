@@ -22,12 +22,12 @@ const BUBBLES: { type: NoteType; icon: typeof FileText; label: string }[] = [
 
 const OFFSETS: Record<"down" | "right", { x: string; y: string }[]> = {
   down: [
-    { x: "-18px", y: "66px" },
-    { x: "-54px", y: "38px" },
+    { x: "-16px", y: "86px" },
+    { x: "-74px", y: "48px" },
   ],
   right: [
-    { x: "62px", y: "-30px" },
-    { x: "52px", y: "34px" },
+    { x: "80px", y: "-34px" },
+    { x: "68px", y: "44px" },
   ],
 };
 
@@ -148,11 +148,11 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
                   animationDelay: closing ? "0ms" : `${(BUBBLES.length - 1 - i) * 45}ms`,
                 } as CSSProperties}
                 className={cn(
-                  "absolute -ml-6 -mt-6 flex h-12 w-12 items-center justify-center rounded-full bg-background/80 backdrop-blur-xl border border-border/40 shadow-elevated pointer-events-auto hover:bg-secondary/90 hover:border-border/60 transition-colors",
+                  "absolute -ml-7 -mt-7 flex h-14 w-14 items-center justify-center rounded-full bg-background/80 backdrop-blur-xl border border-border/40 shadow-elevated pointer-events-auto hover:bg-secondary/90 hover:border-border/60 transition-colors",
                   closing ? "create-bubble-out" : "create-bubble-in"
                 )}
               >
-                <Icon className="h-5 w-5 text-foreground" />
+                <Icon className="h-6 w-6 text-foreground" />
               </button>
             );
           })}
