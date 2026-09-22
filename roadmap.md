@@ -1,6 +1,7 @@
 # Roadmap
 
-## In progress
-- [ ] Mobile create menu: blur overlay must not cover the + button or the fan-out bubbles (portal buttons above overlay, crisp)
-- [ ] Mobile bottom nav: restore left-aligned items (not justify-around) so the Arc bubble never overlaps them
-- [x] Verified Arc FAB outer-circle removal in preview (screenshot captured)
+## Done
+- [x] Mobile create menu: + button and fan-out bubbles stay crisp above the blur overlay (portaled to body; `.glass-shimmer` forced position:relative and was overriding `.fixed` on the portal clone)
+- [x] Mobile bottom nav: items left-aligned again, clear of the Arc bubble
+- [x] Bubbles enlarged (56px) and spaced further out on mobile and desktop rail
+- [x] Verified Arc FAB outer-circle removal (code + build; headless asset load inconclusive)
