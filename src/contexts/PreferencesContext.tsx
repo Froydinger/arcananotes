@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
-export type ThemeType = 'light' | 'dark' | 'navy' | 'system';
+export type ThemeType = 'light' | 'dark' | 'system';
 export type TitleFontType = 'serif' | 'sans' | 'mono';
 export type BodyFontType = 'serif' | 'sans' | 'mono';
 
@@ -41,7 +41,8 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
   // Load user preferences - prioritize localStorage, sync with Supabase
   const loadPreferences = async () => {
     // Always start with localStorage as primary source
-    const localTheme = (localStorage.getItem('theme') as ThemeType) || 'dark';
+    const storedTheme = localStorage.getItem('theme');
+    const localTheme: ThemeType = (storedTheme === 'light' || storedTheme === 'system') ? storedTheme : 'dark';
     const localTitleFont = (localStorage.getItem('titleFont') as TitleFontType) || 'sans';
     const localBodyFont = (localStorage.getItem('bodyFont') as BodyFontType) || 'sans';
     const localAiEnabled = localStorage.getItem('aiEnabled') !== 'false'; // Default to true
@@ -73,13 +74,19 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
         console.error('Error loading preferences:', error);
       } else if (data) {
         // Check if Supabase data differs from local
+        // Legacy 'navy' theme is retired - treat it as dark
+        const supabaseTheme: ThemeType = (data.theme === 'light' || data.theme === 'system') ? data.theme : 'dark';
         const supabaseTitleFont = (data.title_font as TitleFontType) || 'sans';
         const supabaseBodyFont = (data.body_font as BodyFontType) || 'sans';
         const supabaseAiEnabled = data.ai_enabled !== false; // Default to true
-        if (data.theme !== localTheme || supabaseTitleFont !== localTitleFont || supabaseBodyFont !== localBodyFont || supabaseAiEnabled !== localAiEnabled) {
+        if (data.theme === 'navy') {
+          // Clean up retired theme in the database
+          supabase.from('user_preferences').update({ theme: 'dark' }).eq('user_id', user.id).then(() => {});
+        }
+        if (supabaseTheme !== localTheme || supabaseTitleFont !== localTitleFont || supabaseBodyFont !== localBodyFont || supabaseAiEnabled !== localAiEnabled) {
           // Supabase has different preferences - use them and update localStorage
-          setPreferences({ theme: data.theme as ThemeType, titleFont: supabaseTitleFont, bodyFont: supabaseBodyFont, aiEnabled: supabaseAiEnabled });
-          applyTheme(data.theme as ThemeType);
+          setPreferences({ theme: supabaseTheme, titleFont: supabaseTitleFont, bodyFont: supabaseBodyFont, aiEnabled: supabaseAiEnabled });
+          applyTheme(supabaseTheme);
           applyTitleFont(supabaseTitleFont);
           applyBodyFont(supabaseBodyFont);
           applyAiEnabled(supabaseAiEnabled);
@@ -261,7 +268,7 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     await loadPreferences();
   };
 
-  const getResolvedTheme = (theme: ThemeType): 'light' | 'dark' | 'navy' => {
+  const getResolvedTheme = (theme: ThemeType): 'light' | 'dark' => {
     if (theme === 'system') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
@@ -271,8 +278,8 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const applyTheme = (theme: ThemeType) => {
     const html = document.documentElement;
     const resolved = getResolvedTheme(theme);
-    
-    // Remove all theme classes
+
+    // Remove all theme classes (navy is retired)
     html.classList.remove('light', 'dark', 'navy');
     
     // Add the resolved theme class
@@ -318,11 +325,10 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
     localStorage.setItem('aiEnabled', aiEnabled.toString());
   };
 
-  const updateBrowserThemeColor = (theme: 'light' | 'dark' | 'navy') => {
+  const updateBrowserThemeColor = (theme: 'light' | 'dark') => {
     const themeColors = {
       light: '#ffffff',
-      dark: '#0a0a0a',
-      navy: '#192028'
+      dark: '#0a0a0a'
     };
 
     const color = themeColors[theme];

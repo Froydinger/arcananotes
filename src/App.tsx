@@ -61,13 +61,13 @@ function ForceDarkTheme({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const html = document.documentElement;
     const prevClasses = Array.from(html.classList);
-    html.classList.remove('light', 'navy');
+    html.classList.remove('light');
     if (!html.classList.contains('dark')) {
       html.classList.add('dark');
     }
     return () => {
-      html.classList.remove('dark', 'light', 'navy');
-      prevClasses.filter(c => ['dark', 'light', 'navy'].includes(c)).forEach(c => html.classList.add(c));
+      html.classList.remove('dark', 'light');
+      prevClasses.filter(c => ['dark', 'light'].includes(c)).forEach(c => html.classList.add(c));
     };
   }, []);
   return <>{children}</>;

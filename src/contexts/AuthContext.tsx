@@ -204,6 +204,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     } finally {
       clearAllAuthCache();
+      // Reset theme to dark on sign out so the landing page always stays dark
+      localStorage.removeItem('theme');
+      document.documentElement.classList.remove('light', 'dark', 'navy');
+      document.documentElement.classList.add('dark');
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0a0a0a');
       setSession(null);
       setUser(null);
     }
