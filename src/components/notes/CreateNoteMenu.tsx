@@ -31,7 +31,9 @@ const OFFSETS: Record<"down" | "right", { x: string; y: string }[]> = {
   ],
 };
 
-const BUTTON_CLASSES = "h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 hover:border-border/50 transition-colors duration-200 shadow-sm glass-shimmer flex items-center justify-center";
+const BUTTON_CLASSES = "h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 hover:bg-secondary/80 hover:border-border/50 transition-colors duration-200 shadow-sm flex items-center justify-center";
+// Portal clone must not use .glass-shimmer — it forces position: relative and overrides .fixed.
+const CLONE_CLASSES = "h-11 w-11 rounded-full bg-background/60 backdrop-blur-md border border-border/30 transition-colors duration-200 shadow-sm flex items-center justify-center fixed z-[140]";
 
 export function CreateNoteMenu({ onCreate, direction = "down", className }: CreateNoteMenuProps) {
   const [phase, setPhase] = useState<Phase>("closed");
