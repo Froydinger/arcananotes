@@ -130,8 +130,9 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
           </button>,
           document.body
         )}
-      {menuVisible && (
-        <div className="fixed z-[130] pointer-events-none" style={{ left: `${centerX}px`, top: `${centerY}px` }}>
+      {menuVisible &&
+        createPortal(
+          <div className="fixed z-[130] pointer-events-none" style={{ left: `${centerX}px`, top: `${centerY}px` }}>
           {BUBBLES.map((bubble, i) => {
             const offset = offsets[i];
             const Icon = bubble.icon;
