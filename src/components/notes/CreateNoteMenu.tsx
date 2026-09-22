@@ -156,8 +156,9 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
               </button>
             );
           })}
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
