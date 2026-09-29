@@ -12,7 +12,7 @@ export async function sendShareEmail(
 ) {
   try {
     if (!recipientEmail || !recipientEmail.includes('@')) return;
-    await supabase.functions.invoke('send-transactional-email', {
+    await supabase.functions.invoke('send-share-email', {
       body: {
         templateName,
         recipientEmail,
