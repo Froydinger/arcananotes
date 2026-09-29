@@ -290,6 +290,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   useEffect(() => {
     if (!arcSelection || !onCloseArc) return;
     const closeOutside = (event: MouseEvent) => {
+      // Never close mid-drag
+      if (dragState.current) return;
       const target = event.target as Node | null;
       // Ignore clicks on nodes that were removed while the panel opened
       if (!target || !target.isConnected) return;
@@ -302,18 +304,24 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     };
   }, [arcSelection, onCloseArc]);
 
+  // Keep the DOM transform in sync after re-renders (drag writes directly to the node)
+  useEffect(() => {
+    if (!dragState.current) applyTransform(dragOffsetRef.current.x, dragOffsetRef.current.y);
+  });
+
   if (!visible) return null;
 
   return (
     <div
       ref={barRef}
-      className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-lg shadow-elevated flex gap-1 animate-in fade-in slide-in-from-bottom-2 duration-200"
+      className={`absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-lg shadow-elevated flex gap-1 ${arcSelection ? '' : 'animate-in fade-in slide-in-from-bottom-2 duration-200'}`}
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
         transform: `translateX(-50%) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
       }}
     >
+
       {arcSelection && onReplaceArc && onCloseArc ? (
         <div>
           <div
