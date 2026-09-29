@@ -39,48 +39,89 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   const [isMobile, setIsMobile] = useState(isMobileDevice());
   const barRef = useRef<HTMLDivElement>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
   const dragState = useRef<{ pointerId: number; startX: number; startY: number; baseX: number; baseY: number } | null>(null);
+  // Anchor of the Arc panel, captured once when it opens (editor-relative coords)
+  const arcAnchorRef = useRef<{ below: number; above: number } | null>(null);
+  const arcSessionKey = arcSelection ? arcSelection.text : null;
 
-  // Reset manual drag position whenever a new Arc session opens
+  const applyTransform = (x: number, y: number) => {
+    if (barRef.current) {
+      barRef.current.style.transform = `translateX(-50%) translate(${x}px, ${y}px)`;
+    }
+  };
+
+  // Reset manual drag position whenever a new Arc session opens/closes
   useEffect(() => {
-    setDragOffset({ x: 0, y: 0 });
     dragState.current = null;
-  }, [arcSelection]);
+    dragOffsetRef.current = { x: 0, y: 0 };
+    setDragOffset({ x: 0, y: 0 });
+    applyTransform(0, 0);
+    arcAnchorRef.current = null;
+  }, [arcSessionKey]);
 
   const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!arcSelection) return;
     event.preventDefault();
+    event.stopPropagation();
     dragState.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      baseX: dragOffset.x,
-      baseY: dragOffset.y,
+      baseX: dragOffsetRef.current.x,
+      baseY: dragOffsetRef.current.y,
     };
-    event.currentTarget.setPointerCapture(event.pointerId);
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      /* capture is best-effort */
+    }
   };
 
   const onDragMove = (event: React.PointerEvent<HTMLDivElement>) => {
     const drag = dragState.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
+    event.preventDefault();
+
+    const bar = barRef.current;
+    const width = bar?.offsetWidth ?? 320;
+    const height = bar?.offsetHeight ?? 200;
+    const editorRect = editorRef.current?.getBoundingClientRect();
+    if (!editorRect) return;
+
     const nextX = drag.baseX + (event.clientX - drag.startX);
     const nextY = drag.baseY + (event.clientY - drag.startY);
-    // Keep the panel reachable on screen
-    const maxX = window.innerWidth / 2 - 24;
-    const editorTop = editorRef.current?.getBoundingClientRect().top ?? 0;
-    const absTop = editorTop + position.top + nextY;
-    const clampedY = Math.min(Math.max(absTop, 8), window.innerHeight - 48);
-    setDragOffset({
-      x: Math.max(-maxX, Math.min(maxX, nextX)),
-      y: clampedY - editorTop - position.top,
-    });
+
+    // Absolute position of the panel's left/top if we applied this offset
+    const absCenterX = editorRect.left + position.left + nextX;
+    const absTop = editorRect.top + position.top + nextY;
+
+    const minCenterX = width / 2 + 8;
+    const maxCenterX = window.innerWidth - width / 2 - 8;
+    const minTop = 8;
+    const maxTop = Math.max(8, window.innerHeight - height - 8);
+
+    const clampedCenterX = Math.min(Math.max(absCenterX, minCenterX), maxCenterX);
+    const clampedTop = Math.min(Math.max(absTop, minTop), maxTop);
+
+    const offset = {
+      x: clampedCenterX - editorRect.left - position.left,
+      y: clampedTop - editorRect.top - position.top,
+    };
+    dragOffsetRef.current = offset;
+    // Write straight to the DOM while dragging so it stays smooth
+    applyTransform(offset.x, offset.y);
   };
 
   const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (dragState.current?.pointerId === event.pointerId) {
-      dragState.current = null;
+    if (dragState.current?.pointerId !== event.pointerId) return;
+    dragState.current = null;
+    try {
       event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      /* ignore */
     }
+    setDragOffset(dragOffsetRef.current);
   };
 
   useEffect(() => {
@@ -89,8 +130,64 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // --- Arc panel positioning: anchor captured once, never chases the caret ---
   useEffect(() => {
-    if (!visible || !editorRef.current) return;
+    if (!visible || !arcSelection || !editorRef.current) return;
+
+    const captureAnchor = () => {
+      if (arcAnchorRef.current) return true;
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return false;
+      const range = selection.getRangeAt(0);
+      if (!editorRef.current?.contains(range.commonAncestorContainer)) return false;
+      const rects = range.getClientRects();
+      if (rects.length === 0) return false;
+      const editorRect = editorRef.current.getBoundingClientRect();
+      arcAnchorRef.current = {
+        below: rects[rects.length - 1].bottom - editorRect.top,
+        above: rects[0].top - editorRect.top,
+      };
+      return true;
+    };
+
+    const place = () => {
+      if (!captureAnchor()) return;
+      const anchor = arcAnchorRef.current!;
+      const editorRect = editorRef.current?.getBoundingClientRect();
+      if (!editorRect) return;
+
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const panelWidth = Math.min(368, viewportWidth - 32);
+      const panelHeight = barRef.current?.offsetHeight ?? 320;
+      const lineGap = 10;
+
+      let top = anchor.below + lineGap;
+      if (editorRect.top + top + panelHeight > viewportHeight - 8) {
+        top = anchor.above - panelHeight - lineGap;
+      }
+      if (editorRect.top + top < 8) {
+        top = 8 - editorRect.top;
+      }
+
+      let left = editorRect.width / 2;
+      const absCenter = editorRect.left + left;
+      const minCenter = panelWidth / 2 + 8;
+      const maxCenter = viewportWidth - panelWidth / 2 - 8;
+      if (absCenter < minCenter) left = minCenter - editorRect.left;
+      else if (absCenter > maxCenter) left = maxCenter - editorRect.left;
+
+      setPosition((prev) => (prev.top === top && prev.left === left ? prev : { top, left }));
+    };
+
+    place();
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [visible, editorRef, arcSelection]);
+
+  // --- Format bar positioning (follows the selection) ---
+  useEffect(() => {
+    if (!visible || arcSelection || !editorRef.current) return;
 
     const updatePosition = () => {
       const selection = window.getSelection();
@@ -107,42 +204,9 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
 
       if (!editorRect) return;
 
-      // Arc panel: centered horizontally, one line below the selection
-      if (arcSelection) {
-        // Ignore selection changes happening inside the panel itself
-        if (!editorRef.current.contains(range.commonAncestorContainer)) return;
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const panelWidth = Math.min(368, viewportWidth - 32);
-        const panelHeight = 320;
-        const lastRect = rects[rects.length - 1];
-        const lineGap = 10;
-
-        let top = lastRect.bottom - editorRect.top + lineGap;
-        // If it would overflow the bottom of the screen, place it above the selection
-        if (editorRect.top + top + panelHeight > viewportHeight - 8) {
-          top = rect.top - editorRect.top - panelHeight - lineGap;
-        }
-        // Never above the top of the screen
-        if (editorRect.top + top < 8) {
-          top = 8 - editorRect.top;
-        }
-
-        let left = editorRect.width / 2;
-        const absCenter = editorRect.left + left;
-        const minCenter = panelWidth / 2 + 8;
-        const maxCenter = viewportWidth - panelWidth / 2 - 8;
-        if (absCenter < minCenter) left = minCenter - editorRect.left;
-        else if (absCenter > maxCenter) left = maxCenter - editorRect.left;
-
-        setPosition({ top, left });
-        return;
-      }
-
-
-      // Calculate bar dimensions (approx 200px wide with 4 buttons + divider, 40px tall)
-      const barWidth = arcSelection ? 368 : 288;
-      const barHeight = arcSelection ? 300 : 48;
+      // Calculate bar dimensions (approx 288px wide, 48px tall)
+      const barWidth = 288;
+      const barHeight = 48;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
@@ -222,9 +286,12 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     };
   }, [visible, editorRef, isMobile, arcSelection]);
 
+
   useEffect(() => {
     if (!arcSelection || !onCloseArc) return;
     const closeOutside = (event: MouseEvent) => {
+      // Never close mid-drag
+      if (dragState.current) return;
       const target = event.target as Node | null;
       // Ignore clicks on nodes that were removed while the panel opened
       if (!target || !target.isConnected) return;
@@ -237,18 +304,24 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     };
   }, [arcSelection, onCloseArc]);
 
+  // Keep the DOM transform in sync after re-renders (drag writes directly to the node)
+  useEffect(() => {
+    if (!dragState.current) applyTransform(dragOffsetRef.current.x, dragOffsetRef.current.y);
+  });
+
   if (!visible) return null;
 
   return (
     <div
       ref={barRef}
-      className="absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-lg shadow-elevated flex gap-1 animate-in fade-in slide-in-from-bottom-2 duration-200"
+      className={`absolute z-50 bg-card/95 backdrop-blur-xl border border-border/50 rounded-lg shadow-elevated flex gap-1 ${arcSelection ? '' : 'animate-in fade-in slide-in-from-bottom-2 duration-200'}`}
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
         transform: `translateX(-50%) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
       }}
     >
+
       {arcSelection && onReplaceArc && onCloseArc ? (
         <div>
           <div
