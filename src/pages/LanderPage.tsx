@@ -149,10 +149,8 @@ export default function LanderPage() {
                 alt="Arc Notes"
                 width={1024}
                 height={1024}
-                className="w-24 h-24 md:w-32 md:h-32 drop-shadow-lg"
-                style={{ filter: "drop-shadow(0 0 20px hsl(var(--accent) / 0.3))" }}
+                className="w-24 h-24 md:w-32 md:h-32 object-contain"
               />
-              <div className="absolute inset-0 w-24 h-24 md:w-32 md:h-32 bg-accent/20 rounded-full blur-2xl -z-10 animate-pulse-soft" />
             </div>
           </div>
 

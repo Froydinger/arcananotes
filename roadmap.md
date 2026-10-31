@@ -13,6 +13,7 @@
 - [x] Pencil version of him while actively thinking or editing (Arc panel thinking bubble + header, inline editor loading, lander rewrite "writing..."), reverts to plain after
 - [x] Create-menu bubbles rotated down: one directly below the button, one below-left, clamped so they can never touch the top or side edges (verified mobile 411, user 808, desktop 1280)
 - [x] Every AI feature runs on GPT-6 Luna (verified live: spell check + Arc assist both answer)
+- [x] Removed square mascot glow and login/AI empty-state backplates; regenerated transparent app icons; verified landing and login appearances and light/dark mascot rendering.
 
 
 ## Open
