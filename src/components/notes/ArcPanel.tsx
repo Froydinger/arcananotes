@@ -10,6 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
+import arcMascotPencil from '@/assets/arc-mascot-pencil.png.asset.json';
 import { parseArcEdits, applySurgicalEdit, applySurgicalEdits, type ArcEdit } from '@/lib/surgicalEdit';
 
 interface ArcPanelProps {
@@ -592,7 +593,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                 ) : (
                   <div className="relative">
                     <div className="w-7 h-7 rounded-full flex items-center justify-center bg-accent/10 border border-accent/20">
-                       <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-5 w-5 rounded-full object-contain" />
+                       <img src={isLoading ? arcMascotPencil.url : arcAiLogo.url} alt={isLoading ? "Arc thinking" : "Arc AI"} width={768} height={768} className="h-5 w-5 rounded-full object-contain" />
                     </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card bg-green-500" />
                   </div>
@@ -774,7 +775,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   {isLoading && messages[messages.length - 1]?.role === 'user' && (
                     <div className="flex justify-start">
                       <div className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center bg-accent/10 border border-accent/20">
-                          <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-4 w-4 rounded-full object-contain" />
+                          <img src={arcMascotPencil.url} alt="Arc thinking" width={768} height={768} className="h-4 w-4 rounded-full object-contain" />
                       </div>
                       <div className="px-3.5 py-2.5 rounded-[18px] rounded-bl-md bg-muted border border-border/30">
                         <div className="flex items-center gap-1.5">
