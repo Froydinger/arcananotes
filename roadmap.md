@@ -16,7 +16,7 @@
 
 
 ## Open
-- (nothing pending)
+- [ ] Remove square mascot glow/backplates and verify transparent app icons and mascot appearances.
 
 
 

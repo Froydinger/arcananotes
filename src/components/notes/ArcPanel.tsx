@@ -663,8 +663,8 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                 <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3" style={{ scrollbarWidth: 'thin' }}>
                   {messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center px-4 gap-4">
-                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-accent/10 border border-accent/15">
-                          <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-10 w-10 rounded-full object-contain" />
+                      <div className="w-16 h-16 flex items-center justify-center">
+                          <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-16 w-16 object-contain" />
                       </div>
                       <div>
                         <p className="text-sm font-medium mb-1 text-foreground">
