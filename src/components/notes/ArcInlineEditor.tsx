@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { sanitizeForDisplay } from '@/lib/sanitization';
 import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
+import arcMascotPencil from '@/assets/arc-mascot-pencil.png.asset.json';
 
 type InlineAction = 'improve' | 'shorten' | 'lengthen' | 'fix' | 'rewrite';
 
@@ -101,7 +102,7 @@ export function ArcInlineEditor({ selectedText, noteTitle, noteContext, onReplac
       <div className="w-[min(21rem,calc(100vw-2rem))] p-4" aria-live="polite">
         <div className="flex items-center gap-3">
           <div className="relative h-9 w-9 shrink-0 rounded-full border border-accent/30 bg-accent/10 p-1.5">
-            <img src={arcAiLogo.url} alt="" className="h-full w-full rounded-full object-contain animate-pulse-soft" />
+            <img src={arcMascotPencil.url} alt="" className="h-full w-full rounded-full object-contain animate-pulse-soft" />
             <span className="absolute inset-0 rounded-full border border-accent/40 animate-ping motion-reduce:animate-none" />
           </div>
           <div className="min-w-0 flex-1">

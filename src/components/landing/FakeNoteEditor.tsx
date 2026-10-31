@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Type, Heading1, Bold, Italic, TextQuote } from 'lucide-react';
 import arcAiLogo from '@/assets/arc-ai-logo.png.asset.json';
+import arcMascotPencil from '@/assets/arc-mascot-pencil.png.asset.json';
 
 const ORIGINAL_LINES = [
   "I started writing because I needed somewhere to put the noise in my head.",
@@ -109,7 +110,7 @@ const FakeNoteEditor = () => {
           >
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                <img src={arcAiLogo.url} alt="Arc AI" className="w-4 h-4 object-contain" />
+                <img src={isTyping ? arcMascotPencil.url : arcAiLogo.url} alt={isTyping ? "Arc writing" : "Arc AI"} className="w-4 h-4 object-contain" />
               </div>
               <span className="text-xs font-medium text-accent">Arc AI Rewrite</span>
               {isTyping && (

@@ -8,3 +8,16 @@
 - [x] Mobile bottom nav: items left-aligned again, clear of the Arc bubble
 - [x] Bubbles enlarged (56px) and spaced further out on mobile and desktop rail
 - [x] Verified Arc FAB outer-circle removal (code + build; headless asset load inconclusive)
+- [x] Arc's icon is the slime mascot everywhere: bubble, inline editor, format bar, AI panel, lander (brand mark + fake editor), header, sidebar, login, settings, splash, empty state, prompts
+- [x] App icon / PWA icons / favicon: the slime holding a pencil (crisp at 64px, nothing clipped)
+- [x] Pencil version of him while actively thinking or editing (Arc panel thinking bubble + header, inline editor loading, lander rewrite "writing..."), reverts to plain after
+- [x] Create-menu bubbles rotated down: one directly below the button, one below-left, clamped so they can never touch the top or side edges (verified mobile 411, user 808, desktop 1280)
+- [x] Every AI feature runs on GPT-6 Luna (verified live: spell check + Arc assist both answer)
+
+
+## Open
+- (nothing pending)
+
+
+
+

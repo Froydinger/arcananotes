@@ -20,14 +20,16 @@ const BUBBLES: { type: NoteType; icon: typeof FileText; label: string }[] = [
   { type: "checklist", icon: CheckSquare, label: "New checklist" },
 ];
 
-const OFFSETS: Record<"down" | "right", { x: string; y: string }[]> = {
+// Offsets from the button's center, in px. The fan opens downward and inward so
+// the bubbles never crowd the top edge of the screen.
+const OFFSETS: Record<"down" | "right", { x: number; y: number }[]> = {
   down: [
-    { x: "-16px", y: "86px" },
-    { x: "-74px", y: "48px" },
+    { x: 0, y: 58 },
+    { x: -58, y: 58 },
   ],
   right: [
-    { x: "80px", y: "-34px" },
-    { x: "68px", y: "44px" },
+    { x: 58, y: 0 },
+    { x: 58, y: 58 },
   ],
 };
 
@@ -98,6 +100,17 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
   const centerY = anchor ? anchor.top + anchor.height / 2 : 0;
   const menuVisible = phase !== "closed" && anchor !== null;
 
+  // Keep every bubble fully on screen: the button can sit right against a
+  // viewport edge, so each bubble is pulled back inside before it animates out.
+  const place = (dx: number, dy: number) => {
+    const vw = typeof window === "undefined" ? 1024 : window.innerWidth;
+    const vh = typeof window === "undefined" ? 768 : window.innerHeight;
+    const edge = 36; // bubble radius + breathing room
+    const cx = Math.min(Math.max(centerX + dx, edge), vw - edge);
+    const cy = Math.min(Math.max(centerY + dy, edge), vh - edge);
+    return { x: Math.round(cx - centerX), y: Math.round(cy - centerY) };
+  };
+
   return (
     <div className={cn("relative", phase !== "closed" && "z-[130]", className)}>
       <button
@@ -143,8 +156,8 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
                 aria-label={bubble.label}
                 title={bubble.label}
                 style={{
-                  "--tx": offset.x,
-                  "--ty": offset.y,
+                  "--tx": `${place(offset.x, offset.y).x}px`,
+                  "--ty": `${place(offset.x, offset.y).y}px`,
                   animationDelay: closing ? "0ms" : `${(BUBBLES.length - 1 - i) * 45}ms`,
                 } as CSSProperties}
                 className={cn(
