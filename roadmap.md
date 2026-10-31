@@ -10,7 +10,10 @@
 - [x] Verified Arc FAB outer-circle removal (code + build; headless asset load inconclusive)
 
 ## Open
-- [ ] Swap Arc's icon everywhere (bubble, inline editor, format bar, AI UI, lander fake editor) to the new slime mascot
-- [ ] App icon / PWA icons / favicon: the slime mascot holding a pencil
-- [ ] Verify every AI feature runs on Luna 6; switch any stragglers
+- [x] Swap Arc's icon everywhere (bubble, inline editor, format bar, AI UI, lander fake editor) to the new slime mascot
+- [x] App icon / PWA icons / favicon: the slime mascot holding a pencil
+- [x] Verify every AI feature runs on Luna 6; switch any stragglers
+- [ ] Lander + every other place the mascot is used (header, sidebar, login, splash, empty state, prompts)
+- [ ] Pencil version of him while he is actively thinking or editing
+
 
