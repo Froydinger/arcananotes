@@ -10,7 +10,7 @@ const ORIGINAL_LINES = [
 ];
 
 const AI_REWRITE =
-  "I didn't start writing for anyone else.\n\nThe thoughts were too loud to keep inside, so I poured them onto a page — messy, unfiltered, mine.\n\nNo strategy. No audience in mind. Just a quiet place to think out loud.";
+  "I started writing to give the noise in my head somewhere to go.\n\nNo audience. No chasing engagement. Just a page that was mine.\n\nSomewhere along the way, that noise began to sound like music.";
 
 const FakeNoteEditor = () => {
   const [showAI, setShowAI] = useState(false);
@@ -119,6 +119,9 @@ const FakeNoteEditor = () => {
                 </span>
               )}
             </div>
+            <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
+              {isTyping ? "Giving those sentences a little room to breathe. Very considerate of me." : "A little polish. Your voice gets to keep its job."}
+            </p>
             <div className="text-sm md:text-base text-foreground/85 leading-relaxed font-sans whitespace-pre-wrap">
               {aiText}
               {isTyping && (
