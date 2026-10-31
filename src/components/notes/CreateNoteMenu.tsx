@@ -21,13 +21,15 @@ const BUBBLES: { type: NoteType; icon: typeof FileText; label: string }[] = [
 ];
 
 const OFFSETS: Record<"down" | "right", { x: string; y: string }[]> = {
+  // Sit the bubbles on the axes right next to the button: one to its right, one
+  // straight below, so nothing crowds the top edge of the screen.
   down: [
-    { x: "-16px", y: "86px" },
-    { x: "-74px", y: "48px" },
+    { x: "58px", y: "0px" },
+    { x: "0px", y: "58px" },
   ],
   right: [
-    { x: "80px", y: "-34px" },
-    { x: "68px", y: "44px" },
+    { x: "58px", y: "0px" },
+    { x: "0px", y: "58px" },
   ],
 };
 
