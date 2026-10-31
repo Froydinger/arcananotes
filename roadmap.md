@@ -15,5 +15,7 @@
 - [x] Verify every AI feature runs on Luna 6; switch any stragglers
 - [ ] Lander + every other place the mascot is used (header, sidebar, login, splash, empty state, prompts)
 - [ ] Pencil version of him while he is actively thinking or editing
+- [ ] Create-menu bubbles sit too high near the top edge when open: rotate the fan-down a bit
+
 
 
