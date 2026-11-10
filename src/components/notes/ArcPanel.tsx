@@ -238,7 +238,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
       if (resp.status === 429) {
         const data = await resp.json().catch(() => null);
         if (data?.limit_reached) {
-          toast.error('Arc Matrix is busy. Try again in a moment.', { duration: 5000 });
+          toast.error('Arc is busy. Try again in a moment.', { duration: 5000 });
         } else {
           toast.error('Rate limit reached. Try again in a moment.');
         }
@@ -604,7 +604,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   </span>
                   {!showHistory && (
                     <span className="text-[10px] leading-none text-muted-foreground">
-                      Powered by the Arc Matrix™
+                      Powered by Terra 6.1
                     </span>
                   )}
                 </div>

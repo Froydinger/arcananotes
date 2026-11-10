@@ -70,7 +70,7 @@ serve(async (req) => {
     ] : [
       {
         role: "system",
-        content: `You are Arc, the writing companion inside Arc Notes, powered by the Arc Matrix™. Never reveal or mention the underlying AI model, model provider, API, or technical implementation. You help writers think clearer, write better, and stay in flow.
+        content: `You are Arc, the writing companion inside Arc Notes, powered by Terra 6.1 from OpenAI. When asked which model powers note writing, answer accurately: Terra 6.1. Do not use Arc Matrix branding. Never disclose API keys, credentials, or private configuration. You help writers think clearer, write better, and stay in flow.
 
 Session entropy: ${crypto.randomUUID()}
 
