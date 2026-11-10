@@ -17,11 +17,11 @@
 
 
 ## Open
-- [ ] Enlarge the corner pencil assistant icon and verify its layout.
-- [ ] Remove the mascot's circular backing in AI chat and enlarge chat mascot icons.
-- [ ] Switch note-writing AI to the user's direct OpenAI key and verified GPT Terra 6.1 model (supersedes Sol); remove note-writing gateway fallback, deploy, and test.
+- (nothing pending)
 
 ## Latest completed update
+- [x] Note-writing functions use direct OpenAI GPT Terra 6.1, low reasoning, with no gateway fallback; secure key updated, both functions deployed, authenticated live chat and spell correction passed, provider regression test passed. Image generation remains unchanged.
+- [x] Corner pencil enlarged to 80px; chat header, replies, and thinking icons enlarged to 48px with circular backings removed. Desktop/mobile layout checked with local asset substitution; no mobile overflow, build OK.
 - [x] Approved pencil-shaped character replaces app/AI/thinking logos, favicon, Mac/iOS installed icons, share artwork, and email branding; verified desktop/mobile rendering, image backgrounds, metadata, and successful build. Updated email functions deployed.
 - [x] Pencil mascot used for both shared app/AI logos, covering lander, header, sidebar, login, settings, bubble, and AI interfaces; verified landing render and successful build. In-app transparency and black installed icons preserved.
 - [x] Black-backed Mac/iOS installed icons and updated mascot share card; verified opaque black pixels, served icons, social metadata, image layout, and successful preview build.
