@@ -17,7 +17,7 @@
 
 
 ## Open
-- (nothing pending)
+- [ ] Switch note-writing AI to the user's direct OpenAI key and verified GPT Sol 6.1 model; remove note-writing gateway fallback, deploy, and test after secure key submission.
 
 ## Latest completed update
 - [x] Approved pencil-shaped character replaces app/AI/thinking logos, favicon, Mac/iOS installed icons, share artwork, and email branding; verified desktop/mobile rendering, image backgrounds, metadata, and successful build. Updated email functions deployed.
