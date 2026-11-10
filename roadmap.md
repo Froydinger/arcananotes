@@ -18,6 +18,7 @@
 
 ## Open
 - [ ] Enlarge the corner pencil assistant icon and verify its layout.
+- [ ] Remove the mascot's circular backing in AI chat and enlarge chat mascot icons.
 - [ ] Switch note-writing AI to the user's direct OpenAI key and verified GPT Terra 6.1 model (supersedes Sol); remove note-writing gateway fallback, deploy, and test.
 
 ## Latest completed update
