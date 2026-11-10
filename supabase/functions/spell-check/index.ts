@@ -77,9 +77,9 @@ serve(async (req) => {
       );
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      console.error('LOVABLE_API_KEY is not set');
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    if (!OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY is not set');
       return new Response(
         JSON.stringify({ error: 'AI API key not configured' }), 
         { 
@@ -91,23 +91,14 @@ serve(async (req) => {
 
     console.log(`${action} checking text:`, content.substring(0, 100) + '...');
 
-    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-    const useOpenAI = !!OPENAI_API_KEY;
-    const endpoint = useOpenAI
-      ? 'https://api.openai.com/v1/chat/completions'
-      : 'https://ai.gateway.lovable.dev/v1/chat/completions';
-    const authHeaders = useOpenAI
-      ? { 'Authorization': `Bearer ${OPENAI_API_KEY}` }
-      : { 'Lovable-API-Key': LOVABLE_API_KEY, 'X-Lovable-AIG-SDK': 'fetch' };
-
-    const response = await fetch(endpoint, {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        ...authHeaders,
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: useOpenAI ? 'gpt-6-luna' : 'openai/gpt-5.6-luna',
+        model: 'gpt-6.1-sol',
         reasoning_effort: 'low',
         messages: [
           {
@@ -124,7 +115,7 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('AI gateway error:', response.status, errorData);
+      console.error('OpenAI error:', response.status, errorData);
       if (response.status === 429) {
         return new Response(
           JSON.stringify({ error: 'Rate limit exceeded, please try again later.' }),
