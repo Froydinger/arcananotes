@@ -23,6 +23,24 @@ const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 };
 
+// Measure only visible left-side navigation, including the compact desktop rail.
+const getPopupLeftEdge = () => {
+  let edge = 8;
+  document.querySelectorAll<HTMLElement>('.pwa-sidebar-safe, [data-sidebar="sidebar"]').forEach((nav) => {
+    const rect = nav.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0 && rect.left <= 8 && rect.right > 0 && rect.width < window.innerWidth / 2) {
+      edge = Math.max(edge, rect.right + 12);
+    }
+  });
+  return edge;
+};
+
+const observeNavigation = (update: () => void) => {
+  const observer = new ResizeObserver(update);
+  document.querySelectorAll('.pwa-sidebar-safe, [data-sidebar="sidebar"]').forEach((nav) => observer.observe(nav));
+  return () => observer.disconnect();
+};
+
 export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
   visible,
   onFormat,
@@ -96,8 +114,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     const absCenterX = editorRect.left + position.left + nextX;
     const absTop = editorRect.top + position.top + nextY;
 
-    const minCenterX = width / 2 + 8;
-    const maxCenterX = window.innerWidth - width / 2 - 8;
+    const minCenterX = getPopupLeftEdge() + width / 2;
+    const maxCenterX = Math.max(minCenterX, window.innerWidth - width / 2 - 8);
     const minTop = 8;
     const maxTop = Math.max(8, window.innerHeight - height - 8);
 
@@ -152,13 +170,13 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
 
     const place = () => {
       if (!captureAnchor()) return;
-      const anchor = arcAnchorRef.current!;
+      const anchor = arcAnchorRef.current;
       const editorRect = editorRef.current?.getBoundingClientRect();
-      if (!editorRect) return;
+      if (!editorRect || !anchor) return;
 
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      const panelWidth = Math.min(368, viewportWidth - 32);
+      const panelWidth = barRef.current?.offsetWidth ?? Math.min(368, viewportWidth - 32);
       const panelHeight = barRef.current?.offsetHeight ?? 320;
       const lineGap = 10;
 
@@ -171,18 +189,24 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       }
 
       let left = editorRect.width / 2;
-      const absCenter = editorRect.left + left;
-      const minCenter = panelWidth / 2 + 8;
-      const maxCenter = viewportWidth - panelWidth / 2 - 8;
-      if (absCenter < minCenter) left = minCenter - editorRect.left;
-      else if (absCenter > maxCenter) left = maxCenter - editorRect.left;
+      const absCenter = editorRect.left + left + dragOffsetRef.current.x;
+      const minCenter = getPopupLeftEdge() + panelWidth / 2;
+      const maxCenter = Math.max(minCenter, viewportWidth - panelWidth / 2 - 8);
+      left += Math.min(Math.max(absCenter, minCenter), maxCenter) - absCenter;
 
       setPosition((prev) => (prev.top === top && prev.left === left ? prev : { top, left }));
     };
 
     place();
+    const stopObserving = observeNavigation(place);
+    const panelObserver = new ResizeObserver(place);
+    if (barRef.current) panelObserver.observe(barRef.current);
     window.addEventListener('resize', place);
-    return () => window.removeEventListener('resize', place);
+    return () => {
+      stopObserving();
+      panelObserver.disconnect();
+      window.removeEventListener('resize', place);
+    };
   }, [visible, editorRef, arcSelection]);
 
   // --- Format bar positioning (follows the selection) ---
@@ -205,8 +229,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       if (!editorRect) return;
 
       // Calculate bar dimensions (approx 288px wide, 48px tall)
-      const barWidth = 288;
-      const barHeight = 48;
+      const barWidth = barRef.current?.offsetWidth ?? 336;
+      const barHeight = barRef.current?.offsetHeight ?? 48;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
@@ -219,8 +243,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       // Ensure toolbar stays within horizontal viewport bounds
       // Use editorRect.left as the effective left edge (accounts for sidebar)
       const absoluteLeft = editorRect.left + left;
-      const minLeft = Math.max(editorRect.left, barWidth / 2) + 16;
-      const maxLeft = viewportWidth - barWidth / 2 - 16;
+      const minLeft = getPopupLeftEdge() + barWidth / 2;
+      const maxLeft = Math.max(minLeft, viewportWidth - barWidth / 2 - 16);
 
       if (absoluteLeft < minLeft) {
         left = minLeft - editorRect.left;
@@ -249,7 +273,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
       // Check if we're in an H1
       let element = range.commonAncestorContainer;
       if (element.nodeType === Node.TEXT_NODE) {
-        element = element.parentElement!;
+        if (!element.parentElement) return;
+        element = element.parentElement;
       }
 
       const h1 = (element as Element).closest('h1');
@@ -274,6 +299,9 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     };
 
     updatePosition();
+    const stopObserving = observeNavigation(updatePosition);
+    const barObserver = new ResizeObserver(updatePosition);
+    if (barRef.current) barObserver.observe(barRef.current);
 
     // Update position on scroll or resize
     const handleUpdate = () => updatePosition();
@@ -281,6 +309,8 @@ export const FloatingFormatBar: React.FC<FloatingFormatBarProps> = ({
     document.addEventListener('selectionchange', handleUpdate);
 
     return () => {
+      stopObserving();
+      barObserver.disconnect();
       window.removeEventListener('resize', handleUpdate);
       document.removeEventListener('selectionchange', handleUpdate);
     };
