@@ -17,7 +17,7 @@
 
 
 ## Open
-- (nothing pending)
+- [ ] Replace all Arc logos, installed icons, favicon, and share artwork with the approved pencil-shaped character; verify rendering.
 
 ## Latest completed update
 - [x] Pencil mascot used for both shared app/AI logos, covering lander, header, sidebar, login, settings, bubble, and AI interfaces; verified landing render and successful build. In-app transparency and black installed icons preserved.
