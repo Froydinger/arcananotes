@@ -17,7 +17,7 @@
 
 
 ## Open
-- (nothing pending)
+- [ ] Diagnose the user's stalled preview and repair the reproduced cause without changing the requested model.
 
 ## Latest completed update
 - [x] Create menu blur animates out on dismissal and before new-note navigation; page arrivals fade in without moving fixed tools. Verified intermediate blur reduction, live new-note opening, desktop/mobile reduced motion, and successful build.
