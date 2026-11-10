@@ -1460,14 +1460,24 @@ html[data-title-font="mono"] .note-editor h6 {
 .create-bubble-out { animation: jello-pop-out 0.2s cubic-bezier(0.4, 0, 0.7, 0.2) both; }
 .create-plus-icon { transition: transform 0.5s cubic-bezier(0.34, 1.8, 0.44, 1); }
 .create-plus-open { transform: rotate(45deg) scale(1.08); }
-@keyframes create-overlay-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes create-overlay-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes create-overlay-in {
+  from { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+}
+@keyframes create-overlay-out {
+  from { opacity: 1; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  to { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
+}
 .create-overlay-in { animation: create-overlay-in 0.25s ease-out both; }
-.create-overlay-out { animation: create-overlay-out 0.2s ease-in both; }
+.create-overlay-out { animation: create-overlay-out 0.28s ease-out both; }
+/* Opacity-only arrival keeps fixed popups and sticky headers in their original coordinate space. */
+@keyframes page-arrival { from { opacity: 0; } to { opacity: 1; } }
+.page-arrival { animation: page-arrival 0.34s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 @media (prefers-reduced-motion: reduce) {
   .create-bubble-in,
   .create-bubble-out,
   .create-overlay-in,
-  .create-overlay-out { animation-duration: 0.01s; animation-delay: 0ms !important; }
+  .create-overlay-out,
+  .page-arrival { animation-duration: 0.01s; animation-delay: 0ms !important; }
   .create-plus-icon { transition-duration: 0.01s; }
 }

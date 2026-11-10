@@ -48,7 +48,6 @@ const NotePage = () => {
   const { preferences } = usePreferences();
   const { unreadCount } = useNotifications();
   const [showShareManager, setShowShareManager] = useState(false);
-  const [entered, setEntered] = useState(false);
   
   const [aiReplacementFunction, setAiReplacementFunction] = useState<
     ((newContent: string, isSelectionReplacement: boolean) => void) | null
@@ -118,7 +117,6 @@ const NotePage = () => {
 
   // Always start at top when opening a note + play enter transition (no autofocus)
   useEffect(() => {
-    setEntered(false);
     seededIdRef.current = null;
     clearHistory();
     if (document.activeElement && document.activeElement !== document.body) {
@@ -126,8 +124,6 @@ const NotePage = () => {
     }
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-    const timer = setTimeout(() => setEntered(true), 50);
-    return () => clearTimeout(timer);
   }, [id]);
 
   // Seed the history with the note's loaded state so the first undo can return to it
@@ -227,7 +223,7 @@ const NotePage = () => {
     <>
     <div
       key={id}
-      className={`min-h-[100dvh] md:pl-20 transition-opacity duration-200 ease-out ${entered ? "opacity-100" : "opacity-90"}`}
+      className="min-h-[100dvh] md:pl-20"
     >
       <header
         ref={headerRef}

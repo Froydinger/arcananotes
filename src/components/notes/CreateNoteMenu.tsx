@@ -43,6 +43,9 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
   const closing = phase === "closing";
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [anchor, setAnchor] = useState<Anchor | null>(null);
+  const pendingCreate = useRef<NoteType | null>(null);
+  const onCreateRef = useRef(onCreate);
+  onCreateRef.current = onCreate;
 
   // Track the anchor button's on-screen rect so the menu visuals can live in a
   // body portal, above the blur overlay, even when the header creates its own
@@ -67,7 +70,13 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
 
   useEffect(() => {
     if (phase !== "closing") return;
-    const t = window.setTimeout(() => setPhase("closed"), 210);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const t = window.setTimeout(() => {
+      setPhase("closed");
+      const type = pendingCreate.current;
+      pendingCreate.current = null;
+      if (type) void onCreateRef.current(type);
+    }, reducedMotion ? 0 : 280);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -91,8 +100,9 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
   };
 
   const handleCreate = (type: NoteType) => {
-    setPhase("closed");
-    void onCreate(type);
+    if (phase !== "open" || pendingCreate.current) return;
+    pendingCreate.current = type;
+    setPhase("closing");
   };
 
   const offsets = OFFSETS[direction];
@@ -125,7 +135,7 @@ export function CreateNoteMenu({ onCreate, direction = "down", className }: Crea
       {menuVisible &&
         createPortal(
           <div
-            className="fixed inset-0 z-[120] bg-background/50 backdrop-blur-md pointer-events-auto create-overlay-in"
+            className={cn("fixed inset-0 z-[120] bg-background/50 backdrop-blur-md pointer-events-auto", closing ? "create-overlay-out" : "create-overlay-in")}
             onClick={() => setPhase("closing")}
           />,
           document.body

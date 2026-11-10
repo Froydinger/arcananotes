@@ -17,7 +17,7 @@
 
 
 ## Open
-- (nothing pending)
+- [ ] Smooth menu blur on dismissal and note creation, and animate page arrivals with reduced-motion support.
 
 ## Latest completed update
 - [x] Note-writing functions use direct OpenAI GPT Terra 6.1, low reasoning, with no gateway fallback; secure key updated, both functions deployed, authenticated live chat and spell correction passed, provider regression test passed. Image generation remains unchanged.
