@@ -17,7 +17,10 @@
 
 
 ## Open
-- [ ] Black-backed Mac/iOS installed icons and updated mascot share card; verify images and metadata.
+- (nothing pending)
+
+## Latest completed update
+- [x] Black-backed Mac/iOS installed icons and updated mascot share card; verified opaque black pixels, served icons, social metadata, image layout, and successful preview build.
 
 
 
