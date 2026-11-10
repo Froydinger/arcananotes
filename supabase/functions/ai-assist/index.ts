@@ -38,8 +38,8 @@ serve(async (req) => {
 
 
     const { messages, stream, inlineEdit } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured");
 
     const inlineInstruction = typeof inlineEdit?.instruction === "string" ? inlineEdit.instruction.trim() : "";
     const inlineSelectedText = typeof inlineEdit?.selectedText === "string" ? inlineEdit.selectedText.trim() : "";
@@ -281,23 +281,14 @@ When users ask how to use the app, explain these features clearly and warmly.
       ...(Array.isArray(messages) ? messages : []),
     ];
 
-    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-    const useOpenAI = !!OPENAI_API_KEY;
-    const endpoint = useOpenAI
-      ? "https://api.openai.com/v1/chat/completions"
-      : "https://ai.gateway.lovable.dev/v1/chat/completions";
-    const authHeaders = useOpenAI
-      ? { "Authorization": `Bearer ${OPENAI_API_KEY}` }
-      : { "Lovable-API-Key": LOVABLE_API_KEY, "X-Lovable-AIG-SDK": "fetch" };
-
-    const response = await fetch(endpoint, {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        ...authHeaders,
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: useOpenAI ? "gpt-6-luna" : "openai/gpt-5.6-luna",
+        model: "gpt-6.1-terra",
         reasoning_effort: "low",
         messages: requestMessages,
         stream: inlineEdit ? false : !!stream,
@@ -318,7 +309,7 @@ When users ask how to use the app, explain these features clearly and warmly.
         });
       }
       const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
+      console.error("OpenAI error:", response.status, t);
       return new Response(JSON.stringify({ error: "AI request failed" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
