@@ -17,7 +17,7 @@
 
 
 ## Open
-- [ ] Diagnose the user's stalled preview and repair the reproduced cause without changing the requested model.
+- [ ] Diagnose the user's stalled preview without changing the model. Blocked: fresh signed-in home works; need the stalled action or screenshot to reproduce the user's in-flight state.
 
 ## Latest completed update
 - [x] Create menu blur animates out on dismissal and before new-note navigation; page arrivals fade in without moving fixed tools. Verified intermediate blur reduction, live new-note opening, desktop/mobile reduced motion, and successful build.
