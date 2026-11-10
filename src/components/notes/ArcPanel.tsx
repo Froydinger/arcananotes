@@ -563,7 +563,7 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
             alt="Arc AI"
             width={768}
             height={768}
-            className="h-12 w-12 rounded-full object-contain transition-transform duration-300 group-hover:scale-110"
+            className="h-20 w-20 object-contain transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none"
             style={{ filter: 'drop-shadow(0 4px 16px hsla(var(--accent) / 0.25))' }}
           />
         </button>
@@ -592,8 +592,8 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   </button>
                 ) : (
                   <div className="relative">
-                    <div className="w-7 h-7 rounded-full flex items-center justify-center bg-accent/10 border border-accent/20">
-                       <img src={isLoading ? arcMascotPencil.url : arcAiLogo.url} alt={isLoading ? "Arc thinking" : "Arc AI"} width={768} height={768} className="h-5 w-5 rounded-full object-contain" />
+                    <div className="w-12 h-12 flex items-center justify-center">
+                       <img src={isLoading ? arcMascotPencil.url : arcAiLogo.url} alt={isLoading ? "Arc thinking" : "Arc AI"} width={768} height={768} className="h-12 w-12 object-contain" />
                     </div>
                     <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-card bg-green-500" />
                   </div>
@@ -691,8 +691,8 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                     messages.map((msg, i) => (
                       <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                         {msg.role === 'assistant' && (
-                          <div className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center bg-accent/10 border border-accent/20">
-                             <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-4 w-4 rounded-full object-contain" />
+                          <div className="w-12 h-12 shrink-0 mr-2 mt-1 flex items-center justify-center">
+                             <img src={arcAiLogo.url} alt="Arc AI" width={768} height={768} className="h-12 w-12 object-contain" />
                           </div>
                         )}
                         <div
@@ -774,8 +774,8 @@ export function ArcPanel({ noteId, noteContent = '', noteTitle = '', onContentRe
                   )}
                   {isLoading && messages[messages.length - 1]?.role === 'user' && (
                     <div className="flex justify-start">
-                      <div className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center bg-accent/10 border border-accent/20">
-                          <img src={arcMascotPencil.url} alt="Arc thinking" width={768} height={768} className="h-4 w-4 rounded-full object-contain" />
+                      <div className="w-12 h-12 shrink-0 mr-2 mt-1 flex items-center justify-center">
+                          <img src={arcMascotPencil.url} alt="Arc thinking" width={768} height={768} className="h-12 w-12 object-contain" />
                       </div>
                       <div className="px-3.5 py-2.5 rounded-[18px] rounded-bl-md bg-muted border border-border/30">
                         <div className="flex items-center gap-1.5">
