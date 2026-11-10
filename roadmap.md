@@ -17,9 +17,10 @@
 
 
 ## Open
-- [ ] Smooth menu blur on dismissal and note creation, and animate page arrivals with reduced-motion support.
+- (nothing pending)
 
 ## Latest completed update
+- [x] Create menu blur animates out on dismissal and before new-note navigation; page arrivals fade in without moving fixed tools. Verified intermediate blur reduction, live new-note opening, desktop/mobile reduced motion, and successful build.
 - [x] Note-writing functions use direct OpenAI GPT Terra 6.1, low reasoning, with no gateway fallback; secure key updated, both functions deployed, authenticated live chat and spell correction passed, provider regression test passed. Image generation remains unchanged.
 - [x] Corner pencil enlarged to 80px; chat header, replies, and thinking icons enlarged to 48px with circular backings removed. Desktop/mobile layout checked with local asset substitution; no mobile overflow, build OK.
 - [x] Approved pencil-shaped character replaces app/AI/thinking logos, favicon, Mac/iOS installed icons, share artwork, and email branding; verified desktop/mobile rendering, image backgrounds, metadata, and successful build. Updated email functions deployed.
