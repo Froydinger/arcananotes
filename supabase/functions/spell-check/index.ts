@@ -98,7 +98,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-6.1-sol',
+        model: 'gpt-6.1-terra',
         reasoning_effort: 'low',
         messages: [
           {

@@ -288,7 +288,7 @@ When users ask how to use the app, explain these features clearly and warmly.
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-6.1-sol",
+        model: "gpt-6.1-terra",
         reasoning_effort: "low",
         messages: requestMessages,
         stream: inlineEdit ? false : !!stream,
