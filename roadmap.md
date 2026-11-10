@@ -20,6 +20,7 @@
 - (nothing pending)
 
 ## Latest completed update
+- [x] Approved pencil-shaped character replaces app/AI/thinking logos, favicon, Mac/iOS installed icons, share artwork, and email branding; verified desktop/mobile rendering, image backgrounds, metadata, and successful build. Updated email functions deployed.
 - [x] Pencil mascot used for both shared app/AI logos, covering lander, header, sidebar, login, settings, bubble, and AI interfaces; verified landing render and successful build. In-app transparency and black installed icons preserved.
 - [x] Black-backed Mac/iOS installed icons and updated mascot share card; verified opaque black pixels, served icons, social metadata, image layout, and successful preview build.
 

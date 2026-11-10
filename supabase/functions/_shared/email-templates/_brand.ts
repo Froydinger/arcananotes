@@ -2,7 +2,7 @@
 // Body background MUST stay white (#ffffff) even though the app is dark-themed.
 
 export const LOGO_URL =
-  'https://arcananotes.com/__l5e/assets-v1/77a6d5b9-1f9d-4772-95c3-f9ae8cc8221b/arc-notes-logo-black.png'
+  'https://arcnotes.pro/__l5e/assets-v1/b7ef9930-bd20-4211-9bf8-6aa9ed21af99/arc-pencil-logo.png'
 
 export const BRAND_NAME = 'Arc Notes'
 export const PRIMARY = '#0EA5E9' // hsl(199 89% 48%)
