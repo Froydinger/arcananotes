@@ -17,7 +17,7 @@
 
 
 ## Open
-- (nothing pending)
+- [ ] Black-backed Mac/iOS installed icons and updated mascot share card; verify images and metadata.
 
 
 
